@@ -214,6 +214,8 @@ The biggest change is that **the phone moves from the desk to the teacher**, and
 | 13 | Cost per child corrected from ≈₹110 to **≈₹210 a year**, adding Sarvam ASR at about ₹18 per lesson | The deck counted Claude only | 15 Oct | Decided |
 | 14 | Deck wording: "phone on the teacher's desk" → "worn by the teacher"; "zero assessment events" → "no tests, no extra time" | Keeps the deck consistent with rows 1 and 2 | 20 Oct | Proposed |
 | 15 | Real-user testing: proxy sessions with 4–5 children over 3 days, plus 3 teachers in 2 rounds | The organisers' guidance | 16 Oct | Decided |
+| 16 | Record only during one fixed reading slot (30–45 min) that the teacher starts and stops; never all day | Battery, heat and blocked calls on a ₹8–10k phone | Technical mentor, 20 Oct | Decided |
+| 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common | Technical mentor, 20 Oct | Decided |
 
 ## Architecture and build spec
 

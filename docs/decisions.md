@@ -5,6 +5,12 @@ This file is the evidence for the Build deck's **"User inputs and testing"** sli
 ## Input from users, mentors and organisers
 | Date | Source | What they said or did | What we changed | Where it shows |
 | --- | --- | --- | --- | --- |
+| 20 Oct 2026 | Technical mentor (call) | SUNO rests on one untested belief: that each answer can be mapped to the right child. Test that alone before building any app ("if that hypothesis doesn't hold, the entire thing collapses"). Suggested a home test: 2–3 people, a phone some distance away, check the mapping. | Stopped app work. Built feasibility test F1 (voice matching on real child voices from ASER, in a simulated classroom) and a scorer for the home test. Decision on attribution follows the F1 result (see row 17 below). | `docs/feasibility.md`, `eval/feasibility/` |
+| 20 Oct 2026 | Technical mentor (call) | Teachers often point ("haan beta, tum batao") instead of naming, and a class can have several children with the same name; name calls alone can't say who answered. | Name calls become one signal, never the only one. Roster entries carry a roll number so same-name children stay distinct. | Decision 18 |
+| 20 Oct 2026 | Technical mentor (call) | Speech-to-text (Sarvam or any other) tells you *what* was said, not *who* said it. It is a different problem. | Split the pipeline into two separate questions, each tested on its own: who answered (F1) and was it right (F2). | `docs/feasibility.md` |
+| 20 Oct 2026 | Technical mentor (call) | Recording all day is impractical on a ₹8–10k phone: battery, heat, and the teacher can't take calls or use other apps. | SUNO records only during one fixed reading slot (30–45 min), started and stopped by the teacher. | Decision 16 |
+| 20 Oct 2026 | Technical mentor (call) | Asked how the 0.75 confidence gate is set. | Corrected our answer on the call: Claude does not set it. Code computes confidence from measured signals; the gate is the lowest value that keeps precision at or above the target on labelled data, and F1 now picks it that way. | `eval/feasibility/voice_id.py`; deck |
+| 20 Oct 2026 | Technical mentor (call) | Understood that the whole audio would go to Claude Opus to work out who spoke. | Corrected: the Claude API takes text and images, not audio. Speech models handle voices; Claude reasons over transcripts and who-spoke labels. The deck must say this plainly. | Architecture slide |
 | ~16 Oct 2026 | Organisers (Top 30 WhatsApp group) | Proxy testing with 4–5 children of the same age is acceptable, but real users and real settings score higher. For niche users (CRP/BEO/DEO), show mentor input and how it changed the design. | Added 3 proxy sessions with children and 2 teacher test rounds to the plan; started this log | Build plan; testing slide |
 
 ## Internal design decisions
@@ -27,9 +33,15 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 13 | Cost corrected from ≈₹110 to ≈₹210 per child per year (adds Sarvam ASR) | The deck counted Claude only | 15 Oct | Decided |
 | 14 | Deck wording: "worn by the teacher" and "no tests, no extra time" | Matches rows 1–2 | 20 Oct | Proposed |
 | 15 | Real-user testing: 3 proxy sessions plus 3 teachers × 2 rounds | Organisers' guidance | 16 Oct | Decided |
+| 16 | Record only during one fixed reading slot (30–45 min) that the teacher starts and stops; never all day | Battery, heat and blocked calls on a ₹8–10k phone (technical mentor) | 20 Oct | Decided |
+| 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common (technical mentor) | 20 Oct | Decided |
+| 19 | Claude model: `claude-opus-5-5` (Opus 5.5) instead of `claude-opus-5` | Newer, and 20% cheaper ($4 / $20 per million tokens vs $5 / $25); same structured outputs | 20 Oct | Decided |
 
 ## Evidence for the Build deck
-- [ ] Technical mentor call (20 Oct): inputs, and what changed
+- [x] Technical mentor call (20 Oct): inputs, and what changed (6 rows above; F1 feasibility test, `docs/feasibility.md`)
+- [ ] F1: voice matching on real child voices, simulated classroom (`eval/results/f1_voice_id.md`)
+- [ ] F2: right vs wrong on real child readings (`eval/results/f2_answer_check.md`), needs the Sarvam key
+- [ ] F3: attribution on the mentor's hard cases, synthetic (`eval/results/f3_claude_attribution.md`), needs the Anthropic key
 - [ ] Home distance test: accuracy by distance, desk vs worn phone
 - [ ] ASER dataset: answer-checker accuracy on real child speech
 - [ ] Proxy sessions 1–3: attribution and answer accuracy by distance, and the teacher's reaction to her own brief

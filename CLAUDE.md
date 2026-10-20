@@ -26,7 +26,7 @@ Team Sunvai:
 - Top 10 announced 10 Nov. Grand finale (in person, live demo): 18 Nov.
 
 ## Hard rules
-1. **Claude is the reasoning core.** Use `claude-opus-5` with adaptive thinking (`thinking: {type: "adaptive"}`) and JSON-schema structured outputs. **Code computes confidence, never the model.** Load the Claude API skill before writing API code. Don't guess SDK shapes.
+1. **Claude is the reasoning core.** Use `claude-opus-5-5` (Claude Opus 5.5; set effort explicitly, its default is medium) with adaptive thinking (`thinking: {type: "adaptive"}`) and JSON-schema structured outputs. **Code computes confidence, never the model.** Load the Claude API skill before writing API code. Don't guess SDK shapes.
 2. **Never commit:** real audio, children's names, consent forms, team photos, or secrets. `.env`, `data/raw/`, `data/external/`, `data/consents/` and `assets/` are git-ignored. Run a secret scan before the freeze.
 3. **No teacher score or teacher-performance field anywhere.** Never describe a child as weak, slow or poor; enforce a banned-word list in English and Hindi. Use first names only.
 4. **Every claim about a child** must cite real segment IDs (the grounding check in code) and pass the confidence gate (0.75 by default). Below the gate, it becomes "check tomorrow".

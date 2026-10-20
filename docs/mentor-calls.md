@@ -72,5 +72,5 @@ Mentor call report:
 ## Status
 | Call | Done | Report logged in decisions.md |
 | --- | --- | --- |
-| Technical, 20 Oct | [ ] | [ ] |
+| Technical, 20 Oct | [x] | [x] |
 | Education, 28 Oct | [ ] | [ ] |

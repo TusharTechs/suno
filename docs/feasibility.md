@@ -1,0 +1,58 @@
+# Does SUNO work? Feasibility tests after the 20 Oct mentor call
+
+The technical mentor's challenge was that SUNO rests on one untested belief: that a phone can tell **which child** answered. If that fails, nothing else matters. So we split SUNO into the questions it must answer and test each on its own, before building any app.
+
+| # | Question | Test | Data | Status |
+|---|---|---|---|---|
+| F1 | Can a voice sample tell us which child answered? | Voice matching against a one-time voice sample per child | Real child voices (Pratham ASER), simulated classroom | **Done (below)** |
+| F1-real | Same, on a real recording | The mentor's home test ([home-test.md](home-test.md)) | Our recordings | Ready: needs a session |
+| F2 | Can it tell a right reading from a wrong one? | Sarvam speech-to-text vs the expected word, against the ASER surveyor's label | Real child voices (ASER) | Ready: needs `SARVAM_API_KEY` |
+| F3 | Given a transcript, does Claude + code name a child only when it is certain? | Claude call 1 plus code checks on the mentor's hard cases | Synthetic transcripts | Ready: needs `ANTHROPIC_API_KEY` |
+
+Every number here comes from a script in `eval/`. Results files are in `eval/results/`.
+
+<!-- F1-RESULTS -->
+
+## What we change: SUNO knows who answered because the teacher tells it, not because it guesses
+
+Voice can't carry attribution, so the design stops asking it to. Everything else in SUNO stays the same: Claude rebuilds moments and evidence, code checks and scores them, and the tracker, Silence Ledger and morning brief follow. The changes are about how a moment gets its child.
+
+**1. One fixed reading slot (Decision 16).** The teacher starts SUNO for the 30–45 minute reading period and stops it after. It doesn't run all day, so battery and heat stay low and the phone stays free for calls.
+
+**2. Today's call-on list, one tap each (Decision 3, now central).** Each morning the planner picks 4–6 children: those SUNO has heard least, plus those who need support. During the slot, their names sit as big buttons on the phone, with roll numbers so two Priyas stay distinct.
+- When the teacher calls on one of them, by name or just by pointing, she taps that child's button. That's about 5 taps a day.
+- She can tap "someone else" and pick any child from the roster.
+- With a tap, SUNO is told who answered. It doesn't have to work it out.
+
+**3. Call-ons come to the mic (Decision 2).** The planned call-ons happen near the teacher: the child reads one word at her desk, or she leans in at the bench. That puts the answer within about 1 m of the worn phone, where F1 and F2 show recognition is best.
+
+**4. Name calls as a second, stricter signal (Decision 18).** With no tap, SUNO credits an answer only when the teacher's words name exactly one child on the roster and nothing contradicts it. Claude proposes the attribution; code checks that the name is really in the transcript and unique, and that no tap disagrees. Pointing, shared names without a roll number, a friend answering, and chorus answers all become "not known". F3 measures this on the mentor's cases.
+
+**5. Voice matching is not used to name children.** At most it becomes a sanity check, for example flagging a tapped "answer" that is actually the teacher's own voice or many voices.
+
+**What this costs and what it buys**
+
+| | Before (Ideate deck) | Now |
+|---|---|---|
+| Who answered | Inferred from audio | The teacher's tap on a planned call-on, or a unique name she says; otherwise "not known" |
+| Teacher effort | "No extra time" | About 5 taps a day, inside the normal reading period |
+| Tests | None | Still none: these are ordinary call-ons |
+| Recording | Whole lesson | One reading slot a day |
+| Coverage | Everyone, in principle | 4–6 children a day, so every child is heard within about a week (Decision 8), and the Silence Ledger shows who hasn't been |
+| Weak point | Attribution (F1 shows it fails) | Right vs wrong on child speech (F2), and whether teachers tap (teacher test, 24 Oct) |
+
+**If teachers won't tap** (to be checked in teacher round 1 on 24 Oct), there are two fallbacks:
+- **Names only.** SUNO keeps only unique-name calls and abstains on the rest. Fewer moments, same precision.
+- **A 30-second voice note after the slot.** For example: "Priya — tree nahi aaya; Ravi — sab sahi". Claude structures it into evidence. This is the most robust option, but it relies on the teacher's memory.
+
+**What stays innovative.** SUNO doesn't try to understand a whole noisy classroom. It turns the moments a teacher already creates into verified, per-child evidence:
+- a planner decides whom to hear;
+- a tap or a unique name anchors who spoke;
+- the teacher's own reaction is the label;
+- Claude rebuilds the evidence, and code refuses anything it can't verify;
+- the Silence Ledger makes sure quiet children are not missed.
+
+## Next
+1. **Tomorrow, 21 Oct:** add the keys to `.env`, then run F2 and F3. Run the home test with family ([home-test.md](home-test.md)) to check F1 on a real room.
+2. **Teacher round 1, 24 Oct:** test the tap screen with a paper or phone mock-up. Would teachers tap? How many taps can they bear?
+3. If F2 shows right vs wrong is unreliable even close to the phone, the teacher's reaction becomes the main signal and the child's audio only supports it.

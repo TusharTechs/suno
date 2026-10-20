@@ -174,7 +174,7 @@ class Embedder:
                 run_opts={"device": "cpu"})
         else:
             from transformers import AutoFeatureExtractor, WavLMForXVector
-            self.dev = "mps" if torch.backends.mps.is_available() else "cpu"
+            self.dev = "cpu"  # MPS is no faster here and its memory keeps growing with varied clip lengths
             self.fe = AutoFeatureExtractor.from_pretrained("microsoft/wavlm-base-plus-sv")
             self.m = WavLMForXVector.from_pretrained("microsoft/wavlm-base-plus-sv").to(self.dev).eval()
 
@@ -335,8 +335,6 @@ def main() -> None:
         for m, emb in embedders.items():
             E[m].append(emb.enrol(enrol_wavs))
             T[m].append(emb(test_wavs))
-        if torch.backends.mps.is_available():
-            torch.mps.empty_cache()
         print(f"  {min(start + 25, len(pool))}/{len(pool)} children embedded ({time.time() - t:.0f}s)", flush=True)
 
     idx = defaultdict(list)

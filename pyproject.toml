@@ -12,6 +12,7 @@ dependencies = [
     "pandas>=2.2",
     "soundfile>=0.12",
     "jsonschema>=4.23",
+    "httpx>=0.27",
 ]
 
 [dependency-groups]
@@ -23,6 +24,7 @@ speech = [
     "transformers>=4.45",
     "pyroomacoustics>=0.8",
     "scipy>=1.13",
+    "matplotlib>=3.9",
 ]
 dev = ["pytest>=8"]
 

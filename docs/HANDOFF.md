@@ -201,7 +201,7 @@ The biggest change is that **the phone moves from the desk to the teacher**, and
 | --- | --- | --- | --- | --- |
 | 1 | The teacher **wears the phone** on a lanyard or in a shirt pocket; the desk is only a fallback | Sound loses 6 dB each time distance doubles. An answer at about 60 dB one metre away is about 44 dB at six metres, likely below classroom noise. | Distance analysis, 20 Oct | Proposed |
 | 2 | **Evidence moments come to the mic.** The daily call-ons happen near the teacher: one word read at her desk, or her leaning in at the bench. | Clear audio for the moments that matter. This is ordinary teaching, not a test. | 20 Oct | Proposed |
-| 3 | An optional **one-tap confirm** of which child is reading, during planned call-ons | Removes doubt about who spoke where it matters most | 20 Oct | Proposed |
+| 3 | An optional **one-tap confirm** of which child is reading, during planned call-ons | Removes doubt about who spoke where it matters most | 20 Oct | Proposed; now the main attribution signal (row 17) |
 | 4 | **Precision over recall.** Claim only what was heard clearly, and publish the measured operating range. | A wrong label is the worst failure; "not enough evidence yet" is acceptable | 20 Oct | Decided |
 | 5 | **No full speaker separation.** Classify only: teacher, one other voice, or many. | Classroom teacher-vs-student separation error is 17–45%, even when tuned (arXiv 2505.10879) | Research, 15 Oct | Proposed |
 | 6 | Check each answer **against the expected word**, rather than transcribing freely | No published results for Hindi child speech; free transcription is too fragile | Research, 15 Oct | Proposed |
@@ -215,6 +215,7 @@ The biggest change is that **the phone moves from the desk to the teacher**, and
 | 14 | Deck wording: "phone on the teacher's desk" → "worn by the teacher"; "zero assessment events" → "no tests, no extra time" | Keeps the deck consistent with rows 1 and 2 | 20 Oct | Proposed |
 | 15 | Real-user testing: proxy sessions with 4–5 children over 3 days, plus 3 teachers in 2 rounds | The organisers' guidance | 16 Oct | Decided |
 | 16 | Record only during one fixed reading slot (30–45 min) that the teacher starts and stops; never all day | Battery, heat and blocked calls on a ₹8–10k phone | Technical mentor, 20 Oct | Decided |
+| 17 | Who answered comes from the teacher's one tap on a planned call-on list, or a name matching exactly one child; **never from voice matching** | F1 (`docs/feasibility.md`): voice matching can't reach the 90% precision needed, even with the child speaking into the phone | F1 test, 20 Oct | Voice: Dropped. Tap list: Proposed |
 | 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common | Technical mentor, 20 Oct | Decided |
 
 ## Architecture and build spec

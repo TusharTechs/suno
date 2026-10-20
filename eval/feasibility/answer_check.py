@@ -106,7 +106,7 @@ def main() -> None:
                 text = transcribe(client, wav, key)
                 sim = similarity(text, r.que_text)
                 rows.append({"cond": cond, "expected": r.que_text, "heard": text, "similarity": round(sim, 3),
-                             "label": bool(r.label), "pred": sim >= MATCH_THRESHOLD, "empty": not normalise(text)})
+                             "label": bool(r.label), "pred": sim >= MATCH_THRESHOLD, "blank": not normalise(text)})
                 time.sleep(1.0)  # starter plan: 60 requests a minute
             if i % 25 == 0:
                 print(f"  {i}/{len(sample)}")
@@ -125,7 +125,7 @@ def main() -> None:
         fp = int((g.pred & ~g.label).sum()); fn = int((~g.pred & g.label).sum())
         s = {"condition": cond, "n": len(g), "agreement": (tp + tn) / len(g),
              "recall_right": tp / max(tp + fn, 1), "recall_wrong": tn / max(tn + fp, 1),
-             "precision_wrong": tn / max(tn + fn, 1), "empty": float(g.empty.mean())}
+             "precision_wrong": tn / max(tn + fn, 1), "empty": float(g.blank.mean())}
         summary.append(s)
         lines.append(f"| {cond} | {s['agreement']:.0%} | {s['recall_right']:.0%} | {s['recall_wrong']:.0%} | "
                      f"{s['precision_wrong']:.0%} | {s['empty']:.0%} |")

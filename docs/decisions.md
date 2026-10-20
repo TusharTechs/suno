@@ -5,7 +5,7 @@ This file is the evidence for the Build deck's **"User inputs and testing"** sli
 ## Input from users, mentors and organisers
 | Date | Source | What they said or did | What we changed | Where it shows |
 | --- | --- | --- | --- | --- |
-| 20 Oct 2026 | Technical mentor (call) | SUNO rests on one untested belief: that each answer can be mapped to the right child. Test that alone before building any app ("if that hypothesis doesn't hold, the entire thing collapses"). Suggested a home test: 2–3 people, a phone some distance away, check the mapping. | Stopped app work. Built feasibility test F1 (voice matching on real child voices from ASER, in a simulated classroom) and a scorer for the home test. Decision on attribution follows the F1 result (see row 17 below). | `docs/feasibility.md`, `eval/feasibility/` |
+| 20 Oct 2026 | Technical mentor (call) | SUNO rests on one untested belief: that each answer can be mapped to the right child. Test that alone before building any app ("if that hypothesis doesn't hold, the entire thing collapses"). Suggested a home test: 2–3 people, a phone some distance away, check the mapping. | Stopped app work. Built feasibility test F1 (voice matching on real child voices from ASER, in a simulated classroom) and a scorer for the home test. F1 result: voice matching cannot name the child (Decision 17); attribution moves to the teacher's tap on planned call-ons. | `docs/feasibility.md`, `eval/feasibility/` |
 | 20 Oct 2026 | Technical mentor (call) | Teachers often point ("haan beta, tum batao") instead of naming, and a class can have several children with the same name; name calls alone can't say who answered. | Name calls become one signal, never the only one. Roster entries carry a roll number so same-name children stay distinct. | Decision 18 |
 | 20 Oct 2026 | Technical mentor (call) | Speech-to-text (Sarvam or any other) tells you *what* was said, not *who* said it. It is a different problem. | Split the pipeline into two separate questions, each tested on its own: who answered (F1) and was it right (F2). | `docs/feasibility.md` |
 | 20 Oct 2026 | Technical mentor (call) | Recording all day is impractical on a ₹8–10k phone: battery, heat, and the teacher can't take calls or use other apps. | SUNO records only during one fixed reading slot (30–45 min), started and stopped by the teacher. | Decision 16 |
@@ -20,7 +20,7 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | --- | --- | --- | --- | --- |
 | 1 | The teacher wears the phone (lanyard or pocket); the desk is only a fallback | Sound drops 6 dB per doubling of distance: ~60 dB at 1 m becomes ~44 dB at 6 m, below classroom noise | 20 Oct | Proposed |
 | 2 | Evidence moments come to the mic: call-ons happen near the teacher | Clear audio where it matters; this is ordinary teaching | 20 Oct | Proposed |
-| 3 | Optional one-tap confirm of which child is reading, for planned call-ons | Removes attribution doubt | 20 Oct | Proposed |
+| 3 | Optional one-tap confirm of which child is reading, for planned call-ons | Removes attribution doubt | 20 Oct | Proposed; now the main attribution signal (see 17) |
 | 4 | Precision over recall; publish the measured operating range | A wrong label is the worst failure | 20 Oct | Decided |
 | 5 | No full speaker separation: just teacher, one voice, or many | Classroom separation error is 17–45% (arXiv 2505.10879) | 15 Oct | Proposed |
 | 6 | Check answers against the expected word, not by open transcription | Child Hindi ASR is weak | 15 Oct | Proposed |
@@ -34,12 +34,13 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 14 | Deck wording: "worn by the teacher" and "no tests, no extra time" | Matches rows 1–2 | 20 Oct | Proposed |
 | 15 | Real-user testing: 3 proxy sessions plus 3 teachers × 2 rounds | Organisers' guidance | 16 Oct | Decided |
 | 16 | Record only during one fixed reading slot (30–45 min) that the teacher starts and stops; never all day | Battery, heat and blocked calls on a ₹8–10k phone (technical mentor) | 20 Oct | Decided |
+| 17 | Who answered comes from the teacher's one tap on a planned call-on list (4–6 children a day), or a name she says that matches exactly one child; never from voice matching | F1: voice matching is right for at most 56% of one-word answers even spoken into the phone (class of 5), 13% at 1 m in a class of 35, and never reaches the 90% precision needed to name a child | 20 Oct | Voice matching: Dropped. Tap list: Proposed (needs Tushar's OK, then teacher round 1 on 24 Oct) |
 | 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common (technical mentor) | 20 Oct | Decided |
 | 19 | Claude model: `claude-opus-5-5` (Opus 5.5) instead of `claude-opus-5` | Newer, and 20% cheaper ($4 / $20 per million tokens vs $5 / $25); same structured outputs | 20 Oct | Decided |
 
 ## Evidence for the Build deck
 - [x] Technical mentor call (20 Oct): inputs, and what changed (6 rows above; F1 feasibility test, `docs/feasibility.md`)
-- [ ] F1: voice matching on real child voices, simulated classroom (`eval/results/f1_voice_id.md`)
+- [x] F1: voice matching on real child voices, simulated classroom (`eval/results/f1_voice_id.md`, chart `f1_voice_id.png`): it cannot name the child
 - [ ] F2: right vs wrong on real child readings (`eval/results/f2_answer_check.md`), needs the Sarvam key
 - [ ] F3: attribution on the mentor's hard cases, synthetic (`eval/results/f3_claude_attribution.md`), needs the Anthropic key
 - [ ] Home distance test: accuracy by distance, desk vs worn phone

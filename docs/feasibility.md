@@ -4,14 +4,52 @@ The technical mentor's challenge was that SUNO rests on one untested belief: tha
 
 | # | Question | Test | Data | Status |
 |---|---|---|---|---|
-| F1 | Can a voice sample tell us which child answered? | Voice matching against a one-time voice sample per child | Real child voices (Pratham ASER), simulated classroom | **Done (below)** |
+| F1 | Can a voice sample tell us which child answered? | Voice matching against a one-time voice sample per child | Real child voices (Pratham ASER), simulated classroom | **Done: no** (below) |
 | F1-real | Same, on a real recording | The mentor's home test ([home-test.md](home-test.md)) | Our recordings | Ready: needs a session |
 | F2 | Can it tell a right reading from a wrong one? | Sarvam speech-to-text vs the expected word, against the ASER surveyor's label | Real child voices (ASER) | Ready: needs `SARVAM_API_KEY` |
 | F3 | Given a transcript, does Claude + code name a child only when it is certain? | Claude call 1 plus code checks on the mentor's hard cases | Synthetic transcripts | Ready: needs `ANTHROPIC_API_KEY` |
 
 Every number here comes from a script in `eval/`. Results files are in `eval/results/`.
 
-<!-- F1-RESULTS -->
+## F1 result: voice matching cannot tell us which child answered
+
+**Verdict: no.** Off-the-shelf voice matching cannot name the child who answered. This holds even in the best case, with the child speaking straight into the phone, and in a classroom it is close to guessing. We drop voice as a way to attribute answers. The design change is in the next section.
+
+![Voice matching accuracy by distance](../eval/results/f1_voice_id.png)
+
+**How we tested** (`eval/feasibility/voice_id.py`):
+- **Voices:** 200 real children aged 5–10 from the Pratham ASER recordings (Hindi, Rajasthan and Uttar Pradesh). Classes were drawn from children recorded on the same device, as in a real classroom.
+- **Voice sample:** each child "enrolled" with about 20 seconds of their own reading.
+- **Answers tested:** their other, separate single-word readings, and three-word stretches.
+- **Room:** a simulated 9 × 7 m classroom with a 0.8 s echo, ten murmuring children and a fan. The phone is worn by the teacher at the front.
+- **Noise levels:** a "calm" room (the answer is 11 dB above the noise at 1 m) and a "noisy" one (2 dB).
+- **Models:** two standard voice models, SpeechBrain ECAPA and Microsoft WavLM-SV.
+- **Sampling:** 60 random classes per class size.
+
+**Answers matched to the right child** (ECAPA, the better model; 95% intervals in `eval/results/f1_voice_id.md`):
+
+| Where the child is | One word, class of 5 | One word, class of 35 | Three words, class of 35 |
+|---|---|---|---|
+| Speaking into the phone (best case) | 56% | 26% | 49% |
+| 1 m from the teacher, calm room | 41% | 13% | 19% |
+| 2 m, calm | 37% | 10% | 12% |
+| 4–6 m, calm | 30–32% | 7–8% | 9–11% |
+| 2 m, noisy | 28% | 5% | 6% |
+| Random guess | 20% | 3% | 3% |
+
+SUNO only names a child when it would be right at least 90% of the time. In the classroom, voice matching never reaches that, at any distance, class size or answer length. It got there only with the child speaking into the phone in a group of five, three-word answers, and even then only about half the answers.
+
+**Why we believe it, and its limits:**
+- **Checked first** (`eval/results/f1_sanity.md`):
+  - the child's own voice dominates the clips (median pitch 258 Hz, a child's range);
+  - recording on one device vs. 35 different devices barely changes the result (46% vs. 43% on a 10-second-vs-10-second check);
+  - the audio keeps sound up to about 6 kHz, so it is not muffled.
+- **Optimistic in places:** the answer is cleanly cut out (perfect speech detection) and never overlaps another voice.
+- **Pessimistic in places:**
+  - the ASER audio is low-bitrate MP3;
+  - both models were trained on adult voices, and children's voices are known to be harder;
+  - fine-tuning on child speech could help, but we have neither the data nor the time before 1 Nov.
+- **Simulated room:** the home test (F1-real) checks this on a real one.
 
 ## What we change: SUNO knows who answered because the teacher tells it, not because it guesses
 

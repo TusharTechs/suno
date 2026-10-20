@@ -1,0 +1,28 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# real data, never in git
+data/raw/
+data/external/
+data/consents/
+*.wav
+*.aiff
+*.m4a
+*.mp3
+*.opus
+*.ogg
+!samples/synthetic/**
+
+# assets (team photos, videos): keep out of git by default
+assets/
+**/frames/
+**/.cdp-profile/
+
+# tooling
+__pycache__/
+.venv/
+node_modules/
+.DS_Store
+*.log

@@ -1,0 +1,2 @@
+lesson_id,t_start,t_end,speaker,distance_m,phone,expected_item,heard_human,correct,skill_code,error_type,teacher_uptake,notes
+proxy-d1,00:03:12,00:03:16,child:Priya,3,worn,पेड़,पे-ड़,partial,read.blend_cvc,segments_without_blending,correction,example row: delete

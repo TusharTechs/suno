@@ -9,8 +9,10 @@ Brief: records -> code picture (tracker, Silence Ledger, listening list) -> Clau
 from __future__ import annotations
 
 import logging
+import tempfile
 import time
 from datetime import date, datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from . import store
@@ -115,8 +117,9 @@ def make_brief(class_id: str, day: str) -> None:
                     usage_json=_usage_dict(usage, brief_mod.PROMPT))
     audio_name = f"{class_id}_{day}.mp3"
     try:
-        tts.speak_hi(b["text_hi"], store.VAR / "audio" / audio_name)
-        store.put_brief(class_id, day, status="done", audio_file=audio_name)
+        with tempfile.TemporaryDirectory() as tmp:
+            mp3 = tts.speak_hi(b["text_hi"], Path(tmp) / audio_name).read_bytes()
+        store.put_brief(class_id, day, status="done", audio_file=audio_name, audio=mp3)
     except Exception as e:
         log.warning("text-to-speech failed for %s %s: %s", class_id, day, e)
         store.put_brief(class_id, day, status="done", error=f"voice not available: {type(e).__name__}")

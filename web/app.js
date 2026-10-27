@@ -486,12 +486,14 @@ function recCard(r) {
 function questionCard(q, n) {
   const rec = n.records.find((r) => r.mention_id === q.mention_id);
   if (q.answered_at) return "";
-  const opts = q.candidates.length ? q.candidates : S.me.roster.map((c) => c.child_id);
-  const pick = q.candidates.length
-    ? q.candidates.map((c) => `<button data-q="${q.q_id}" data-a="${c}">${esc(nameOf(c))}</button>`).join("")
-    : `<select data-qsel="${q.q_id}"><option value="">बच्चा चुनें · choose a child</option>${opts.map((c) => `<option value="${c}">${esc(nameOf(c))}</option>`).join("")}</select>`;
+  const which = q.type === "which_child";
+  const buttons = q.candidates.map((c) => `<button data-q="${q.q_id}" data-a="${c}">${esc(nameOf(c))}</button>`).join("");
+  const others = S.me.roster.filter((c) => !q.candidates.includes(c.child_id));
+  const select = which ? "" : `<select data-qsel="${q.q_id}"><option value="">${q.candidates.length ? "कोई और · someone else" : "बच्चा चुनें · choose a child"}</option>${others.map((c) => `<option value="${c.child_id}">${esc(nameOf(c.child_id))}</option>`).join("")}</select>`;
+  const pick = buttons + select;
+  const said = q.name_said || "नाम नहीं लिया";
   return `<div class="card q-card">
-    <b>“${esc(q.name_said)}”</b>: ${q.candidates.length ? "कौन सा बच्चा?" : "यह कौन है?"} <span class="en">· ${q.candidates.length ? "this name matches more than one child" : "this name is not on the roster"}</span>
+    <b>“${esc(said)}”</b>: ${which ? "कौन सा बच्चा?" : "यह कौन है?"} <span class="en">· ${which ? "this name matches more than one child" : q.name_said ? "this name is not on the roster" + (q.candidates.length ? "; closest-sounding names below" : "") : "no name was said"}</span>
     ${rec ? `<div class="small" style="margin-top:4px">${esc(skillHi(rec.skill_code))} ${rec.item ? "· " + esc(rec.item) : ""} ${OUTCOME[rec.outcome] || ""}</div>` : ""}
     <div class="opts">${pick}<button data-q="${q.q_id}" data-a="skip">छोड़ें · skip</button></div></div>`;
 }

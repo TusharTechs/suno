@@ -1,9 +1,13 @@
-"""SQLite storage. One file (var/suno.db), no server to run.
+"""Storage: SQLite on a laptop (var/suno.db), Postgres when SUNO_DATABASE_URL is set (hosted).
+
+The same SQL runs on both: `?` placeholders are rewritten for Postgres, and the two schema
+differences (auto-increment ids, binary columns) are handled here.
 
 Privacy by design:
-- No audio is stored. The teacher's voice note is transcribed and dropped.
+- No voice note is stored. The teacher's voice note is transcribed and dropped.
 - No child's voice is ever recorded. A child is a first name and a roll number.
 - There is no teacher score or teacher-performance field anywhere.
+- The only audio kept is SUNO's own spoken brief (text-to-speech), so it plays offline.
 """
 
 from __future__ import annotations
@@ -13,12 +17,15 @@ import os
 import sqlite3
 import threading
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 VAR = Path(os.environ.get("SUNO_VAR", ROOT / "var"))
 DB_PATH = VAR / "suno.db"
+PG_URL = os.environ.get("SUNO_DATABASE_URL", "")
+PG = PG_URL.startswith(("postgres://", "postgresql://"))
+DEMO_KEEP_HOURS = 48   # demo sandboxes are deleted after two days
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS classes (
@@ -35,20 +42,21 @@ CREATE TABLE IF NOT EXISTS notes (
   synthetic INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS records (
-  rec_id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, class_id TEXT NOT NULL, day TEXT NOT NULL,
+  rec_id SERIALID, note_id TEXT NOT NULL, class_id TEXT NOT NULL, day TEXT NOT NULL,
   mention_id TEXT, name_said TEXT, child_id TEXT, kind TEXT, skill_code TEXT, item TEXT, outcome TEXT,
   error_type TEXT, when_ TEXT, home_language TEXT, teacher_quote TEXT, rationale TEXT,
   attribution TEXT, candidates_json TEXT, signals_json TEXT, confidence REAL, status TEXT,
   feedback TEXT
 );
 CREATE TABLE IF NOT EXISTS questions (
-  q_id INTEGER PRIMARY KEY AUTOINCREMENT, note_id TEXT NOT NULL, class_id TEXT NOT NULL,
+  q_id SERIALID, note_id TEXT NOT NULL, class_id TEXT NOT NULL,
   mention_id TEXT, type TEXT, name_said TEXT, candidates_json TEXT,
   answer TEXT, answered_at TEXT
 );
 CREATE TABLE IF NOT EXISTS briefs (
   class_id TEXT NOT NULL, day TEXT NOT NULL, created_at TEXT NOT NULL, status TEXT NOT NULL,
   picture_json TEXT, brief_json TEXT, problems_json TEXT, audio_file TEXT, error TEXT, usage_json TEXT,
+  audio BLOBTYPE,
   PRIMARY KEY (class_id, day)
 );
 CREATE INDEX IF NOT EXISTS records_class ON records(class_id, day);
@@ -56,34 +64,84 @@ CREATE INDEX IF NOT EXISTS notes_class ON notes(class_id, day);
 """
 
 _lock = threading.RLock()
-_conn: sqlite3.Connection | None = None
+_conn = None
 
 
 def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def db() -> sqlite3.Connection:
+def _connect():
+    if PG:
+        import psycopg
+        from psycopg.rows import dict_row
+        conn = psycopg.connect(PG_URL, autocommit=True, row_factory=dict_row)
+        ddl = SCHEMA.replace("SERIALID", "BIGSERIAL PRIMARY KEY").replace("BLOBTYPE", "BYTEA") \
+                    .replace(" REAL", " DOUBLE PRECISION")
+        for stmt in [x.strip() for x in ddl.split(";") if x.strip()]:
+            conn.execute(stmt)
+        return conn
+    VAR.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False, isolation_level=None)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.executescript(SCHEMA.replace("SERIALID", "INTEGER PRIMARY KEY AUTOINCREMENT").replace("BLOBTYPE", "BLOB"))
+    return conn
+
+
+def db():
     global _conn
     if _conn is None:
-        VAR.mkdir(parents=True, exist_ok=True)
-        (VAR / "audio").mkdir(exist_ok=True)
-        _conn = sqlite3.connect(DB_PATH, check_same_thread=False, isolation_level=None)
-        _conn.row_factory = sqlite3.Row
-        _conn.execute("PRAGMA journal_mode=WAL")
-        _conn.executescript(SCHEMA)
+        _conn = _connect()
     return _conn
+
+
+def _run(sql: str, args: tuple):
+    """Execute with one reconnect: a free hosted Postgres drops idle connections."""
+    global _conn
+    if PG:
+        sql = sql.replace("?", "%s")
+    for attempt in (0, 1):
+        try:
+            return db().execute(sql, args)
+        except Exception as e:  # psycopg.OperationalError, or a closed connection
+            dropped = any(w in str(e).lower() for w in ("closed", "terminat", "connection"))
+            if not PG or attempt or not dropped:
+                raise
+            _conn = None
 
 
 def q(sql: str, args: tuple = ()) -> list[dict]:
     with _lock:
-        return [dict(r) for r in db().execute(sql, args).fetchall()]
+        return [dict(r) for r in _run(sql, args).fetchall()]
 
 
-def x(sql: str, args: tuple = ()) -> int:
+def x(sql: str, args: tuple = (), returning: str | None = None):
     with _lock:
-        cur = db().execute(sql, args)
-        return cur.lastrowid
+        if returning and PG:
+            return _run(sql + f" RETURNING {returning}", args).fetchone()[returning]
+        cur = _run(sql, args)
+        return cur.lastrowid if returning else None
+
+
+def since_today_utc() -> str:
+    return datetime.now(timezone.utc).date().isoformat()
+
+
+def count_today(table: str, class_id: str) -> int:
+    assert table in ("notes", "briefs")
+    return q(f"SELECT COUNT(*) AS n FROM {table} WHERE class_id=? AND created_at >= ?",
+             (class_id, since_today_utc()))[0]["n"]
+
+
+def cleanup_demo() -> int:
+    """Delete demo sandboxes (synthetic classes) older than DEMO_KEEP_HOURS, and everything in them."""
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=DEMO_KEEP_HOURS)).isoformat(timespec="seconds")
+    old = [r["class_id"] for r in q("SELECT class_id FROM classes WHERE synthetic=1 AND created_at < ?", (cutoff,))]
+    for cid in old:
+        for t in ("records", "questions", "notes", "briefs", "classes"):
+            x(f"DELETE FROM {t} WHERE class_id=?", (cid,))
+    return len(old)
 
 
 def j(v) -> str:
@@ -197,7 +255,7 @@ def update_record(rec_id: int, **fields) -> None:
 
 def add_questions(note_id: str, class_id: str, questions: list[dict]) -> list[int]:
     return [x("INSERT INTO questions (note_id, class_id, mention_id, type, name_said, candidates_json) VALUES (?,?,?,?,?,?)",
-          (note_id, class_id, qq["mention_id"], qq["type"], qq["name_said"], j(qq["candidates"])))
+              (note_id, class_id, qq["mention_id"], qq["type"], qq["name_said"], j(qq["candidates"])), returning="q_id")
             for qq in questions]
 
 
@@ -220,8 +278,16 @@ def answer_question(q_id: int, answer: str) -> None:
 
 # ---- briefs ----------------------------------------------------------------
 
+BRIEF_COLS = "class_id, day, created_at, status, picture_json, brief_json, problems_json, audio_file, error, usage_json"
+
+
+def get_brief_audio(class_id: str, day: str) -> bytes | None:
+    rows = q("SELECT audio FROM briefs WHERE class_id=? AND day=?", (class_id, day))
+    return bytes(rows[0]["audio"]) if rows and rows[0]["audio"] is not None else None
+
+
 def get_brief(class_id: str, day: str) -> dict | None:
-    rows = q("SELECT * FROM briefs WHERE class_id=? AND day=?", (class_id, day))
+    rows = q(f"SELECT {BRIEF_COLS} FROM briefs WHERE class_id=? AND day=?", (class_id, day))
     if not rows:
         return None
     b = rows[0]
@@ -239,6 +305,11 @@ def put_brief(class_id: str, day: str, **fields) -> None:
         cols = ", ".join(f"{k}=?" for k in fields)
         vals = tuple(j(v) if k.endswith("_json") else v for k, v in fields.items())
         x(f"UPDATE briefs SET {cols} WHERE class_id=? AND day=?", vals + (class_id, day))
+
+
+def delete_note(note_id: str) -> None:
+    for t in ("records", "questions", "notes"):
+        x(f"DELETE FROM {t} WHERE note_id=?", (note_id,))
 
 
 def delete_brief(class_id: str, day: str) -> None:

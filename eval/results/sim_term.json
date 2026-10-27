@@ -1,0 +1,186 @@
+{
+ "label": "SIMULATED",
+ "rates": {
+  "p_evidence": 0.9658119658119658,
+  "p_wrong_child": 0.02158273381294964,
+  "p_direction_wrong": 0.02158273381294964,
+  "source": "eval/results/sim_pipeline.json (Stage A, after one-tap answers; error rates floored at 3/139)"
+ },
+ "runs": 200,
+ "results": {
+  "no_list": {
+   "2": {
+    "children_found": 0.044826577658815134,
+    "children_flag_precision": 0.9722222222222222,
+    "level_stated": 0.011285714285714286,
+    "level_exact": 0.47474747474747475,
+    "level_within_one": 1.0,
+    "children_with_evidence": 0.6888571428571428,
+    "quiet_with_evidence": 0.42,
+    "cells_known": 0.05388571428571429,
+    "struggling_found": 0.03614603053104772,
+    "flags": 2.89,
+    "flags_right": 2.815,
+    "quiet_struggling_found": 0.0010727969348659002
+   },
+   "4": {
+    "children_found": 0.14177192405725633,
+    "children_flag_precision": 0.9842687074829931,
+    "level_stated": 0.030285714285714284,
+    "level_exact": 0.6061643835616438,
+    "level_within_one": 0.9931506849315068,
+    "children_with_evidence": 0.8532857142857142,
+    "quiet_with_evidence": 0.6418181818181818,
+    "cells_known": 0.16688571428571428,
+    "struggling_found": 0.117305034946143,
+    "flags": 9.36,
+    "flags_right": 9.155,
+    "quiet_struggling_found": 0.011730988347598812
+   },
+   "8": {
+    "children_found": 0.27657830493263885,
+    "children_flag_precision": 0.9897423626066842,
+    "level_stated": 0.061285714285714284,
+    "level_exact": 0.6967054263565892,
+    "level_within_one": 0.9886627906976745,
+    "children_with_evidence": 0.9437142857142856,
+    "quiet_with_evidence": 0.8381818181818181,
+    "cells_known": 0.33771428571428574,
+    "struggling_found": 0.24029009122159667,
+    "flags": 19.045,
+    "flags_right": 18.81,
+    "quiet_struggling_found": 0.04112367007727143
+   },
+   "12": {
+    "children_found": 0.35232351136116646,
+    "children_flag_precision": 0.9939195526695527,
+    "level_stated": 0.08057142857142857,
+    "level_exact": 0.7828538359788361,
+    "level_within_one": 0.9870659722222223,
+    "children_with_evidence": 0.9751428571428572,
+    "quiet_with_evidence": 0.9245454545454546,
+    "cells_known": 0.4326285714285714,
+    "struggling_found": 0.302752142966412,
+    "flags": 23.935,
+    "flags_right": 23.695,
+    "quiet_struggling_found": 0.07426919456543107
+   }
+  },
+  "list_50": {
+   "2": {
+    "children_found": 0.06938271653093855,
+    "children_flag_precision": 0.9808080808080809,
+    "level_stated": 0.004285714285714285,
+    "level_exact": 0.6724137931034483,
+    "level_within_one": 1.0,
+    "children_with_evidence": 0.8827142857142857,
+    "quiet_with_evidence": 0.81,
+    "cells_known": 0.055085714285714286,
+    "struggling_found": 0.0396396908057282,
+    "flags": 3.185,
+    "flags_right": 3.085,
+    "quiet_struggling_found": 0.013073524554980674
+   },
+   "4": {
+    "children_found": 0.19599663354871782,
+    "children_flag_precision": 0.9849761904761906,
+    "level_stated": 0.020285714285714285,
+    "level_exact": 0.6364485981308411,
+    "level_within_one": 0.9716510903426792,
+    "children_with_evidence": 0.9881428571428572,
+    "quiet_with_evidence": 0.9795454545454545,
+    "cells_known": 0.17728571428571427,
+    "struggling_found": 0.14006090728650464,
+    "flags": 11.385,
+    "flags_right": 10.88,
+    "quiet_struggling_found": 0.08047960920431609
+   },
+   "8": {
+    "children_found": 0.4366157995518196,
+    "children_flag_precision": 0.988291736041736,
+    "level_stated": 0.08014285714285714,
+    "level_exact": 0.6902089407191448,
+    "level_within_one": 0.9766520894071915,
+    "children_with_evidence": 1.0,
+    "quiet_with_evidence": 1.0,
+    "cells_known": 0.4229714285714286,
+    "struggling_found": 0.3444636197104009,
+    "flags": 27.435,
+    "flags_right": 26.82,
+    "quiet_struggling_found": 0.30479892930858793
+   },
+   "12": {
+    "children_found": 0.5218251270142804,
+    "children_flag_precision": 0.9913238269083857,
+    "level_stated": 0.19228571428571428,
+    "level_exact": 0.7708509268509269,
+    "level_within_one": 0.9857537878787879,
+    "children_with_evidence": 1.0,
+    "quiet_with_evidence": 1.0,
+    "cells_known": 0.5869142857142857,
+    "struggling_found": 0.42901639781210604,
+    "flags": 34.07,
+    "flags_right": 33.435,
+    "quiet_struggling_found": 0.3691516178885684
+   }
+  },
+  "list_80": {
+   "2": {
+    "children_found": 0.057219955059537995,
+    "children_flag_precision": 0.9462719298245614,
+    "level_stated": 0.0027142857142857142,
+    "level_exact": 0.631578947368421,
+    "level_within_one": 1.0,
+    "children_with_evidence": 0.9584285714285714,
+    "quiet_with_evidence": 0.9418181818181819,
+    "cells_known": 0.04274285714285714,
+    "struggling_found": 0.0295160390587794,
+    "flags": 2.445,
+    "flags_right": 2.29,
+    "quiet_struggling_found": 0.012359164576474688
+   },
+   "4": {
+    "children_found": 0.22875857390878349,
+    "children_flag_precision": 0.9783928571428571,
+    "level_stated": 0.021,
+    "level_exact": 0.6793154761904762,
+    "level_within_one": 0.9598214285714286,
+    "children_with_evidence": 0.9990000000000001,
+    "quiet_with_evidence": 0.9972727272727273,
+    "cells_known": 0.18974285714285713,
+    "struggling_found": 0.17641717964111797,
+    "flags": 14.295,
+    "flags_right": 13.715,
+    "quiet_struggling_found": 0.15347795024536298
+   },
+   "8": {
+    "children_found": 0.5375200469151662,
+    "children_flag_precision": 0.9866434517280105,
+    "level_stated": 0.16928571428571426,
+    "level_exact": 0.7358159846853315,
+    "level_within_one": 0.9793032623434633,
+    "children_with_evidence": 1.0,
+    "quiet_with_evidence": 1.0,
+    "cells_known": 0.5292285714285714,
+    "struggling_found": 0.4182425224332822,
+    "flags": 33.295,
+    "flags_right": 32.485,
+    "quiet_struggling_found": 0.4069842049045211
+   },
+   "12": {
+    "children_found": 0.5730223794911701,
+    "children_flag_precision": 0.9902301201765211,
+    "level_stated": 0.30957142857142855,
+    "level_exact": 0.7807683138155275,
+    "level_within_one": 0.9877418969918971,
+    "children_with_evidence": 1.0,
+    "quiet_with_evidence": 1.0,
+    "cells_known": 0.6188857142857143,
+    "struggling_found": 0.45111683050440005,
+    "flags": 35.725,
+    "flags_right": 35.15,
+    "quiet_struggling_found": 0.41814018974710015
+   }
+  }
+ }
+}

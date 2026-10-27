@@ -11,6 +11,7 @@ import logging
 import os
 import secrets
 import threading
+from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
 
@@ -35,7 +36,18 @@ BRIEFS_PER_DAY = int(os.environ.get("SUNO_BRIEFS_PER_DAY", "12"))
 MAX_UPLOAD = 8 * 1024 * 1024
 MAX_TEXT = 3000
 
-app = FastAPI(title="SUNO", docs_url="/api/docs", openapi_url="/api/openapi.json")
+@asynccontextmanager
+async def lifespan(_app):
+    try:
+        n = store.cleanup_demo()
+        if n:
+            log.info("removed %d demo sandboxes older than %d h", n, store.DEMO_KEEP_HOURS)
+    except Exception:
+        log.exception("demo cleanup failed")
+    yield
+
+
+app = FastAPI(title="SUNO", docs_url="/api/docs", openapi_url="/api/openapi.json", lifespan=lifespan)
 
 
 # ---- sessions: a signed class id in a cookie ---------------------------------
@@ -97,9 +109,7 @@ def _start_brief(c: dict, day: str, force: bool = False) -> None:
     b = store.get_brief(c["class_id"], day)
     if b and not force and b["status"] in ("queued", "thinking", "speaking", "done"):
         return
-    made_today = store.q("SELECT COUNT(*) AS n FROM briefs WHERE class_id=? AND created_at >= date('now')",
-                         (c["class_id"],))[0]["n"]
-    if made_today >= BRIEFS_PER_DAY:
+    if store.count_today("briefs", c["class_id"]) >= BRIEFS_PER_DAY:
         raise HTTPException(429, "brief limit for today reached for this class")
     store.delete_brief(c["class_id"], day)
     store.put_brief(c["class_id"], day, status="queued")
@@ -193,6 +203,7 @@ def today(c: dict = Depends(current_class)):
         "needs_support": pic["needs_support"],
         "language_flags": pic["language_flags"],
         "heard_this_week": pic["heard_this_week"],
+        "levels": pic.get("levels", {}),
         "brief": None if not b else {
             "status": b["status"], "brief": b["brief"], "error": b["error"],
             "audio_url": f"/api/audio/{b['audio_file']}" if b.get("audio_file") else None,
@@ -210,13 +221,13 @@ def brief(force: bool = False, c: dict = Depends(current_class)):
 
 @app.get("/api/audio/{name}")
 def audio(name: str, c: dict = Depends(current_class)):
-    if not name.startswith(c["class_id"] + "_") or "/" in name or ".." in name:
+    prefix = c["class_id"] + "_"
+    if not name.startswith(prefix) or "/" in name or ".." in name or not name.endswith(".mp3"):
         raise HTTPException(404)
-    f = store.VAR / "audio" / name
-    if not f.exists():
+    data = store.get_brief_audio(c["class_id"], name[len(prefix):-4])
+    if data is None:
         raise HTTPException(404)
-    return FileResponse(f, media_type="audio/mpeg" if f.suffix == ".mp3" else "audio/wav",
-                        headers={"Cache-Control": "private, max-age=86400"})
+    return Response(data, media_type="audio/mpeg", headers={"Cache-Control": "private, max-age=86400"})
 
 
 @app.post("/api/next-day")
@@ -245,9 +256,7 @@ async def add_note(audio: UploadFile | None = File(default=None), text: str | No
             raise HTTPException(400, "day must be YYYY-MM-DD")
         if (today_ - note_day).days > 14:
             raise HTTPException(400, "notes older than two weeks are not accepted")
-    made = store.q("SELECT COUNT(*) AS n FROM notes WHERE class_id=? AND created_at >= date('now')",
-                   (c["class_id"],))[0]["n"]
-    if made >= NOTES_PER_DAY:
+    if store.count_today("notes", c["class_id"]) >= NOTES_PER_DAY:
         raise HTTPException(429, "note limit for today reached for this class")
     data = await audio.read(MAX_UPLOAD + 1) if audio else None
     if data is not None and len(data) > MAX_UPLOAD:
@@ -299,6 +308,16 @@ def trace(note_id: str, c: dict = Depends(current_class)):
     }
 
 
+@app.delete("/api/notes/{note_id}")
+def delete_note(note_id: str, c: dict = Depends(current_class)):
+    """The teacher can delete a note she didn't mean to send; its observations go with it."""
+    n = store.get_note(note_id)
+    if not n or n["class_id"] != c["class_id"]:
+        raise HTTPException(404)
+    store.delete_note(note_id)
+    return {"ok": True}
+
+
 class Answer(BaseModel):
     answer: str  # a child_id, or "skip"
 
@@ -336,8 +355,8 @@ def class_picture(c: dict = Depends(current_class)):
     for r in recs:
         if r["child_id"] and r["status"] not in ("dismissed",):
             last[r["child_id"]] = r["day"]
-    return {"today": t.isoformat(), "grid": pic["grid"], "silent": pic["silent"],
-            "language_flags": pic["language_flags"], "last_described": last}
+    return {"today": t.isoformat(), "grid": pic["grid"], "silent": pic["silent"], "levels": pic["levels"],
+            "next_steps": pic["needs_support"], "language_flags": pic["language_flags"], "last_described": last}
 
 
 @app.get("/api/children/{child_id}")
@@ -346,10 +365,15 @@ def child(child_id: str, c: dict = Depends(current_class)):
         raise HTTPException(404)
     t = jobs.class_today(c)
     recs = store.records(c["class_id"])
-    state = planner.tracker_state(recs, t)
+    lads = planner.ladders(recs, t)
+    state = planner.ladder.skill_views(lads)
     row = planner.grid([_names(c)[child_id]], state)[child_id]
+    levels = {area: {"level": st.level, "moments": st.moments, "days": len(st.days),
+                     "post": [round(p, 3) for p in st.post]} for (cid, area), st in lads.items() if cid == child_id}
+    nxt = planner.ladder.next_steps(state, child_id)
     mine = [_public_record(r) for r in recs if r["child_id"] == child_id and r["status"] != "dismissed"]
-    return {"child": _names(c)[child_id], "grid": row, "records": list(reversed(mine)),
+    return {"child": _names(c)[child_id], "grid": row, "records": list(reversed(mine)), "levels": levels,
+            "next_steps": nxt,
             "language_flag": next((f for f in planner.language_flags(recs, t) if f["child_id"] == child_id), None)}
 
 

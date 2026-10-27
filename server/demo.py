@@ -9,7 +9,6 @@ time, so the demo always looks like it is the morning after the last note.
 from __future__ import annotations
 
 import json
-import shutil
 
 from . import jobs, store
 from .pipeline import planner
@@ -49,13 +48,12 @@ def clone_demo() -> str:
         same = [(x["child_id"], x["item"]) for x in pic["listen_today"]] == \
                [(x["child_id"], x["item"]) for x in b["picture"]["listen_today"]]
         if same and sorted(pic["silent"]) == sorted(b["picture"]["silent"]):
-            audio = None
             src = store.ROOT / b["audio_file"] if b.get("audio_file") else None
-            if src and src.exists():
-                audio = f"{cid}_{today.isoformat()}{src.suffix}"
-                shutil.copy(src, store.VAR / "audio" / audio)
+            has_audio = bool(src and src.exists())
             store.put_brief(cid, today.isoformat(), status="done", picture_json=pic, brief_json=b["brief"],
-                            problems_json=b.get("problems", []), audio_file=audio, usage_json=b.get("usage"))
+                            problems_json=b.get("problems", []), usage_json=b.get("usage"),
+                            audio_file=f"{cid}_{today.isoformat()}.mp3" if has_audio else None,
+                            audio=src.read_bytes() if has_audio else None)
     return cid
 
 

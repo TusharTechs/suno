@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -98,9 +97,10 @@ def main() -> None:
     print(b["status"], b.get("error"))
     print(json.dumps(b["brief"], ensure_ascii=False, indent=1))
     audio_rel = None
-    if b.get("audio_file"):
-        audio_rel = "samples/synthetic/audio/demo_brief" + Path(b["audio_file"]).suffix
-        shutil.copy(store.VAR / "audio" / b["audio_file"], ROOT / audio_rel)
+    audio = store.get_brief_audio(cid, today.isoformat())
+    if audio:
+        audio_rel = "samples/synthetic/audio/demo_brief.mp3"
+        (ROOT / audio_rel).write_bytes(audio)
     fixture = {"label": LABEL, "notes": out_notes,
                "brief": {"picture": b["picture"], "brief": b["brief"], "problems": b.get("problems") or [],
                          "usage": b.get("usage"), "audio_file": audio_rel} if b["brief"] else None}

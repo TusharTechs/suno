@@ -15,10 +15,10 @@ import json
 import os
 
 from .claude_client import ClaudeOutputError, Usage, call_structured, load_prompt, load_schema
-from .config import ACTIVITIES, SKILL_BY_CODE
+from .config import ACTIVITIES, SKILL_BY_CODE, SKILLS
 from .guardrails import has_banned_words
 
-PROMPT = "brief.v2.md"
+PROMPT = "brief.v3.md"
 SCHEMA = "brief.v2.json"
 MAX_CHARS_HI = 1800
 MAX_CHARS_EN = 900
@@ -50,8 +50,10 @@ def facts_for_brief(roster: list[dict], pic: dict, recent_evidence: list[dict]) 
                                                 "evidence": ev_by.get((x["child_id"], x["skill_code"]), [])[-3:]}
                           for x in pic["needs_support"]],
         "on_track_by_skill": {SKILL_BY_CODE[s]["label_hi"]: n for s, n in on_track.items()},
+        "levels": _levels(pic, who),
         "listen_today": [who(x["child_id"]) | {"item": x["item"], "reason": x["reason"],
                                                "skill": SKILL_BY_CODE[x["skill_code"]]["label_hi"]}
+                         | ({"also": x["also"]["item"]} if x.get("also") else {})
                          for x in pic["listen_today"]],
         "silent": [who(c) for c in pic["silent"]],
         "language_flags": [who(x["child_id"]) | {"signal": x["signal"]} for x in pic["language_flags"]],
@@ -59,6 +61,18 @@ def facts_for_brief(roster: list[dict], pic: dict, recent_evidence: list[dict]) 
                                                   "outcome": r["outcome"], "what": r["rationale"], "day": r["day"]}
                             for r in recent_evidence[-40:]],
     }
+
+
+def _levels(pic: dict, who) -> dict:
+    """{area: {level label: [children]}} for children whose level SUNO is sure of."""
+    labels = {a["area"]: a for a in SKILLS["areas"]}
+    out: dict = {}
+    for cid, areas in pic.get("levels", {}).items():
+        for area, v in areas.items():
+            if v["level"] is not None:
+                lab = labels[area]["levels"][v["level"]]["label_hi"]
+                out.setdefault(labels[area]["label_hi"], {}).setdefault(lab, []).append(who(cid)["first_name"])
+    return out
 
 
 def check_brief(b: dict, roster_ids: set[str], pic: dict) -> list[str]:

@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
-from . import tracker
+from . import ladder, tracker
 from .config import SKILL_CODES
 
 LISTEN_PER_DAY = 5
@@ -47,10 +47,15 @@ def _usable(r: dict) -> bool:
     return r.get("feedback") != "down"
 
 
+def ladders(records: list[dict], today: date):
+    obs = [ladder.Obs(r["child_id"], r["skill_code"], r["outcome"], r["confidence"], _day(r), r.get("error_type") or "none")
+           for r in records if r["status"] == "evidence" and _usable(r) and _day(r) <= today]
+    return ladder.track(obs, today)
+
+
 def tracker_state(records: list[dict], today: date):
-    ev = [tracker.Evidence(r["child_id"], r["skill_code"], r["outcome"], r["confidence"], _day(r))
-          for r in records if r["status"] == "evidence" and _usable(r) and _day(r) <= today]
-    return tracker.track(ev, today)
+    """Per child and skill: probability of having it, observations, days, status (from the ladder)."""
+    return ladder.skill_views(ladders(records, today))
 
 
 def grid(roster: list[dict], state) -> dict:
@@ -116,13 +121,19 @@ def _confirm_list(records: list[dict], today: date) -> list[dict]:
 
 
 def listen_today(roster: list[dict], lesson: dict, records: list[dict], state, today: date,
-                 yesterday_list: set[str], silent: list[str]) -> list[dict]:
+                 yesterday_list: set[str], silent: list[str], lads=None) -> list[dict]:
+    """Confirm-first, then the children and skills where one more observation tells SUNO the most
+    (adaptive, like ASER's ladder): a struggle half-seen, a child never heard, a level unsure."""
     by_id = {c["child_id"]: c for c in roster}
-    focus = lesson.get("focus_skills") or SKILL_CODES
+    focus = [s for s in (lesson.get("focus_skills") or SKILL_CODES) if lesson["items"].get(s)]
+    # Any skill with an item this week can be asked about (see askable below): a child stuck below
+    # the week's focus (still on letters) is found by asking about letters, as ASER's ladder does.
+    lads = lads if lads is not None else {}
     seen = {}  # items rotate with how often a child has been described, not with the calendar
     for r in records:
         if r["child_id"]:
             seen[r["child_id"]] = seen.get(r["child_id"], 0) + 1
+    askable = [s for s in SKILL_CODES if lesson["items"].get(s)]
     plan = []
     for x in _confirm_list(records, today)[:2]:
         if not x["skill_code"] or not lesson["items"].get(x["skill_code"]):
@@ -133,17 +144,50 @@ def listen_today(roster: list[dict], lesson: dict, records: list[dict], state, t
     taken = {p["child_id"] for p in plan}
     absent_yesterday = {r["child_id"] for r in records
                         if r["status"] == "absent" and r["day"] == school_days_before(today, 1)[0].isoformat()}
-    pool = [c["child_id"] for c in roster if c["child_id"] not in taken]
-    picks = tracker.plan_call_ons(pool, state, focus, yesterday_list - absent_yesterday,
-                                  k=LISTEN_PER_DAY - len(plan))
-    for cid in picks:
-        skill = _least_known(cid, state, focus)
+    skip = taken | (yesterday_list - absent_yesterday)
+    scored = []
+    for c in roster:
+        cid = c["child_id"]
+        if cid in skip:
+            continue
+        best_skill, best_info = None, -1.0
+        for s in askable:
+            area, need = ladder.NEED[s]
+            info = ladder.information(lads.get((cid, area)), need, area)
+            if info > best_info:
+                best_skill, best_info = s, info
+        struggling = any(state.get((cid, s)) and 0 < state[(cid, s)].p < 0.5 and not state[(cid, s)].decided
+                         for s in focus)
+        bonus = 0.5 * (cid in silent) + 0.3 * struggling
+        scored.append((best_info + bonus, -seen.get(cid, 0), cid, best_skill, struggling))
+    scored.sort(key=lambda x: (-x[0], -x[1], x[2]))
+    for _, _, cid, skill, struggling in scored[:LISTEN_PER_DAY - len(plan)]:
         st = state.get((cid, skill))
         reason = ("not_heard" if cid in silent else
-                  "needs_support" if st and st.status == "needs support" else "least_known")
+                  "needs_support" if struggling or (st and st.status == "needs support") else "least_known")
         plan.append({"child_id": cid, "skill_code": skill, "reason": reason,
                      "item": _item_for(lesson, skill, by_id[cid]["roll_no"] + seen.get(cid, 0))})
+    for x in plan:
+        x["also"] = _second_rung(x, lads, askable, lesson, by_id[x["child_id"]]["roll_no"] + seen.get(x["child_id"], 0))
     return plan
+
+
+def _second_rung(x: dict, lads, askable: list[str], lesson: dict, salt: int) -> dict | None:
+    """A second item one rung up the ladder if the child probably has the first, else one rung down:
+    the two-item mini-ladder ASER uses, heard while the child reads a line of the page anyway."""
+    area, need = ladder.NEED[x["skill_code"]]
+    st = lads.get((x["child_id"], area))
+    p = st.p_has(need) if st else 0.5
+    target = need + 1 if p >= 0.5 else need - 1
+    options = [s for s in askable if ladder.NEED[s] == (area, target)]
+    if not options:
+        options = [s for s in askable if ladder.NEED[s][0] == area and ladder.NEED[s][1] != need]
+        options.sort(key=lambda s: abs(ladder.NEED[s][1] - target))
+        options = options[:1]
+    if not options:
+        return None
+    skill = options[salt % len(options)]
+    return {"skill_code": skill, "item": _item_for(lesson, skill, salt)}
 
 
 def language_flags(records: list[dict], today: date) -> list[dict]:
@@ -159,14 +203,21 @@ def language_flags(records: list[dict], today: date) -> list[dict]:
 def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
             yesterday_list: set[str] | None = None) -> dict:
     """Everything code knows about the class on `today` (morning: today's notes not in yet)."""
-    state = tracker_state(records, today)
+    lads = ladders(records, today)
+    state = ladder.skill_views(lads)
     silent = silent_children(roster, records, today)
     g = grid(roster, state)
     window = set(school_days_before(today, WINDOW_DAYS - 1) + [today])
     heard_week = sorted({r["child_id"] for r in records if r["child_id"] and r["kind"] == "observation"
                          and _day(r) in window and _usable(r)})
-    needs = [{"child_id": c, "skill_code": s, **cell} for c, row in g.items() for s, cell in row.items()
-             if cell["status"] == "needs support"]
+    # "Needs support" = each child's next step on each ladder: the lowest skill they need help with
+    # (Teaching at the Right Level groups), not every skill above it.
+    needs = [{"child_id": c["child_id"], "skill_code": s, **g[c["child_id"]][s]}
+             for c in roster for s in ladder.next_steps(state, c["child_id"]).values()]
+    levels = {}
+    for (cid, area), st in lads.items():
+        levels.setdefault(cid, {})[area] = {"level": st.level, "moments": st.moments, "days": len(st.days),
+                                            "post": [round(p, 3) for p in st.post]}
     on_track = [{"child_id": c, "skill_code": s} for c, row in g.items() for s, cell in row.items()
                 if cell["status"] == "on track"]
     return {
@@ -176,6 +227,7 @@ def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
         "on_track": on_track,
         "silent": silent,
         "heard_this_week": heard_week,
-        "listen_today": listen_today(roster, lesson, records, state, today, yesterday_list or set(), silent),
+        "levels": levels,
+        "listen_today": listen_today(roster, lesson, records, state, today, yesterday_list or set(), silent, lads),
         "language_flags": language_flags(records, today),
     }

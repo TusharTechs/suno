@@ -1,40 +1,238 @@
 {
-  "label": "Skill ladder used by SUNO v1. Hindi reading follows the ASER/TaRL progression (letters -> vowel signs -> words -> sentences -> understanding); maths follows the NIPUN Bharat Grade 1-3 number strand. Written by Team Sunvai.",
+  "label": "Skill ladder used by SUNO v1. Hindi reading follows the ASER/TaRL progression (letters -> vowel signs -> words -> sentences -> understanding); maths follows the NIPUN Bharat Grade 1-3 number strand. Written by Team Sunvai. Each area is a ladder of levels (TaRL/ASER style); each skill needs a level on its area's ladder.",
   "areas": [
-    {"area": "hindi", "label_hi": "हिंदी पढ़ना", "label_en": "Hindi reading"},
-    {"area": "maths", "label_hi": "गणित", "label_en": "Maths"},
-    {"area": "english", "label_hi": "अंग्रेज़ी", "label_en": "English"}
+    {
+      "area": "hindi",
+      "label_hi": "हिंदी पढ़ना",
+      "label_en": "Hindi reading",
+      "levels": [
+        {
+          "label_hi": "शुरुआत",
+          "label_en": "beginner"
+        },
+        {
+          "label_hi": "अक्षर",
+          "label_en": "letters"
+        },
+        {
+          "label_hi": "शब्द",
+          "label_en": "simple words"
+        },
+        {
+          "label_hi": "मात्रा वाले शब्द",
+          "label_en": "words with vowel signs"
+        },
+        {
+          "label_hi": "वाक्य",
+          "label_en": "sentences"
+        },
+        {
+          "label_hi": "कहानी और समझ",
+          "label_en": "story and understanding"
+        }
+      ]
+    },
+    {
+      "area": "maths",
+      "label_hi": "गणित",
+      "label_en": "Maths",
+      "levels": [
+        {
+          "label_hi": "शुरुआत",
+          "label_en": "beginner"
+        },
+        {
+          "label_hi": "संख्या पहचान",
+          "label_en": "reads numbers"
+        },
+        {
+          "label_hi": "दहाई-इकाई",
+          "label_en": "tens and ones"
+        },
+        {
+          "label_hi": "जोड़-घटाव",
+          "label_en": "adds and subtracts"
+        }
+      ]
+    },
+    {
+      "area": "english",
+      "label_hi": "अंग्रेज़ी",
+      "label_en": "English",
+      "levels": [
+        {
+          "label_hi": "शुरुआत",
+          "label_en": "beginner"
+        },
+        {
+          "label_hi": "शब्द",
+          "label_en": "reads words"
+        }
+      ]
+    }
   ],
   "skills": [
-    {"code": "hi.letters", "area": "hindi", "label_hi": "अक्षर पहचान", "label_en": "Letters", "example": "क, म, ल"},
-    {"code": "hi.matras", "area": "hindi", "label_hi": "मात्रा", "label_en": "Vowel signs", "example": "का, कि, की, कु"},
-    {"code": "hi.blend_no_matra", "area": "hindi", "label_hi": "अक्षर जोड़कर शब्द", "label_en": "Blending simple words", "example": "घर, कमल, नमक"},
-    {"code": "hi.words_with_matras", "area": "hindi", "label_hi": "मात्रा वाले शब्द", "label_en": "Words with vowel signs", "example": "पानी, किताब, मछली"},
-    {"code": "hi.conjuncts", "area": "hindi", "label_hi": "संयुक्त अक्षर", "label_en": "Joined letters", "example": "क्ष, त्र, प्र"},
-    {"code": "hi.sentence", "area": "hindi", "label_hi": "वाक्य पढ़ना", "label_en": "Reading sentences", "example": "राम घर जा।"},
-    {"code": "hi.comprehension", "area": "hindi", "label_hi": "पढ़कर समझना", "label_en": "Understanding what was read", "example": "कहानी में क्या हुआ?"},
-    {"code": "math.number_recognition", "area": "maths", "label_hi": "संख्या पहचान", "label_en": "Reading numbers", "example": "32, 47, 90"},
-    {"code": "math.place_value", "area": "maths", "label_hi": "दहाई-इकाई", "label_en": "Tens and ones", "example": "32 = 3 दहाई 2 इकाई"},
-    {"code": "math.addition", "area": "maths", "label_hi": "जोड़", "label_en": "Addition", "example": "23 + 5"},
-    {"code": "math.subtraction", "area": "maths", "label_hi": "घटाव", "label_en": "Subtraction", "example": "15 - 6"},
-    {"code": "en.words", "area": "english", "label_hi": "अंग्रेज़ी शब्द", "label_en": "English words", "example": "cat, sun, tree"}
+    {
+      "code": "hi.letters",
+      "area": "hindi",
+      "label_hi": "अक्षर पहचान",
+      "label_en": "Letters",
+      "example": "क, म, ल",
+      "level": 1
+    },
+    {
+      "code": "hi.matras",
+      "area": "hindi",
+      "label_hi": "मात्रा",
+      "label_en": "Vowel signs",
+      "example": "का, कि, की, कु",
+      "level": 2
+    },
+    {
+      "code": "hi.blend_no_matra",
+      "area": "hindi",
+      "label_hi": "अक्षर जोड़कर शब्द",
+      "label_en": "Blending simple words",
+      "example": "घर, कमल, नमक",
+      "level": 2
+    },
+    {
+      "code": "hi.words_with_matras",
+      "area": "hindi",
+      "label_hi": "मात्रा वाले शब्द",
+      "label_en": "Words with vowel signs",
+      "example": "पानी, किताब, मछली",
+      "level": 3
+    },
+    {
+      "code": "hi.conjuncts",
+      "area": "hindi",
+      "label_hi": "संयुक्त अक्षर",
+      "label_en": "Joined letters",
+      "example": "क्ष, त्र, प्र",
+      "level": 4
+    },
+    {
+      "code": "hi.sentence",
+      "area": "hindi",
+      "label_hi": "वाक्य पढ़ना",
+      "label_en": "Reading sentences",
+      "example": "राम घर जा।",
+      "level": 4
+    },
+    {
+      "code": "hi.comprehension",
+      "area": "hindi",
+      "label_hi": "पढ़कर समझना",
+      "label_en": "Understanding what was read",
+      "example": "कहानी में क्या हुआ?",
+      "level": 5
+    },
+    {
+      "code": "math.number_recognition",
+      "area": "maths",
+      "label_hi": "संख्या पहचान",
+      "label_en": "Reading numbers",
+      "example": "32, 47, 90",
+      "level": 1
+    },
+    {
+      "code": "math.place_value",
+      "area": "maths",
+      "label_hi": "दहाई-इकाई",
+      "label_en": "Tens and ones",
+      "example": "32 = 3 दहाई 2 इकाई",
+      "level": 2
+    },
+    {
+      "code": "math.addition",
+      "area": "maths",
+      "label_hi": "जोड़",
+      "label_en": "Addition",
+      "example": "23 + 5",
+      "level": 2
+    },
+    {
+      "code": "math.subtraction",
+      "area": "maths",
+      "label_hi": "घटाव",
+      "label_en": "Subtraction",
+      "example": "15 - 6",
+      "level": 3
+    },
+    {
+      "code": "en.words",
+      "area": "english",
+      "label_hi": "अंग्रेज़ी शब्द",
+      "label_en": "English words",
+      "example": "cat, sun, tree",
+      "level": 1
+    }
   ],
   "error_types": [
-    {"code": "none", "label_en": "No mistake"},
-    {"code": "not_stated", "label_en": "The teacher did not say what went wrong"},
-    {"code": "letter_confusion", "label_en": "Reads one letter as another (ब/व, घ/ध)"},
-    {"code": "matra_omitted", "label_en": "Drops the vowel sign (पानी read as पन)"},
-    {"code": "matra_confused", "label_en": "Mixes up vowel signs (ि/ी, ु/ू)"},
-    {"code": "segments_without_blending", "label_en": "Sounds out letters but does not join them (क-म-ल)"},
-    {"code": "conjunct_broken", "label_en": "Splits a joined letter"},
-    {"code": "guesses_from_first_letter", "label_en": "Guesses the word from its first letter or the picture"},
-    {"code": "letter_by_letter", "label_en": "Reads correctly but only letter by letter, very slowly"},
-    {"code": "meaning_not_understood", "label_en": "Reads the words but cannot say what they mean"},
-    {"code": "number_reversal", "label_en": "Reverses digits (32 read as 23)"},
-    {"code": "place_value_confusion", "label_en": "Confuses tens and ones"},
-    {"code": "counting_error", "label_en": "Counting or calculation slip"},
-    {"code": "operation_confused", "label_en": "Uses the wrong operation"},
-    {"code": "no_attempt", "label_en": "Did not try"},
-    {"code": "other", "label_en": "Another mistake, described in the rationale"}
+    {
+      "code": "none",
+      "label_en": "No mistake"
+    },
+    {
+      "code": "not_stated",
+      "label_en": "The teacher did not say what went wrong"
+    },
+    {
+      "code": "letter_confusion",
+      "label_en": "Reads one letter as another (ब/व, घ/ध)"
+    },
+    {
+      "code": "matra_omitted",
+      "label_en": "Drops the vowel sign (पानी read as पन)"
+    },
+    {
+      "code": "matra_confused",
+      "label_en": "Mixes up vowel signs (ि/ी, ु/ू)"
+    },
+    {
+      "code": "segments_without_blending",
+      "label_en": "Sounds out letters but does not join them (क-म-ल)"
+    },
+    {
+      "code": "conjunct_broken",
+      "label_en": "Splits a joined letter"
+    },
+    {
+      "code": "guesses_from_first_letter",
+      "label_en": "Guesses the word from its first letter or the picture"
+    },
+    {
+      "code": "letter_by_letter",
+      "label_en": "Reads correctly but only letter by letter, very slowly"
+    },
+    {
+      "code": "meaning_not_understood",
+      "label_en": "Reads the words but cannot say what they mean"
+    },
+    {
+      "code": "number_reversal",
+      "label_en": "Reverses digits (32 read as 23)"
+    },
+    {
+      "code": "place_value_confusion",
+      "label_en": "Confuses tens and ones"
+    },
+    {
+      "code": "counting_error",
+      "label_en": "Counting or calculation slip"
+    },
+    {
+      "code": "operation_confused",
+      "label_en": "Uses the wrong operation"
+    },
+    {
+      "code": "no_attempt",
+      "label_en": "Did not try"
+    },
+    {
+      "code": "other",
+      "label_en": "Another mistake, described in the rationale"
+    }
   ]
 }

@@ -246,9 +246,11 @@ def check_mentions(mentions: list[dict], sentences: list[dict], roster: list[dic
         if child is None:
             r.update(confidence=0.0, status="unattributed")
             if status in ("ambiguous", "unknown", "disagree", "no_name") and m["kind"] == "observation":
+                which = bool(res["candidates"])
                 questions.append({"mention_id": mid, "name_said": m["name_said"],
-                                  "type": "which_child" if res["candidates"] else "who_is_this",
-                                  "candidates": res["candidates"]})
+                                  "type": "which_child" if which else "who_is_this",
+                                  # who_is_this: the nearest-sounding names, offered as suggestions only
+                                  "candidates": res["candidates"] if which else names.nearest(m["name_said"], roster)})
             records.append(r)
             continue
         if m["kind"] == "absent":

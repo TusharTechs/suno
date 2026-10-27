@@ -121,6 +121,19 @@ def candidates(name_said: str, roster: list[dict]) -> list[dict]:
     return exact or close
 
 
+def nearest(name_said: str, roster: list[dict], k: int = 3, floor: float = 0.7) -> list[str]:
+    """Roster children whose names sound closest to an unrecognised name ("मिकास" -> विकास).
+    Only ever offered to the teacher as one-tap suggestions; never used to attribute on its own."""
+    toks = [t for t in tokens(name_said) if not t.isdigit()]
+    scored = []
+    for c in roster:
+        best = max((SequenceMatcher(None, phonetic_key(t), phonetic_key(n)).ratio()
+                    for t in toks for n in names_of(c) if phonetic_key(t) and phonetic_key(n)), default=0.0)
+        if best >= floor:
+            scored.append((best, c["roll_no"], c["child_id"]))
+    return [cid for _, _, cid in sorted(scored, key=lambda x: (-x[0], x[1]))[:k]]
+
+
 # Hindi number words (1-100) with common spellings: roll numbers, and numbers in maths items.
 _HINDI_NUMBERS = {
     "एक": 1, "दो": 2, "तीन": 3, "चार": 4, "पांच": 5, "पाँच": 5, "छह": 6, "छः": 6, "छे": 6, "सात": 7, "आठ": 8,

@@ -76,7 +76,9 @@ def note_signals(m: dict, item_in_transcript: bool, item_in_lesson: bool) -> dic
     elif item_in_transcript:
         specificity = 1.0 if item_in_lesson else 0.85
     elif m["skill_code"]:
-        specificity = 0.6
+        # A skill named without a word or sum ("did the addition work fine") can't be checked:
+        # it stays just below the gate and becomes "listen again tomorrow" (real-speech test, 27 Oct).
+        specificity = 0.5
     else:
         specificity = 0.2
     if m["outcome"] == "correct":

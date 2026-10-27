@@ -245,7 +245,7 @@ def check_mentions(mentions: list[dict], sentences: list[dict], roster: list[dic
 
         if child is None:
             r.update(confidence=0.0, status="unattributed")
-            if status in ("ambiguous", "unknown", "disagree", "no_name") and m["kind"] == "observation":
+            if status in ("ambiguous", "unknown", "disagree", "no_name") and m["kind"] in ("observation", "absent"):
                 which = bool(res["candidates"])
                 questions.append({"mention_id": mid, "name_said": m["name_said"],
                                   "type": "which_child" if which else "who_is_this",

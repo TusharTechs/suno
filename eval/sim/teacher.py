@@ -172,8 +172,10 @@ def expectation(s: dict, dup_names: set[str], by_id: dict) -> str:
         s["name_form"] == "first" and by_id[s["child_id"]].first_name in dup_names)
     if s["detail"] == "vague":
         return "not_evidence"
-    if s["detail"] == "skill" and s["outcome"] != "correct":
-        base = "either"   # "got the vowel signs wrong" with no word: a reviewer could go either way
+    if s["detail"] == "skill":
+        # A skill with no word or sum ("did the addition fine", "got the vowel signs wrong") can't be
+        # checked: SUNO holds it back as "check tomorrow" (decision 32). Not scored either way.
+        base = "either"
     else:
         base = "evidence"
     return f"ask_then_{base}" if unclear_who else base

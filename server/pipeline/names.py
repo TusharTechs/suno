@@ -173,6 +173,31 @@ def numbers_in(text: str) -> set[int]:
     return found
 
 
+# How people say (and speech-to-text writes) some numbers. Used ONLY right after "रोल" / "roll" or
+# right before "नंबर" / "number", because several are ordinary words elsewhere (तेरा = "yours").
+_SPOKEN_ROLL = {"एक": 1, "दो": 2, "तीन": 3, "चार": 4, "पाँच": 5, "पांच": 5, "छे": 6, "छह": 6, "सात": 7, "आठ": 8,
+                "नौ": 9, "नो": 9, "दस": 10, "ग्यारा": 11, "बारा": 12, "तेरा": 13, "चौदा": 14, "पंद्रा": 15,
+                "सोला": 16, "सत्रा": 17, "सतरा": 17, "अठारा": 18, "उन्नीस": 19, "बीस": 20}
+_ROLL_BEFORE = {"रोल", "roll", "रॉल"}
+_ROLL_AFTER = {"नंबर", "नम्बर", "number", "no"}
+
+
+def roll_numbers(text: str) -> set[int]:
+    """Numbers said as a roll number: digits or Hindi number words anywhere, plus spoken forms
+    such as "रोल तेरा" (13) when they sit next to रोल / नंबर."""
+    found = numbers_in(text)
+    toks = tokens(unicodedata.normalize("NFC", text))
+    for i, tok in enumerate(toks):
+        n = _SPOKEN_ROLL.get(_num_norm(tok))
+        if n is None:
+            continue
+        before = toks[i - 1].lower() if i else ""
+        after = toks[i + 1].lower() if i + 1 < len(toks) else ""
+        if before in _ROLL_BEFORE or after in _ROLL_AFTER:
+            found.add(n)
+    return found
+
+
 def resolve(name_said: str, roster: list[dict]) -> dict:
     """Which child does name_said mean? Returns
     {"status": "unique" | "roll_number" | "ambiguous" | "unknown" | "no_name",
@@ -185,7 +210,7 @@ def resolve(name_said: str, roster: list[dict]) -> dict:
         return {"status": "unknown", "child_id": None, "candidates": []}
     if len(cands) == 1:
         return {"status": "unique", "child_id": ids[0], "candidates": ids}
-    rolls = numbers_in(name_said)
+    rolls = roll_numbers(name_said)
     by_roll = [c for c in cands if c["roll_no"] in rolls]
     if len(by_roll) == 1:
         return {"status": "roll_number", "child_id": by_roll[0]["child_id"], "candidates": ids}

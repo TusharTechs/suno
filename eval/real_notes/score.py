@@ -28,6 +28,25 @@ RAW = ROOT / "data" / "raw" / "real_notes"
 LESSON = json.loads((ROOT / "samples/synthetic/demo_class.json").read_text())["lesson"]
 
 
+def _words(text: str) -> list[str]:
+    import re
+    import unicodedata
+    t = unicodedata.normalize("NFC", text).replace("\u093c", "").lower()
+    return re.sub(r"[^\w\u0900-\u097f\s+-]", " ", t).split()
+
+
+def wer(ref: str, hyp: str) -> tuple[int, int]:
+    """Word errors (substitutions + deletions + insertions) and reference length."""
+    r, h = _words(ref), _words(hyp)
+    prev = list(range(len(h) + 1))
+    for i, rw in enumerate(r, 1):
+        cur = [i] + [0] * len(h)
+        for j, hw in enumerate(h, 1):
+            cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (rw != hw))
+        prev = cur
+    return prev[-1], len(r)
+
+
 def main() -> None:
     scripts = json.loads((ROOT / "eval/real_notes/scripts.json").read_text())
     by_id = {n["id"]: n for n in scripts["notes"]}
@@ -45,7 +64,8 @@ def main() -> None:
         a = score_note(note["statements"], out["records"], out["follow_ups"])
         before.update(b); after.update(a)
         setting = f.stem.split("_", 1)[1] if "_" in f.stem else "unspecified"
-        per_setting.setdefault(setting, Counter()).update(b)
+        e, n = wer(note["text"], heard["transcript"])
+        per_setting.setdefault(setting, Counter()).update(b | {"wer_errors": e, "wer_words": n, "recordings": 1})
         rows.append((f.name, heard["seconds"], b, a, taps, heard["transcript"]))
         print(f"{f.name}: {heard['seconds']} s, evidence {b['evidence']}, wrong child {b['wrong_child_evidence']}, "
               f"clear obs → evidence {b['expect_evidence_became_evidence']}/{b['expect_evidence']}", flush=True)
@@ -66,15 +86,17 @@ def main() -> None:
         f"| Labels repeated by SUNO | {B['banned_in_output']} (in {B['statements_with_label']} statements that used one) |",
         f"| Specific observations about a clearly named child that became evidence | {pct(B['expect_evidence_became_evidence'], B['expect_evidence'])} |",
         f"| …with an unclear name, after the teacher's one tap | {pct(A['expect_ask_then_evidence_became_evidence'], A['expect_ask_then_evidence'])} |",
-        f"| Absences recorded | {pct(B['absent_found'], B['expect_absent'])} |",
+        f"| Absences recorded | {pct(B['absent_found'], B['expect_absent'])} (after one-tap answers: {pct(A['absent_found'], A['expect_absent'])}) |",
         "",
         "## By setting",
         "",
-        "| Setting | Recordings | Wrong-child evidence | Direction right | Clear observations → evidence |",
-        "|---|---|---|---|---|",
-    ] + [f"| {k} | {sum(1 for r in rows if (r[0].split('.')[0].split('_', 1) + ['unspecified'])[1] == k)} | "
+        "| Setting | Recordings | Speech-to-text word error rate | Wrong-child evidence | Direction right | Clear observations → evidence |",
+        "|---|---|---|---|---|---|",
+    ] + [f"| {k} | {c['recordings']} | {100 * c['wer_errors'] / max(1, c['wer_words']):.0f}% | "
          f"{pct(c['wrong_child_evidence'], c['evidence'])} | {pct(c['evidence_direction_ok'], c['evidence'])} | "
          f"{pct(c['expect_evidence_became_evidence'], c['expect_evidence'])} |" for k, c in sorted(per_setting.items())] + [
+        "",
+        "Word error rate compares the transcript with the script word by word; the reader may also have changed a word, so it is an upper bound on recognition errors.",
         "",
         "One speaker (an adult man); most primary teachers are women. Read with the simulation results, not instead of them.",
         "",
@@ -83,6 +105,10 @@ def main() -> None:
     ] + [f"| {n} | {s} | {b['evidence']} | {b['wrong_child_evidence']} | {b['expect_evidence_became_evidence']}/{b['expect_evidence']} |"
          for n, s, b, a, t, _ in rows] + ["", f"Claude spend: ${usage.usd:.2f}."]
     (ROOT / "eval/results/real_notes.md").write_text("\n".join(lines) + "\n")
+    (ROOT / "eval/results/real_notes.json").write_text(json.dumps({
+        "label": "One real speaker reading scripted notes (fictional class) on an ordinary phone.",
+        "recordings": len(files), "before_taps": dict(B), "after_taps": dict(A),
+        "settings": {k: dict(c) for k, c in per_setting.items()}}, ensure_ascii=False, indent=1))
     print("\n".join(lines))
 
 

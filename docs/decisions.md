@@ -5,6 +5,7 @@ This file is the evidence for the Build deck's **"User inputs and testing"** sli
 ## Input from users, mentors and organisers
 | Date | Source | What they said or did | What we changed | Where it shows |
 | --- | --- | --- | --- | --- |
+| 27 Oct 2026 | Real-speech test (Tushar, alone; 15 recordings of 5 scripted notes in a quiet room, with a fan, and with classroom noise) | Real human voice on an ordinary phone: 0 of 62 evidence records on the wrong child and 62 of 62 in the right direction, at 15–23% speech-to-text word error rate. But 3 of 21 vague remarks became evidence ("काजल ने आज जोड़ वाला काम ठीक कर लिया", no sum named), and 3 of 15 absences were lost because "रोल तेरह" was transcribed as "रोल तेरा" | Evidence now needs a specific word or sum (decision 32); spoken roll numbers are read next to रोल / नंबर, and unclear absences get a one-tap question (decision 33). Re-scored: 0 of 21 vague remarks became evidence; 15 of 15 absences recorded | `eval/results/real_notes.md`, `server/pipeline/confidence.py`, `names.py`, `guardrails.py` |
 | 20 Oct 2026 | Technical mentor (call) | SUNO rests on one untested belief: that each answer can be mapped to the right child. Test that alone before building any app ("if that hypothesis doesn't hold, the entire thing collapses"). Suggested a home test: 2–3 people, a phone some distance away, check the mapping. | Stopped app work. Built feasibility test F1 (voice matching on real child voices from ASER, in a simulated classroom) and a scorer for the home test. F1 result: voice matching cannot name the child (Decision 17); attribution moves to the teacher's tap on planned call-ons. | `docs/feasibility.md`, `eval/feasibility/` |
 | 20 Oct 2026 | Technical mentor (call) | Teachers often point ("haan beta, tum batao") instead of naming, and a class can have several children with the same name; name calls alone can't say who answered. | Name calls become one signal, never the only one. Roster entries carry a roll number so same-name children stay distinct. | Decision 18 |
 | 20 Oct 2026 | Technical mentor (call) | Speech-to-text (Sarvam or any other) tells you *what* was said, not *who* said it. It is a different problem. | Split the pipeline into two separate questions, each tested on its own: who answered (F1) and was it right (F2). | `docs/feasibility.md` |
@@ -49,6 +50,8 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 29 | The listening list asks for **two items per child**: one at the likely level, one a rung up or down (ASER's mini-ladder), picked by expected information | Stage B: children who need support found by week 8 rose from 41% (one item) to 54% (two items); costs no extra class time, since the child reads a line anyway | 27 Oct | Decided |
 | 30 | Unknown names get the nearest-sounding roster names as one-tap suggestions (मिकास → विकास), never automatic attribution | Stage A: speech-to-text misheard names; the teacher should tap, not scroll a list of 30 | 27 Oct | Decided |
 | 31 | Ready for a real classroom: roster from a photo of the attendance register (Claude vision, first names only, teacher checks), weekly lesson words set by the teacher, readable class codes, Hindi-only mode, delete a note, free Postgres so classes persist | "Hand it over to a teacher" (Tushar, 27 Oct); the Ideate deck promised the register photo | 27 Oct | Decided |
+| 32 | Evidence needs a specific word or sum: a skill named without one ("did the addition fine") stays just below the gate and becomes "check tomorrow". The evaluation's ground truth was aligned with this rule (skill-only remarks are scored as neither), and both versions are kept | Real-speech test: such a remark passed at 0.76 | 27 Oct | Decided |
+| 33 | Roll numbers as people say them ("रोल तेरा" = 13) are read only next to रोल / नंबर; an absence with an unclear name gets a one-tap question like an observation | Real-speech test: 3 of 15 absences were lost to one homophone | 27 Oct | Decided |
 
 ## Evidence for the Build deck
 - [x] Technical mentor call (20 Oct): inputs, and what changed (6 rows above; F1 feasibility test, `docs/feasibility.md`)
@@ -57,7 +60,8 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 - [x] Simulation Stage B: 200 simulated terms, listening list vs perfect diary (`eval/results/sim_term.md`), SIMULATED; it changed the design (decisions 28–29)
 - [ ] F2: right vs wrong on real child readings (superseded by decision 20: no child speech is transcribed)
 - [ ] F3: attribution on the mentor's hard cases, synthetic (`eval/results/f3_claude_attribution.md`), needs the Anthropic key
-- [ ] Home distance test: accuracy by distance, desk vs worn phone
+- [x] Real-speech test: 15 recordings, one real speaker, three settings (`eval/results/real_notes.md`); it changed the design (decisions 32–33)
+- [ ] Home distance test: superseded by decision 20 (no classroom recording)
 - [ ] ASER dataset: answer-checker accuracy on real child speech
 - [ ] Proxy sessions 1–3: attribution and answer accuracy by distance, and the teacher's reaction to her own brief
 - [ ] Teacher tests, round 1 and round 2: problems found, fixes made, before and after

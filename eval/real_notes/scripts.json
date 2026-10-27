@@ -630,7 +630,7 @@
      "when": "today",
      "label": false,
      "home_language": "none",
-     "expect": "evidence"
+     "expect": "either"
     },
     {
      "sid": "t4",
@@ -760,7 +760,7 @@
      "when": "today",
      "label": false,
      "home_language": "none",
-     "expect": "ask_then_evidence"
+     "expect": "ask_then_either"
     },
     {
      "sid": "t1",

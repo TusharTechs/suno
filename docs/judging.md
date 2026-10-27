@@ -44,7 +44,7 @@
 - **What wins him:**
   - Precision reported with counts and stated assumptions, and a conservative "rule of three" for zero-error results.
   - Levels that map to EGRA-style learner profiles.
-  - A planner that keeps the quietest children in view: 7× more of their struggles found in simulation.
+  - A planner that keeps the quietest children in view: 10× more of their struggles found in simulation.
   - A pre-registered validation design against ORF/ASER for the finale.
   - Never overclaiming.
 
@@ -131,11 +131,11 @@ The two cheapest points to win:
 
 - **Differentiation:** PadhAI, TARA, Vaachan Samiksha and NIPUN Lakshya are assessment events: one child reads into an app. SUNO has no test and records no child's voice. It turns what the teacher already noticed into checked, per-child evidence, and tells her the next morning whom to listen to and what to do. These are complementary, not competing.
 - **Measured precision (SIMULATED, 32 voice notes, 4 teacher styles, real speech-to-text):**
-  - No evidence about the wrong child: 0 of 114.
-  - Right/wrong direction always right: 114 of 114.
-  - No opinion, label or vague remark became evidence: 0 of 42.
+  - No evidence about the wrong child: 0 of 110 (simulated), 0 of 56 (one real speaker, three settings).
+  - Right/wrong direction always right: 110 of 110 (simulated), 56 of 56 (real speaker).
+  - No opinion, label or vague remark became evidence: 0 of 35 (simulated), 0 of 21 (real speaker).
   - Labels never repeated.
-  - Every unclear name was resolved by one tap: 24 of 24.
+  - Unclear names resolved by one tap: 16 of 18; none was misassigned.
   - Source: `eval/results/sim_pipeline.md`.
 - **The design learns from failure, on the record:**
   - F1 killed classroom audio.

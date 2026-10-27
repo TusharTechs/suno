@@ -143,3 +143,12 @@ def test_delete_class_needs_the_code(client):
     assert client.request("DELETE", "/api/class", json={"confirm": code.lower()}).status_code == 200
     client.cookies.clear()
     assert client.post("/api/login", json={"code": code}).status_code == 401
+
+
+def test_exports(client):
+    client.post("/api/login", json={"code": "SUNO-DEMO"})
+    s = client.get("/api/export/summary.json").json()
+    assert s["children_on_roll"] == 30 and "aser_style_levels" in s
+    assert "पिंकी" not in str(s)  # aggregate: no names
+    csv_text = client.get("/api/export/class.csv").text
+    assert csv_text.splitlines()[0].lstrip("﻿").startswith("roll_no,first_name") and "पिंकी" in csv_text

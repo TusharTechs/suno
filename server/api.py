@@ -452,6 +452,58 @@ def child(child_id: str, c: dict = Depends(current_class)):
 
 # ---- samples, health, web app ---------------------------------------------------
 
+# SUNO's ladder levels -> ASER-style categories (approximate mapping, for aggregate reporting).
+ASER_READING = {0: "beginner", 1: "letter", 2: "word", 3: "word", 4: "paragraph", 5: "story"}
+ASER_MATHS = {0: "beginner", 1: "number recognition 10-99", 2: "number recognition 10-99", 3: "subtraction"}
+
+
+@app.get("/api/export/summary.json")
+def export_summary(c: dict = Depends(current_class)):
+    """Aggregate levels for a block or state dashboard (for example a Vidya Samiksha Kendra):
+    counts only, no names, no teacher field. Only children whose level SUNO is sure of are counted."""
+    t = jobs.class_today(c)
+    lads = planner.ladders(store.records(c["class_id"]), t)
+    counts = {"hindi_reading": {}, "maths": {}}
+    for (cid, area), st in lads.items():
+        if st.level is None:
+            continue
+        if area == "hindi":
+            k = ASER_READING[st.level]; counts["hindi_reading"][k] = counts["hindi_reading"].get(k, 0) + 1
+        elif area == "maths":
+            k = ASER_MATHS[st.level]; counts["maths"][k] = counts["maths"].get(k, 0) + 1
+    return {"as_of": t.isoformat(), "grade": c["grade"], "children_on_roll": len(c["roster"]),
+            "levels_known": {k: sum(v.values()) for k, v in counts.items()},
+            "aser_style_levels": counts,
+            "note": "ASER-style categories mapped approximately from SUNO's ladder levels. Counts only: no names, "
+                    "no teacher field. Children whose level is not yet certain are not counted."}
+
+
+@app.get("/api/export/class.csv")
+def export_class_csv(c: dict = Depends(current_class)):
+    """The teacher's own class list with levels and next steps (names included: for her, not for upload)."""
+    import csv
+    import io
+    t = jobs.class_today(c)
+    recs = store.records(c["class_id"])
+    lads = planner.ladders(recs, t)
+    views = planner.ladder.skill_views(lads)
+    buf = io.StringIO()
+    w = csv.writer(buf)
+    w.writerow(["roll_no", "first_name", "hindi_level", "hindi_next_step", "maths_level", "maths_next_step", "observations"])
+    levels = {a["area"]: a["levels"] for a in SKILLS["areas"]}
+    for ch in c["roster"]:
+        nx = planner.ladder.next_steps(views, ch["child_id"])
+        row = [ch["roll_no"], ch["first_name"]]
+        for area in ("hindi", "maths"):
+            st = lads.get((ch["child_id"], area))
+            row.append(levels[area][st.level]["label_hi"] if st and st.level is not None else "")
+            row.append(nx.get(area, ""))
+        row.append(sum(1 for r in recs if r["child_id"] == ch["child_id"] and r["status"] == "evidence"))
+        w.writerow(row)
+    return Response("\ufeff" + buf.getvalue(), media_type="text/csv; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="suno-{c.get("code") or "demo"}-{t}.csv"'})
+
+
 @app.get("/api/samples")
 def samples():
     import json
@@ -491,6 +543,19 @@ def evidence():
             "clear_obs": before["expect_evidence"], "clear_obs_evidence": before["expect_evidence_became_evidence"],
             "unclear_names": after["expect_ask_then_evidence"], "unclear_names_resolved": after["expect_ask_then_evidence_became_evidence"],
             "questions": after["questions"],
+        }
+    f = res / "real_notes.json"
+    if f.exists():
+        d = json.loads(f.read_text())
+        B, A = d["before_taps"], d["after_taps"]
+        out["real_speech"] = {
+            "recordings": d["recordings"],
+            "settings": {k: {"recordings": v["recordings"], "wer": v["wer_errors"] / max(1, v["wer_words"])} for k, v in d["settings"].items()},
+            "evidence": B.get("evidence", 0), "wrong_child_evidence": B.get("wrong_child_evidence", 0),
+            "direction_ok": B.get("evidence_direction_ok", 0),
+            "not_evidence": B.get("expect_not_evidence", 0), "not_evidence_became_evidence": B.get("not_evidence_became_evidence", 0),
+            "clear_obs": B.get("expect_evidence", 0), "clear_obs_evidence": B.get("expect_evidence_became_evidence", 0),
+            "absent": A.get("expect_absent", 0), "absent_found": A.get("absent_found", 0),
         }
     f = res / "sim_term.json"
     if f.exists():

@@ -165,9 +165,9 @@ function renderLanding(err = "") {
         <div class="step"><div class="n">3</div><div><b>${t("सुबह का सार", "The morning brief")}</b><span>${t("स्तर के हिसाब से समूह, 10 मिनट की गतिविधि, आज किसे सुनें।", "Groups by level, a 10-minute activity, whom to listen to today.")}</span></div></div>
       </div>
       <div class="proof">
-        <div><b>0 / 114</b><span>${t("सबूत गलत बच्चे पर", "evidence records about the wrong child")}</span></div>
-        <div><b>94%</b><span>${t("सबसे शांत बच्चे दूसरे हफ़्ते तक सुने गए (SUNO की सूची के बिना 42%)", "of the quietest children heard by week 2 (42% without SUNO's listening list)")}</span></div>
-        <div><b>2×</b><span>${t("मदद चाहने वाले बच्चे 8 हफ़्ते में मिले, एक पूरी डायरी की तुलना में", "the children who need support found by week 8, vs a perfect diary")}</span></div>
+        <div><b id="pf-wrong">0</b><span>${t("सबूत गलत बच्चे पर", "evidence records about the wrong child")}</span></div>
+        <div><b id="pf-quiet">–</b><span id="pf-quiet-t">${t("सबसे शांत बच्चे दूसरे हफ़्ते तक सुने गए", "of the quietest children heard by week 2")}</span></div>
+        <div><b id="pf-found">–</b><span>${t("मदद चाहने वाले बच्चे 8 हफ़्ते में मिले, एक पूरी डायरी की तुलना में", "the children who need support found by week 8, vs a perfect diary")}</span></div>
       </div>
       <div class="proof-note">${t("सिमुलेशन के नतीजे (असली बच्चे नहीं): eval/results/ में स्क्रिप्ट और मान्यताएँ।", "Simulated results, not real children: scripts and assumptions in eval/results/.")}</div>
       <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap"><a href="#evidence" style="color:var(--accent);font-weight:700">${t("हमने SUNO को कैसे परखा →", "How we tested SUNO →")}</a><a href="#privacy" style="color:#c9cfee">${t("निजता", "Privacy")}</a></div>
@@ -193,6 +193,18 @@ function renderLanding(err = "") {
     </div></section>
   </div>`;
   wireLang($("#app"), () => renderLanding(err));
+  // Headline numbers come from the evaluation results, never typed in by hand.
+  api("/api/evidence").then((e) => {
+    if (e.pipeline) $("#pf-wrong") && ($("#pf-wrong").textContent = `${e.pipeline.wrong_child_evidence} / ${e.pipeline.evidence}`);
+    const a = (arm, wk, m) => e.term && e.term.arms[arm] && e.term.arms[arm][wk] ? e.term.arms[arm][wk][m] : null;
+    const q = a("list_80", "2", "quiet_with_evidence"), q0 = a("no_list", "2", "quiet_with_evidence");
+    if (q != null && $("#pf-quiet")) {
+      $("#pf-quiet").textContent = `${Math.round(100 * q)}%`;
+      $("#pf-quiet-t").textContent = t(`सबसे शांत बच्चे दूसरे हफ़्ते तक सुने गए (SUNO की सूची के बिना ${Math.round(100 * q0)}%)`, `of the quietest children heard by week 2 (${Math.round(100 * q0)}% without SUNO's list)`);
+    }
+    const f = a("list_80", "8", "children_found"), f0 = a("no_list", "8", "children_found");
+    if (f != null && f0 && $("#pf-found")) $("#pf-found").textContent = `${(f / f0).toFixed(1)}×`;
+  }).catch(() => {});
   const open = async (code, btn) => {
     btn.disabled = true;
     try { await api("/api/login", { method: "POST", json: { code } }); await clearCached(); await boot(); }
@@ -262,6 +274,7 @@ function openMenu() {
       <button class="btn alt block" id="m-roster">👧🏽 ${t(`बच्चों की सूची (${S.me.roster.length})`, `Children (${S.me.roster.length})`)}</button>
       <button class="btn alt block" id="m-lesson">📖 ${t("इस हफ़्ते का पाठ", "This week's lesson")}</button>
       <button class="btn alt block" id="m-howto">❓ ${t("SUNO कैसे काम करता है", "How SUNO works")}</button>
+      <a class="btn alt block" href="/api/export/class.csv">⬇️ ${t("कक्षा की सूची (CSV) डाउनलोड करें", "Download class list (CSV)")}</a>
       <a class="btn alt block" href="#evidence">📊 ${t("हमने SUNO को कैसे परखा", "Evidence: how we tested SUNO")}</a>
       <a class="btn alt block" href="#privacy">🔒 ${t("निजता और डेटा", "Privacy and your data")}</a>
       <button class="btn alt block" id="m-out">${t("बाहर निकलें", "Sign out")}</button>
@@ -820,7 +833,7 @@ async function renderEvidence() {
   pageShell(t("हमने SUNO को कैसे परखा", "How we tested SUNO"), `<div class="loading"><span class="spin"></span></div>`);
   let e = {};
   try { e = await api("/api/evidence"); } catch (_) {}
-  const P = e.pipeline, T = e.term, C = e.cost;
+  const P = e.pipeline, T = e.term, C = e.cost, R = e.real_speech;
   const arm = (a, wk, m) => (T && T.arms[a] && T.arms[a][wk] ? pc(T.arms[a][wk][m]) : "–");
   const body = `
     <p class="muted">${t("असली कक्षा का सबूत 1 नवंबर से पहले संभव नहीं था, इसलिए हमने SUNO को सिमुलेशन में परखा। हर संख्या एक स्क्रिप्ट से आती है; मान्यताएँ eval/sim/ में लिखी हैं। नवंबर में असली कक्षाओं में परीक्षण।", "Real classroom evidence wasn't possible before 1 Nov, so we tested SUNO in simulation. Every number below comes from a script in the repo, and the assumptions are written in eval/sim/. Classroom testing follows in November.")}</p>
@@ -861,6 +874,18 @@ async function renderEvidence() {
         <tr><td>${t("अस्पष्ट नाम, एक टैप से सुलझे", "Unclear names resolved with one tap")}</td><td><b>${P.unclear_names_resolved} / ${P.unclear_names}</b></td></tr>
       </table><p class="tiny">eval/results/sim_pipeline.md</p></div>` : `<p class="muted">–</p>`}
 
+    ${R ? `<h2 class="sec">${t("3b. असली आवाज़, असली फ़ोन", "3b. A real human voice on an ordinary phone")}</h2>
+    <div class="card small"><p style="margin-top:0">${t(`एक असली व्यक्ति ने काल्पनिक कक्षा के नोट फ़ोन पर पढ़े: शांत कमरा, पंखा, और कक्षा का शोर (${R.recordings} रिकॉर्डिंग)। बोली-से-लिखाई की शब्द-गलती दर: ${Object.entries(R.settings).map(([k, v]) => `${k} ${Math.round(100 * v.wer)}%`).join(", ")}।`, `One real speaker read scripted notes (a fictional class) into an ordinary phone in a quiet room, with a fan on, and with classroom noise playing (${R.recordings} recordings). Speech-to-text word error rate: ${Object.entries(R.settings).map(([k, v]) => `${k} ${Math.round(100 * v.wer)}%`).join(", ")}.`)}</p>
+      <table class="signals" style="width:100%;font-size:14px">
+        <tr><td>${t("गलत बच्चे पर सबूत", "Evidence about the wrong child")}</td><td><b>${R.wrong_child_evidence} / ${R.evidence}</b></td></tr>
+        <tr><td>${t("सही/गलत की दिशा सही", "Right/wrong direction correct")}</td><td><b>${R.direction_ok} / ${R.evidence}</b></td></tr>
+        <tr><td>${t("राय और अस्पष्ट बातें जो सबूत बनीं", "Opinions and vague remarks that became evidence")}</td><td><b>${R.not_evidence_became_evidence} / ${R.not_evidence}</b></td></tr>
+        <tr><td>${t("साफ़ नाम वाली ठोस बातें जो सबूत बनीं", "Specific observations that became evidence")}</td><td><b>${pct(R.clear_obs_evidence, R.clear_obs)}</b> (${R.clear_obs_evidence}/${R.clear_obs})</td></tr>
+        <tr><td>${t("अनुपस्थिति दर्ज", "Absences recorded")}</td><td><b>${R.absent_found} / ${R.absent}</b></td></tr>
+      </table>
+      <p style="margin-bottom:0">${t("इस परीक्षण ने दो बदलाव करवाए: सबूत के लिए ठोस शब्द या सवाल ज़रूरी, और “रोल तेरा” जैसे बोले गए रोल नंबर पढ़ना।", "This test changed two things: evidence now needs a specific word or sum, and roll numbers as people say them (“रोल तेरा” = 13) are understood.")}</p>
+      <p class="tiny">${t("सीमा: एक ही वक्ता (पुरुष)।", "Limit: one speaker (a man); most primary teachers are women.")} eval/results/real_notes.md</p></div>` : ""}
+
     <h2 class="sec">${t("4. 12 हफ़्ते का सत्र, 200 बार", "4. A 12-week term, simulated 200 times")}</h2>
     ${T ? `<div class="card small"><p style="margin-top:0">${t("SUNO के असली ट्रैकर और प्लानर के साथ; ऊपर की गलती दरें (कम से कम 3/n)। तुलना: शिक्षक जो अपने आप देखती हैं उसकी एक पूरी डायरी।", "Uses SUNO's real tracker and planner, with the error rates above (floored at 3/n). The baseline is a perfect written diary of what the teacher notices on her own.")}</p>
       <table class="signals" style="width:100%;font-size:14px">
@@ -877,7 +902,7 @@ async function renderEvidence() {
 
     <h2 class="sec">${t("6. सीमाएँ, साफ़-साफ़", "6. Limits, stated plainly")}</h2>
     <div class="card small"><ul style="margin:0;padding-left:20px;line-height:1.7">
-      <li>${t("यह सिमुलेशन है: नकली शिक्षक साफ़, कृत्रिम हिंदी बोलती हैं; असली बोली, आदतें और राय अभी परखी जानी हैं।", "This is simulation: the simulated teacher speaks clean, synthetic Hindi; real teachers' speech, habits and judgement are still to be tested.")}</li>
+      <li>${t("ज़्यादातर नतीजे सिमुलेशन के हैं; असली आवाज़ का परीक्षण एक ही वक्ता का है। असली शिक्षकों की बोली, आदतें और राय अभी परखी जानी हैं।", "Most results are simulated, and the real-voice test has one speaker. Real teachers' speech, habits and judgement are still to be tested.")}</li>
       <li>${t("दिन में ~5 बच्चों पर, किसी बच्चे की कमी पक्के तौर पर लगभग 6 हफ़्ते में दिखती है।", "At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.")}</li>
       <li>${t("SUNO शिक्षक की बात पर चलता है; अगले कदम में ASER टेस्ट से तुलना (वही बच्चे) होगी।", "SUNO relies on what the teacher reports; next is a comparison with the ASER test on the same children.")}</li>
     </ul></div>`;

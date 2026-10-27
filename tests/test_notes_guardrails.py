@@ -210,3 +210,24 @@ def test_vague_general_statement_stays_below_gate():
 def test_confidence_is_zero_without_a_child():
     m = mention(item="कमल")
     assert note_confidence("none", note_signals(m, True, True)) == 0.0
+
+
+def test_spoken_roll_number_only_next_to_roll():
+    # "रोल तेरह" often comes back from speech-to-text as "रोल तेरा" (तेरा = "yours").
+    assert names.roll_numbers("अजय, रोल तेरा") == {13}
+    assert names.roll_numbers("प्रिया बारा नंबर वाली") == {12}
+    assert names.roll_numbers("यह तेरा काम है") == set()
+
+
+def test_skill_without_an_item_is_not_evidence():
+    recs, _, _ = run("काजल ने आज जोड़ वाला काम ठीक कर लिया।",
+                     mention(name_said="काजल", child_id="c15", skill_code="math.addition", outcome="correct",
+                             error_type="none"))
+    assert recs[0]["status"] == "check_tomorrow" and recs[0]["confidence"] < GATE
+
+
+def test_absent_with_shared_name_asks_which_child():
+    recs, qs, _ = run("प्रिया आज नहीं आई।", mention(name_said="प्रिया", kind="absent", skill_code=None,
+                                                 outcome="unclear", error_type="not_stated"))
+    assert recs[0]["status"] == "unattributed" and qs[0]["type"] == "which_child"
+    assert names.resolve("प्रिया रोल सत्ताईस", ROSTER)["child_id"] == "c27"

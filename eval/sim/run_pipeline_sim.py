@@ -72,10 +72,10 @@ def answer_questions(out: dict, statements: list[dict]) -> list[str]:
             continue
         # She sees the card (name heard, skill, word, outcome) and taps the child she meant.
         if q["type"] == "which_child":
-            pool = [s for s in statements if s["child_id"] in q["candidates"] and s["kind"] == "observation"]
+            pool = [s for s in statements if s["child_id"] in q["candidates"] and s["kind"] == rec["kind"]]
         else:
             taken = {r["child_id"] for r in out["records"] if r["child_id"]}
-            pool = [s for s in statements if s["kind"] == "observation" and s["child_id"] not in taken]
+            pool = [s for s in statements if s["kind"] == rec["kind"] and s["child_id"] not in taken]
         pool = sorted(pool, key=lambda s: -((s["skill"] == rec["skill_code"]) * 2
                                             + bool(rec["item"] and rec["item"] in (s["lesson_item"], s["item"]))))
         if pool and (len(pool) == 1 or pool[0]["skill"] == rec["skill_code"]):

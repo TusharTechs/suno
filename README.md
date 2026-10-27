@@ -68,15 +68,15 @@ Teacher's voice note (phone, offline-capable)
 **SIMULATED**, not real children or teachers. Every number comes from a script; the assumptions are written in `eval/sim/`.
 
 - **The pipeline on simulated classrooms** (`eval/results/sim_pipeline.md`): 32 voice notes from simulated teachers in 4 styles (precise, brief, impressionistic, Hinglish), including shared names, unknown nicknames, labels and opinions. Each was voiced by Sarvam text-to-speech and transcribed by Sarvam speech-to-text. Results:
-  - **0 of 114** evidence records were about the wrong child;
-  - **114 of 114** had the right right/wrong direction;
-  - **0 of 42** opinions, labels or vague remarks became evidence;
+  - **0 of 110** evidence records were about the wrong child;
+  - **110 of 110** had the right right/wrong direction;
+  - **0 of 35** opinions, labels or vague remarks became evidence;
   - labels were never repeated;
-  - **24 of 24** unclear names were resolved with one tap.
+  - **16 of 18** unclear names were resolved with one tap (the other two were skipped, never misassigned).
 - **A 12-week term, 200 times over** (`eval/results/sim_term.md`), with SUNO's real tracker and planner and the error rates above (floored at 3/n). Compared with a *perfect diary* of what the teacher naturally notices, SUNO's listening list (followed 80% of the time):
-  - hears the quietest third of the class far sooner: **94% vs 42%** by week 2;
+  - hears the quietest third of the class far sooner: **95% vs 42%** by week 2;
   - finds **54% vs 28%** of the children who need support in Hindi reading by week 8;
-  - finds **41% vs 4%** of the quiet children's gaps;
+  - finds **42% vs 4%** of the quiet children's gaps;
   - keeps precision at 98–99%.
 - **The simulation changed the design.** The first planner made detection *worse*: it spread a teacher's few observations too thin. That led to the ladder model and the two-item mini-ladder (`docs/decisions.md`).
 - **Honest limits:**
@@ -95,7 +95,18 @@ About **₹15.5 per teacher per school day** (Claude and Sarvam), about **₹103
 
 ### Real-speech test
 
-`docs/real-notes-protocol.md` has 10 scripted teacher notes (a fictional class) for real people to read aloud on ordinary phones; `eval/real_notes/score.py` scores the recordings against the scripts' ground truth (`eval/results/real_notes.md`).
+One real speaker read 5 scripted notes (a fictional class) into an ordinary phone, each in three settings: a quiet room, a fan on full, and classroom noise playing. That's 15 recordings, run through Sarvam speech-to-text and SUNO's real pipeline (`eval/results/real_notes.md`). At a 15–23% speech-to-text word error rate:
+
+- **0 of 56** evidence records were about the wrong child, and **56 of 56** had the right right/wrong direction;
+- **0 of 21** opinions or vague remarks became evidence;
+- **98%** of specific observations were captured;
+- **15 of 15** absences were recorded.
+
+The test changed two things (decisions 32–33):
+- evidence now needs a specific word or sum;
+- roll numbers as people say them ("रोल तेरा" = 13) are understood.
+
+**Limit:** one speaker, a man; most primary teachers are women. The scripts and the scorer are in `docs/real-notes-protocol.md` and `eval/real_notes/`.
 
 ### Offline and low network
 

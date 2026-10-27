@@ -13,4 +13,4 @@ COPY config ./config
 COPY samples ./samples
 ENV SUNO_VAR=/data PORT=8000 PYTHONUNBUFFERED=1
 EXPOSE 8000
-CMD ["sh", "-c", "uv run --no-sync uvicorn server.api:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
+CMD ["sh", "-c", "/app/.venv/bin/uvicorn server.api:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]

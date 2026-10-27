@@ -1,0 +1,33 @@
+{
+ "label": "SYNTHETIC sample notes written by Team Sunvai about the fictional demo class, voiced by Sarvam text-to-speech (bulbul:v3). Not a real teacher, not real children.",
+ "notes": [
+  {
+   "id": "everyday",
+   "title": "रोज़ का नोट",
+   "title_en": "An ordinary day: the listening list, a mistake, an absence",
+   "text": "आज मोहन ने घर सही पढ़ा, जल्दी से। काजल ने कि को की पढ़ा, छोटी और बड़ी इ में गड़बड़ हुई। पिंकी ने कमल को क म ल पढ़ा, अभी भी जोड़ नहीं पा रही। दीपक आज नहीं आया।",
+   "audio": "/samples/audio/sample_everyday.mp3"
+  },
+  {
+   "id": "hard-cases",
+   "title": "मुश्किल नाम और लेबल",
+   "title_en": "Hard cases: two Priyas, a label, a name not on the roster",
+   "text": "प्रिया ने किताब को कताब पढ़ा। प्रिया, सत्ताईस नंबर वाली, ने पूरा वाक्य सही पढ़ा। सोनू तो कमज़ोर है, उसने पानी को पनी पढ़ा। राजू ने नाव सही पढ़ा। रवि अच्छा बच्चा है।",
+   "audio": "/samples/audio/sample_hard-cases.mp3"
+  },
+  {
+   "id": "maths-language",
+   "title": "गणित और घर की भाषा",
+   "title_en": "Maths, and a child who understood in her home language",
+   "text": "गोलू ने सैंतालीस सही पढ़ा, पहली बार उल्टा नहीं किया। इमरान ने तेईस और पाँच जोड़कर अट्ठाईस बताया। फ़ातिमा को कमल कहाँ खिलता है समझ नहीं आया, भोजपुरी में पूछा तो बता दिया। सलमा ने बत्तीस में तीन दहाई बताई।",
+   "audio": "/samples/audio/sample_maths-language.mp3"
+  },
+  {
+   "id": "hinglish",
+   "title": "हिंदी-अंग्रेज़ी मिला नोट",
+   "title_en": "Code-mixed Hindi and English, the way many teachers talk",
+   "text": "Aaj Neha ने tree को सही पढ़ा, English में भी अच्छा कर रही है। Geeta ने sun को son पढ़ा। Vikas ने मटर को म ट र पढ़ा, blending अभी नहीं हो रही। Arjun absent था।",
+   "audio": "/samples/audio/sample_hinglish.mp3"
+  }
+ ]
+}

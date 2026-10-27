@@ -1,0 +1,39 @@
+# Render Blueprint: SUNO on the FREE plan (no paid resources).
+# Free web services sleep after 15 minutes without traffic (about 1 minute to wake) and their
+# disk is wiped on sleep or redeploy: demo classes are re-created at every login, so the demo
+# is unaffected, but a class created by a user does not survive a sleep.
+services:
+  - type: web
+    name: suno
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: feasibility/voice-attribution
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: CLAUDE_MODEL
+        value: claude-opus-5-5
+      - key: SUNO_NOTE_EFFORT
+        value: high
+      - key: SUNO_BRIEF_EFFORT
+        value: medium
+      - key: SUNO_ASR_KEYTERMS
+        value: "off"
+      - key: SUNO_SECURE_COOKIE
+        value: "1"
+      - key: SUNO_DEMO_CODE
+        value: SUNO-DEMO
+      - key: SUNO_NOTES_PER_DAY
+        value: "25"
+      - key: SUNO_BRIEFS_PER_DAY
+        value: "12"
+      - key: VO_SPEAKER
+        value: shubh

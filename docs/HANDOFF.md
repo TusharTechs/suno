@@ -217,6 +217,13 @@ The biggest change is that **the phone moves from the desk to the teacher**, and
 | 16 | Record only during one fixed reading slot (30–45 min) that the teacher starts and stops; never all day | Battery, heat and blocked calls on a ₹8–10k phone | Technical mentor, 20 Oct | Decided |
 | 17 | Who answered comes from the teacher's one tap on a planned call-on list, or a name matching exactly one child; **never from voice matching** | F1 (`docs/feasibility.md`): voice matching can't reach the 90% precision needed, even with the child speaking into the phone | F1 test, 20 Oct | Voice: Dropped. Tap list: Proposed |
 | 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common | Technical mentor, 20 Oct | Decided |
+| 19 | Claude model `claude-opus-5-5` | Newer and cheaper, same structured outputs | 20 Oct | Decided |
+| 20 | **SUNO listens to the teacher, not the classroom**: a ~60-second voice note after the reading period, turned into per-child observations; no classroom recording, no child's voice. Rows 1, 2, 3, 5, 6, 16 and 17 are superseded | F1, distance to the back bench, phone heat, start/stop per period and per teacher, consent for recording children | Tushar, 27 Oct | Decided |
+| 21 | Observations count, opinions don't: code scores how checkable a statement is; opinions and labels become "listen again tomorrow" | Teachers' impressions are often wrong; precision over recall | 27 Oct | Decided |
+| 22 | Code resolves the child from the roster (phonetic names, roll numbers) and must agree with Claude; mix-ups become one-tap questions | A wrong child is the worst failure | 27 Oct | Decided |
+| 23 | Speech-to-text keyterms off; "X को X पढ़ा" can't be "correct" | Speech-to-text erased quoted misreadings in our sample notes | 27 Oct | Decided |
+| 24 | Web app (PWA, offline queue) instead of native Android; SQLite instead of Postgres | 4 days left; judges test a hosted link | 27 Oct | Decided |
+| 25 | Maths and English words join the skill ladder; the language-or-concept flag returns | Cheap once the input is the teacher's speech | 27 Oct | Decided |
 
 ## Architecture and build spec
 

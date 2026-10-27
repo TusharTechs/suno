@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "needs_support": {
+      "type": "array",
+      "items": {"type": "object", "properties": {"child_id": {"type": "string"}, "skill_code": {"type": "string"}}, "required": ["child_id", "skill_code"], "additionalProperties": false}
+    },
+    "stuck_where": {
+      "type": "array",
+      "items": {"type": "object", "properties": {"skill_code": {"type": "string"}, "child_ids": {"type": "array", "items": {"type": "string"}}, "what_hi": {"type": "string"}}, "required": ["skill_code", "child_ids", "what_hi"], "additionalProperties": false}
+    },
+    "today": {
+      "type": "array",
+      "items": {"type": "object", "properties": {"group": {"type": "string"}, "child_ids": {"type": "array", "items": {"type": "string"}}, "activity_id": {"type": "string"}, "minutes": {"type": "integer"}}, "required": ["group", "child_ids", "activity_id", "minutes"], "additionalProperties": false}
+    },
+    "listen_today": {
+      "type": "array",
+      "items": {"type": "object", "properties": {"child_id": {"type": "string"}, "item": {"type": "string"}}, "required": ["child_id", "item"], "additionalProperties": false}
+    },
+    "silent": {"type": "array", "items": {"type": "string"}},
+    "text_hi": {"type": "string", "description": "The spoken brief in simple Hindi, under 1,500 characters, first names only"},
+    "summary_en": {"type": "string", "description": "The same brief in plain English, under 700 characters"}
+  },
+  "required": ["needs_support", "stuck_where", "today", "listen_today", "silent", "text_hi", "summary_en"],
+  "additionalProperties": false
+}

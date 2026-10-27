@@ -51,3 +51,46 @@ def confidence(attribution_basis: str, outcome: str, match: float, uptake: str, 
 
 def passes_gate(c: float) -> bool:
     return c >= GATE
+
+
+# ---------------------------------------------------------------------------
+# v1: confidence for what the teacher reports in her after-class voice note.
+#
+# The teacher's ear is the sensor; this scores how checkable her statement is.
+# A specific observation ("Pinki read कमल as क-म-ल") can pass the gate. A general
+# opinion ("Ravi achha padhta hai", "Sonu is weak") can never pass: it becomes a
+# question for tomorrow. Hand-set weights (v0); refit on labelled notes in eval/.
+# ---------------------------------------------------------------------------
+
+# How sure we are WHICH child she meant, by how code resolved the name (names.resolve).
+NOTE_ATTRIBUTION = {"teacher_confirmed": 0.99, "roll_number": 0.98, "unique": 0.95,
+                    "ambiguous": 0.0, "unknown": 0.0, "no_name": 0.0}
+RECENCY = {"today": 1.0, "earlier": 0.7, "general": 0.3}
+W_SPECIFIC, W_CONCRETE, W_RECENT = 0.5, 0.3, 0.2
+
+
+def note_signals(m: dict, item_in_transcript: bool, item_in_lesson: bool) -> dict:
+    """The measurable parts of one verified mention. Every value is computed here, not by Claude."""
+    if m["kind"] != "observation" or m["outcome"] == "unclear":
+        specificity = 0.2
+    elif item_in_transcript:
+        specificity = 1.0 if item_in_lesson else 0.85
+    elif m["skill_code"]:
+        specificity = 0.6
+    else:
+        specificity = 0.2
+    if m["outcome"] == "correct":
+        concreteness = 1.0
+    elif m["outcome"] in ("incorrect", "partial"):
+        concreteness = {"not_stated": 0.4, "other": 0.7}.get(m["error_type"], 1.0)
+    else:
+        concreteness = 0.0
+    if m["kind"] == "opinion":
+        concreteness = min(concreteness, 0.4)
+    return {"specificity": specificity, "concreteness": concreteness, "recency": RECENCY[m["when"]]}
+
+
+def note_confidence(attribution: str, signals: dict) -> float:
+    a = NOTE_ATTRIBUTION.get(attribution, 0.0)
+    return a * (W_SPECIFIC * signals["specificity"] + W_CONCRETE * signals["concreteness"]
+                + W_RECENT * signals["recency"])

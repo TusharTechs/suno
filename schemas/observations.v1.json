@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "mentions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mention_id": {"type": "string", "description": "m1, m2, ... in the order she spoke"},
+          "sent_ids": {"type": "array", "items": {"type": "string"}},
+          "name_said": {"type": "string", "description": "The words naming the child, copied exactly from the transcript; empty if no name was used"},
+          "child_id": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+          "kind": {"type": "string", "enum": ["observation", "opinion", "absent"]},
+          "skill_code": {"anyOf": [{"type": "string", "enum": ["hi.letters", "hi.matras", "hi.blend_no_matra", "hi.words_with_matras", "hi.conjuncts", "hi.sentence", "hi.comprehension", "math.number_recognition", "math.place_value", "math.addition", "math.subtraction", "en.words"]}, {"type": "null"}]},
+          "item": {"type": "string"},
+          "outcome": {"type": "string", "enum": ["correct", "incorrect", "partial", "unclear"]},
+          "error_type": {"type": "string", "enum": ["none", "not_stated", "letter_confusion", "matra_omitted", "matra_confused", "segments_without_blending", "conjunct_broken", "guesses_from_first_letter", "letter_by_letter", "meaning_not_understood", "number_reversal", "place_value_confusion", "counting_error", "operation_confused", "no_attempt", "other"]},
+          "when": {"type": "string", "enum": ["today", "earlier", "general"]},
+          "home_language": {"type": "string", "enum": ["none", "helped", "barrier"]},
+          "teacher_quote": {"type": "string"},
+          "rationale": {"type": "string"}
+        },
+        "required": ["mention_id", "sent_ids", "name_said", "child_id", "kind", "skill_code", "item", "outcome", "error_type", "when", "home_language", "teacher_quote", "rationale"],
+        "additionalProperties": false
+      }
+    },
+    "follow_ups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name_said": {"type": "string"},
+          "question_hi": {"type": "string"}
+        },
+        "required": ["name_said", "question_hi"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["mentions", "follow_ups"],
+  "additionalProperties": false
+}

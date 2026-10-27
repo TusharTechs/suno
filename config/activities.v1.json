@@ -1,0 +1,15 @@
+{
+  "label": "PLACEHOLDER written by Team Sunvai: common remedial activities, to be replaced by activities retrieved from the NCERT Class 1-2 teacher handbook and the state teacher guide. Not NCERT text.",
+  "activities": [
+    {"activity_id": "act-letter-cards", "skills": ["hi.letters"], "minutes": 10, "title": "अक्षर कार्ड", "title_en": "Letter cards", "steps": "एक-एक अक्षर कार्ड दिखाएँ; समूह साथ में नाम बोले, फिर हर बच्चा एक कार्ड बोले। जिन अक्षरों में गड़बड़ होती है, उन्हें बीच-बीच में डालें।"},
+    {"activity_id": "act-matra-ladder", "skills": ["hi.matras", "hi.words_with_matras"], "minutes": 10, "title": "मात्रा की सीढ़ी", "title_en": "Vowel-sign ladder", "steps": "बोर्ड पर एक अक्षर की सारी मात्राएँ एक कॉलम में लिखें (का कि की कु कू के कै को कौ)। साथ में ऊपर से नीचे पढ़ें, फिर हर बच्चा एक सीढ़ी पढ़े।"},
+    {"activity_id": "act-blend-slide", "skills": ["hi.blend_no_matra", "en.words"], "minutes": 10, "title": "आवाज़ें जोड़ो", "title_en": "Slide the sounds", "steps": "छोटे शब्द की आवाज़ें धीरे-धीरे बोलें, हर अक्षर के नीचे उँगली फिसलाते हुए, फिर तेज़ी से, जब तक शब्द जुड़ न जाए (क-म-ल, कमल)। बच्चे अपनी उँगली से दोहराएँ।"},
+    {"activity_id": "act-word-build", "skills": ["hi.words_with_matras", "hi.blend_no_matra", "hi.conjuncts"], "minutes": 10, "title": "शब्द बनाओ", "title_en": "Build the word", "steps": "समूह को अक्षर और मात्रा कार्ड दें। आज के पाठ का एक शब्द बोलें; समूह उसे कार्ड से बनाए और पढ़े।"},
+    {"activity_id": "act-echo-read", "skills": ["hi.sentence", "hi.words_with_matras"], "minutes": 10, "title": "गूँज पठन", "title_en": "Echo reading", "steps": "पाठ की एक पंक्ति शब्दों के नीचे उँगली रखकर पढ़ें; समूह वापस पढ़े। फिर अगली पंक्ति एक बच्चा पहले पढ़े।"},
+    {"activity_id": "act-tell-back", "skills": ["hi.comprehension", "hi.sentence"], "minutes": 10, "title": "कहानी वापस सुनाओ", "title_en": "Tell it back", "steps": "दो-तीन वाक्य की छोटी कहानी पढ़ें। हर बच्चे से एक सवाल पूछें: कौन? क्या हुआ? क्यों? बच्चे अपनी घर की भाषा में भी जवाब दे सकते हैं।"},
+    {"activity_id": "act-bundle-sticks", "skills": ["math.place_value", "math.number_recognition"], "minutes": 10, "title": "तीलियों के बंडल", "title_en": "Bundles of ten", "steps": "दस-दस तीलियों के बंडल और खुली तीलियाँ दें। संख्या बोलें (32); बच्चे 3 बंडल और 2 तीली रखें, फिर उल्टा: तीलियाँ देखकर संख्या बोलें।"},
+    {"activity_id": "act-number-cards", "skills": ["math.number_recognition"], "minutes": 10, "title": "संख्या कार्ड", "title_en": "Number cards", "steps": "दो अंकों वाले कार्ड दिखाएँ, खासकर उलटने वाली जोड़ियाँ (23/32, 47/74)। हर बच्चा कार्ड पढ़े और बताए कि कौन-सा बड़ा है।"},
+    {"activity_id": "act-number-line", "skills": ["math.addition", "math.subtraction"], "minutes": 10, "title": "संख्या रेखा पर कूदो", "title_en": "Number-line jumps", "steps": "फ़र्श पर 0-30 की संख्या रेखा बनाएँ। 'आठ से पाँच आगे कूदो' जैसे सवाल दें; बच्चा कूदकर जवाब बताए। घटाव के लिए पीछे कूदें।"},
+    {"activity_id": "act-picture-word", "skills": ["en.words"], "minutes": 10, "title": "चित्र और शब्द", "title_en": "Picture and word", "steps": "चित्र कार्ड और अंग्रेज़ी शब्द कार्ड फ़र्श पर रखें। बच्चे शब्द को चित्र से मिलाएँ और पढ़ें।"}
+  ]
+}

@@ -29,3 +29,6 @@ node_modules/
 
 # local caches (models, HF)
 .cache/
+
+# runtime state (SQLite, brief audio)
+var/

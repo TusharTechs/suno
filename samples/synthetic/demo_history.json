@@ -1,0 +1,5266 @@
+{
+ "label": "SYNTHETIC. Eight days of after-class voice notes written by Team Sunvai for a fictional Grade 2 class, run once through SUNO's real pipeline (Claude + code checks) by eval/seed_demo.py. Not real children, not a real teacher.",
+ "notes": [
+  {
+   "back": 8,
+   "transcript": "आज आरव ने कमल सही पढ़ा। सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए। पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई। अंजलि ने का कि की पढ़ा पर कु पर अटक गई। रवि तो बहुत होशियार है।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "आज आरव ने कमल सही पढ़ा।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "अंजलि ने का कि की पढ़ा पर कु पर अटक गई।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "रवि तो बहुत होशियार है।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c01",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "घर"
+    },
+    {
+     "child_id": "c02",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c04",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c05",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "आरव",
+      "child_id": "c01",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "कमल",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "आरव ने कमल सही पढ़ा",
+      "rationale": "read कमल correctly"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "सिमरन",
+      "child_id": "c02",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "घर",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+      "rationale": "blended and read घर correctly"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "सिमरन",
+      "child_id": "c02",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "नमक",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+      "rationale": "blended and read नमक correctly"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "पिंकी",
+      "child_id": "c04",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "कमल",
+      "outcome": "incorrect",
+      "error_type": "segments_without_blending",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई",
+      "rationale": "read कमल as क-म-ल without blending"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "अंजलि",
+      "child_id": "c05",
+      "kind": "observation",
+      "skill_code": "hi.matras",
+      "item": "का कि की",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अंजलि ने का कि की पढ़ा",
+      "rationale": "read का, कि, की correctly"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "अंजलि",
+      "child_id": "c05",
+      "kind": "observation",
+      "skill_code": "hi.matras",
+      "item": "कु",
+      "outcome": "incorrect",
+      "error_type": "not_stated",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "कु पर अटक गई",
+      "rationale": "got stuck on कु; mistake not described"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "अंजलि",
+      "question_hi": "अंजलि ने कु को क्या पढ़ा, कू या कुछ और?"
+     },
+     {
+      "name_said": "रवि",
+      "question_hi": "रवि ने आज बतख कैसे पढ़ा, जोड़कर या अक्षर-अक्षर?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "अंजलि",
+     "question_hi": "अंजलि ने कु को क्या पढ़ा, कू या कुछ और?"
+    },
+    {
+     "name_said": "रवि",
+     "question_hi": "रवि ने आज बतख कैसे पढ़ा, जोड़कर या अक्षर-अक्षर?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 272,
+    "output_tokens": 1460,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0314,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 12.8
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "आरव",
+     "child_id": "c01",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "कमल",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "आरव ने कमल सही पढ़ा",
+     "rationale": "read कमल correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c01"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "सिमरन",
+     "child_id": "c02",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "घर",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+     "rationale": "blended and read घर correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c02"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "सिमरन",
+     "child_id": "c02",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "नमक",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+     "rationale": "blended and read नमक correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c02"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "पिंकी",
+     "child_id": "c04",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "कमल",
+     "outcome": "incorrect",
+     "error_type": "segments_without_blending",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई",
+     "rationale": "read कमल as क-म-ल without blending",
+     "attribution": "unique",
+     "candidates": [
+      "c04"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "अंजलि",
+     "child_id": "c05",
+     "kind": "observation",
+     "skill_code": "hi.matras",
+     "item": "का कि की",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अंजलि ने का कि की पढ़ा",
+     "rationale": "read का, कि, की correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c05"
+     ],
+     "signals": {
+      "specificity": 0.85,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.879,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "अंजलि",
+     "child_id": "c05",
+     "kind": "observation",
+     "skill_code": "hi.matras",
+     "item": "कु",
+     "outcome": "incorrect",
+     "error_type": "not_stated",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "कु पर अटक गई",
+     "rationale": "got stuck on कु; mistake not described",
+     "attribution": "unique",
+     "candidates": [
+      "c05"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 0.4,
+      "recency": 1.0
+     },
+     "confidence": 0.779,
+     "status": "evidence"
+    }
+   ],
+   "questions": []
+  },
+  {
+   "back": 7,
+   "transcript": "अमन ने पानी सही पढ़ा, जल्दी से। सोनू ने पानी को पनी पढ़ा, मात्रा छोड़ दी। सुरेश आज नहीं आया। अर्जुन ने मटर सही पढ़ा। रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा। गोलू ने बत्तीस को तेईस पढ़ा।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "अमन ने पानी सही पढ़ा, जल्दी से।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "सोनू ने पानी को पनी पढ़ा, मात्रा छोड़ दी।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "सुरेश आज नहीं आया।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "अर्जुन ने मटर सही पढ़ा।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा।"
+    },
+    {
+     "sent_id": "s6",
+     "text": "गोलू ने बत्तीस को तेईस पढ़ा।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c06",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "घर"
+    },
+    {
+     "child_id": "c07",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c08",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c09",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c10",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "अमन",
+      "child_id": "c06",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "पानी",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अमन ने पानी सही पढ़ा, जल्दी से।",
+      "rationale": "read पानी correctly and quickly"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "सोनू",
+      "child_id": "c08",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "पानी",
+      "outcome": "incorrect",
+      "error_type": "matra_omitted",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सोनू ने पानी को पनी पढ़ा, मात्रा छोड़ दी।",
+      "rationale": "read पानी as पनी, dropping the aa matra"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "सुरेश",
+      "child_id": "c07",
+      "kind": "absent",
+      "skill_code": null,
+      "item": "",
+      "outcome": "unclear",
+      "error_type": "not_stated",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सुरेश आज नहीं आया।",
+      "rationale": "not in class today"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "अर्जुन",
+      "child_id": "c09",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "मटर",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अर्जुन ने मटर सही पढ़ा।",
+      "rationale": "read मटर correctly"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "रीना",
+      "child_id": "c10",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "बतख",
+      "outcome": "partial",
+      "error_type": "segments_without_blending",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा।",
+      "rationale": "read बतख as ब-त-ख, blended only with teacher's help"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s6"
+      ],
+      "name_said": "गोलू",
+      "child_id": "c28",
+      "kind": "observation",
+      "skill_code": "math.number_recognition",
+      "item": "बत्तीस",
+      "outcome": "incorrect",
+      "error_type": "number_reversal",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "गोलू ने बत्तीस को तेईस पढ़ा।",
+      "rationale": "read 32 as 23, reversing the digits"
+     }
+    ],
+    "follow_ups": []
+   },
+   "problems": [],
+   "follow_ups": [],
+   "usage": {
+    "input_tokens": 299,
+    "output_tokens": 1298,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0283,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 10.5
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "अमन",
+     "child_id": "c06",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "पानी",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अमन ने पानी सही पढ़ा, जल्दी से।",
+     "rationale": "read पानी correctly and quickly",
+     "attribution": "unique",
+     "candidates": [
+      "c06"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "सोनू",
+     "child_id": "c08",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "पानी",
+     "outcome": "incorrect",
+     "error_type": "matra_omitted",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सोनू ने पानी को पनी पढ़ा, मात्रा छोड़ दी।",
+     "rationale": "read पानी as पनी, dropping the aa matra",
+     "attribution": "unique",
+     "candidates": [
+      "c08"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "सुरेश",
+     "child_id": "c07",
+     "kind": "absent",
+     "skill_code": null,
+     "item": "",
+     "outcome": "unclear",
+     "error_type": "not_stated",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सुरेश आज नहीं आया।",
+     "rationale": "not in class today",
+     "attribution": "unique",
+     "candidates": [
+      "c07"
+     ],
+     "signals": null,
+     "confidence": null,
+     "status": "absent"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "अर्जुन",
+     "child_id": "c09",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "मटर",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अर्जुन ने मटर सही पढ़ा।",
+     "rationale": "read मटर correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c09"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "रीना",
+     "child_id": "c10",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "बतख",
+     "outcome": "partial",
+     "error_type": "segments_without_blending",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा।",
+     "rationale": "read बतख as ब-त-ख, blended only with teacher's help",
+     "attribution": "unique",
+     "candidates": [
+      "c10"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "गोलू",
+     "child_id": "c28",
+     "kind": "observation",
+     "skill_code": "math.number_recognition",
+     "item": "बत्तीस",
+     "outcome": "incorrect",
+     "error_type": "number_reversal",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "गोलू ने बत्तीस को तेईस पढ़ा।",
+     "rationale": "read 32 as 23, reversing the digits",
+     "attribution": "unique",
+     "candidates": [
+      "c28"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    }
+   ],
+   "questions": []
+  },
+  {
+   "back": 6,
+   "transcript": "फ़ातिमा ने वाक्य पढ़ लिया पर कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया। प्रिया ने किताब सही पढ़ी। करण ने तेईस और पाँच जोड़कर अट्ठाईस बताया, सही। मोहन ने मछली सही पढ़ी। पिंकी ने नमक को न म क पढ़ा, जोड़ नहीं पाई।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "फ़ातिमा ने वाक्य पढ़ लिया पर कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "प्रिया ने किताब सही पढ़ी।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "करण ने तेईस और पाँच जोड़कर अट्ठाईस बताया, सही।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "मोहन ने मछली सही पढ़ी।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "पिंकी ने नमक को न म क पढ़ा, जोड़ नहीं पाई।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c07",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "घर"
+    },
+    {
+     "child_id": "c12",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c13",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "फ़ातिमा",
+      "child_id": "c11",
+      "kind": "observation",
+      "skill_code": "hi.sentence",
+      "item": "",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "फ़ातिमा ने वाक्य पढ़ लिया",
+      "rationale": "read the sentence; which sentence was not named"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "फ़ातिमा",
+      "child_id": "c11",
+      "kind": "observation",
+      "skill_code": "hi.comprehension",
+      "item": "कमल कहाँ खिलता है",
+      "outcome": "partial",
+      "error_type": "meaning_not_understood",
+      "when": "today",
+      "home_language": "helped",
+      "teacher_quote": "कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया",
+      "rationale": "could not answer the question in Hindi, answered at once when asked in Bhojpuri"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "प्रिया",
+      "child_id": null,
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "किताब",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "प्रिया ने किताब सही पढ़ी।",
+      "rationale": "read किताब correctly"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "करण",
+      "child_id": "c13",
+      "kind": "observation",
+      "skill_code": "math.addition",
+      "item": "तेईस और पाँच",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "करण ने तेईस और पाँच जोड़कर अट्ठाईस बताया, सही।",
+      "rationale": "added 23 + 5 and answered 28 correctly"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "मोहन",
+      "child_id": "c14",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "मछली",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "मोहन ने मछली सही पढ़ी।",
+      "rationale": "read मछली correctly"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "पिंकी",
+      "child_id": "c04",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "नमक",
+      "outcome": "incorrect",
+      "error_type": "segments_without_blending",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पिंकी ने नमक को न म क पढ़ा, जोड़ नहीं पाई।",
+      "rationale": "read नमक as न-म-क without blending"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "फ़ातिमा",
+      "question_hi": "फ़ातिमा ने कौन सा वाक्य पढ़ा था?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "फ़ातिमा",
+     "question_hi": "फ़ातिमा ने कौन सा वाक्य पढ़ा था?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 331,
+    "output_tokens": 1582,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0341,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 14.1
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "फ़ातिमा",
+     "child_id": "c11",
+     "kind": "observation",
+     "skill_code": "hi.sentence",
+     "item": "",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "फ़ातिमा ने वाक्य पढ़ लिया",
+     "rationale": "read the sentence; which sentence was not named",
+     "attribution": "unique",
+     "candidates": [
+      "c11"
+     ],
+     "signals": {
+      "specificity": 0.6,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.76,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "फ़ातिमा",
+     "child_id": "c11",
+     "kind": "observation",
+     "skill_code": "hi.comprehension",
+     "item": "कमल कहाँ खिलता है",
+     "outcome": "partial",
+     "error_type": "meaning_not_understood",
+     "when": "today",
+     "home_language": "helped",
+     "teacher_quote": "कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया",
+     "rationale": "could not answer the question in Hindi, answered at once when asked in Bhojpuri",
+     "attribution": "unique",
+     "candidates": [
+      "c11"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "प्रिया",
+     "child_id": null,
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "किताब",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "प्रिया ने किताब सही पढ़ी।",
+     "rationale": "read किताब correctly",
+     "attribution": "none",
+     "candidates": [
+      "c12",
+      "c27"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.0,
+     "status": "unattributed"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "करण",
+     "child_id": "c13",
+     "kind": "observation",
+     "skill_code": "math.addition",
+     "item": "तेईस और पाँच",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "करण ने तेईस और पाँच जोड़कर अट्ठाईस बताया, सही।",
+     "rationale": "added 23 + 5 and answered 28 correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c13"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "मोहन",
+     "child_id": "c14",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "मछली",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "मोहन ने मछली सही पढ़ी।",
+     "rationale": "read मछली correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c14"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "पिंकी",
+     "child_id": "c04",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "नमक",
+     "outcome": "incorrect",
+     "error_type": "segments_without_blending",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पिंकी ने नमक को न म क पढ़ा, जोड़ नहीं पाई।",
+     "rationale": "read नमक as न-म-क without blending",
+     "attribution": "unique",
+     "candidates": [
+      "c04"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    }
+   ],
+   "questions": [
+    {
+     "mention_id": "m3",
+     "type": "which_child",
+     "name_said": "प्रिया",
+     "candidates": [
+      "c12",
+      "c27"
+     ],
+     "answer": "c12"
+    }
+   ]
+  },
+  {
+   "back": 5,
+   "transcript": "नेहा ने कमल का फूल सुंदर है पूरा वाक्य पढ़ा। विकास ने ग और घ में गड़बड़ की, घर को गर पढ़ा। पूजा ने फूल और नाव सही पढ़े। दीपक ने पंद्रह में से छह घटाकर नौ बताया। सोनू ने किताब को कताब पढ़ा। सुरेश आज भी नहीं आया।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "नेहा ने कमल का फूल सुंदर है पूरा वाक्य पढ़ा।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "विकास ने ग और घ में गड़बड़ की, घर को गर पढ़ा।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "पूजा ने फूल और नाव सही पढ़े।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "दीपक ने पंद्रह में से छह घटाकर नौ बताया।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "सोनू ने किताब को कताब पढ़ा।"
+    },
+    {
+     "sent_id": "s6",
+     "text": "सुरेश आज भी नहीं आया।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c15",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    },
+    {
+     "child_id": "c16",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "घर"
+    },
+    {
+     "child_id": "c17",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c18",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c19",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "मटर"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "नेहा",
+      "child_id": "c16",
+      "kind": "observation",
+      "skill_code": "hi.sentence",
+      "item": "कमल का फूल सुंदर है",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "नेहा ने कमल का फूल सुंदर है पूरा वाक्य पढ़ा।",
+      "rationale": "read the full sentence कमल का फूल सुंदर है"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "विकास",
+      "child_id": "c17",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "घर",
+      "outcome": "incorrect",
+      "error_type": "letter_confusion",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "ग और घ में गड़बड़ की, घर को गर पढ़ा।",
+      "rationale": "read घर as गर, confusing घ with ग"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "पूजा",
+      "child_id": "c18",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "फूल",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पूजा ने फूल और नाव सही पढ़े।",
+      "rationale": "read फूल correctly"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "पूजा",
+      "child_id": "c18",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पूजा ने फूल और नाव सही पढ़े।",
+      "rationale": "read नाव correctly"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "दीपक",
+      "child_id": "c19",
+      "kind": "observation",
+      "skill_code": "math.subtraction",
+      "item": "पंद्रह में से छह",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "दीपक ने पंद्रह में से छह घटाकर नौ बताया।",
+      "rationale": "answered 15 - 6 = 9 correctly"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "सोनू",
+      "child_id": "c08",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "किताब",
+      "outcome": "incorrect",
+      "error_type": "matra_omitted",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सोनू ने किताब को कताब पढ़ा।",
+      "rationale": "read किताब as कताब, dropping the ि matra"
+     },
+     {
+      "mention_id": "m7",
+      "sent_ids": [
+       "s6"
+      ],
+      "name_said": "सुरेश",
+      "child_id": "c07",
+      "kind": "absent",
+      "skill_code": null,
+      "item": "",
+      "outcome": "unclear",
+      "error_type": "not_stated",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सुरेश आज भी नहीं आया।",
+      "rationale": "not in class today"
+     }
+    ],
+    "follow_ups": []
+   },
+   "problems": [],
+   "follow_ups": [],
+   "usage": {
+    "input_tokens": 295,
+    "output_tokens": 1560,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0335,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 13.1
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "नेहा",
+     "child_id": "c16",
+     "kind": "observation",
+     "skill_code": "hi.sentence",
+     "item": "कमल का फूल सुंदर है",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "नेहा ने कमल का फूल सुंदर है पूरा वाक्य पढ़ा।",
+     "rationale": "read the full sentence कमल का फूल सुंदर है",
+     "attribution": "unique",
+     "candidates": [
+      "c16"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "विकास",
+     "child_id": "c17",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "घर",
+     "outcome": "incorrect",
+     "error_type": "letter_confusion",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "ग और घ में गड़बड़ की, घर को गर पढ़ा।",
+     "rationale": "read घर as गर, confusing घ with ग",
+     "attribution": "unique",
+     "candidates": [
+      "c17"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "पूजा",
+     "child_id": "c18",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "फूल",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पूजा ने फूल और नाव सही पढ़े।",
+     "rationale": "read फूल correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c18"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "पूजा",
+     "child_id": "c18",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "नाव",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पूजा ने फूल और नाव सही पढ़े।",
+     "rationale": "read नाव correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c18"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "दीपक",
+     "child_id": "c19",
+     "kind": "observation",
+     "skill_code": "math.subtraction",
+     "item": "पंद्रह में से छह",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "दीपक ने पंद्रह में से छह घटाकर नौ बताया।",
+     "rationale": "answered 15 - 6 = 9 correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c19"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "सोनू",
+     "child_id": "c08",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "किताब",
+     "outcome": "incorrect",
+     "error_type": "matra_omitted",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सोनू ने किताब को कताब पढ़ा।",
+     "rationale": "read किताब as कताब, dropping the ि matra",
+     "attribution": "unique",
+     "candidates": [
+      "c08"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m7",
+     "name_said": "सुरेश",
+     "child_id": "c07",
+     "kind": "absent",
+     "skill_code": null,
+     "item": "",
+     "outcome": "unclear",
+     "error_type": "not_stated",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सुरेश आज भी नहीं आया।",
+     "rationale": "not in class today",
+     "attribution": "unique",
+     "candidates": [
+      "c07"
+     ],
+     "signals": null,
+     "confidence": null,
+     "status": "absent"
+    }
+   ],
+   "questions": []
+  },
+  {
+   "back": 4,
+   "transcript": "राहुल ने संतालीस को चौहत्तर पढ़ा। सलमा थोड़ी कमज़ोर है पढ़ने में। आशा ने मछली पानी में रहती है पढ़ा, अच्छे से। मनीष ने कि और की में फर्क नहीं किया। इमरान ने बत्तीस में तीन दहाई दो इकाई सही बताया। अमन ने किताब सही पढ़ी। पिंकी ने घर को घ र पढ़ा, फिर से कोशिश की तो थोड़ा जोड़ा।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "राहुल ने संतालीस को चौहत्तर पढ़ा।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "सलमा थोड़ी कमज़ोर है पढ़ने में।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "आशा ने मछली पानी में रहती है पढ़ा, अच्छे से।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "मनीष ने कि और की में फर्क नहीं किया।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "इमरान ने बत्तीस में तीन दहाई दो इकाई सही बताया।"
+    },
+    {
+     "sent_id": "s6",
+     "text": "अमन ने किताब सही पढ़ी।"
+    },
+    {
+     "sent_id": "s7",
+     "text": "पिंकी ने घर को घ र पढ़ा, फिर से कोशिश की तो थोड़ा जोड़ा।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c07",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c13",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c20",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "राहुल",
+      "child_id": "c21",
+      "kind": "observation",
+      "skill_code": "math.number_recognition",
+      "item": "संतालीस",
+      "outcome": "incorrect",
+      "error_type": "number_reversal",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "राहुल ने संतालीस को चौहत्तर पढ़ा।",
+      "rationale": "read 47 as 74, reversing the digits"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "सलमा",
+      "child_id": "c22",
+      "kind": "opinion",
+      "skill_code": null,
+      "item": "",
+      "outcome": "unclear",
+      "error_type": "not_stated",
+      "when": "general",
+      "home_language": "none",
+      "teacher_quote": "",
+      "rationale": "general remark about reading with no specific word or mistake named"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "आशा",
+      "child_id": "c23",
+      "kind": "observation",
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "आशा ने मछली पानी में रहती है पढ़ा, अच्छे से।",
+      "rationale": "read the sentence मछली पानी में रहती है well"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "मनीष",
+      "child_id": "c24",
+      "kind": "observation",
+      "skill_code": "hi.matras",
+      "item": "कि और की",
+      "outcome": "incorrect",
+      "error_type": "matra_confused",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "मनीष ने कि और की में फर्क नहीं किया।",
+      "rationale": "did not distinguish short and long i signs in कि and की"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "इमरान",
+      "child_id": "c25",
+      "kind": "observation",
+      "skill_code": "math.place_value",
+      "item": "बत्तीस में तीन दहाई दो इकाई",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "इमरान ने बत्तीस में तीन दहाई दो इकाई सही बताया।",
+      "rationale": "correctly said 32 has 3 tens and 2 ones"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s6"
+      ],
+      "name_said": "अमन",
+      "child_id": "c06",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "किताब",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अमन ने किताब सही पढ़ी।",
+      "rationale": "read किताब correctly"
+     },
+     {
+      "mention_id": "m7",
+      "sent_ids": [
+       "s7"
+      ],
+      "name_said": "पिंकी",
+      "child_id": "c04",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "घर",
+      "outcome": "partial",
+      "error_type": "segments_without_blending",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पिंकी ने घर को घ र पढ़ा, फिर से कोशिश की तो थोड़ा जोड़ा।",
+      "rationale": "read घर as घ-र, blended partly on a second try"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "सलमा",
+      "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और किस अक्षर या मात्रा पर अटकी?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "सलमा",
+     "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और किस अक्षर या मात्रा पर अटकी?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 349,
+    "output_tokens": 1585,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0343,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 13.6
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "राहुल",
+     "child_id": "c21",
+     "kind": "observation",
+     "skill_code": "math.number_recognition",
+     "item": "संतालीस",
+     "outcome": "incorrect",
+     "error_type": "number_reversal",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "राहुल ने संतालीस को चौहत्तर पढ़ा।",
+     "rationale": "read 47 as 74, reversing the digits",
+     "attribution": "unique",
+     "candidates": [
+      "c21"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "सलमा",
+     "child_id": "c22",
+     "kind": "opinion",
+     "skill_code": null,
+     "item": "",
+     "outcome": "unclear",
+     "error_type": "not_stated",
+     "when": "general",
+     "home_language": "none",
+     "teacher_quote": "",
+     "rationale": "general remark about reading with no specific word or mistake named",
+     "attribution": "unique",
+     "candidates": [
+      "c22"
+     ],
+     "signals": {
+      "specificity": 0.2,
+      "concreteness": 0.0,
+      "recency": 0.3
+     },
+     "confidence": 0.152,
+     "status": "check_tomorrow"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "आशा",
+     "child_id": "c23",
+     "kind": "observation",
+     "skill_code": "hi.sentence",
+     "item": "मछली पानी में रहती है",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "आशा ने मछली पानी में रहती है पढ़ा, अच्छे से।",
+     "rationale": "read the sentence मछली पानी में रहती है well",
+     "attribution": "unique",
+     "candidates": [
+      "c23"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "मनीष",
+     "child_id": "c24",
+     "kind": "observation",
+     "skill_code": "hi.matras",
+     "item": "कि और की",
+     "outcome": "incorrect",
+     "error_type": "matra_confused",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "मनीष ने कि और की में फर्क नहीं किया।",
+     "rationale": "did not distinguish short and long i signs in कि and की",
+     "attribution": "unique",
+     "candidates": [
+      "c24"
+     ],
+     "signals": {
+      "specificity": 0.85,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.879,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "इमरान",
+     "child_id": "c25",
+     "kind": "observation",
+     "skill_code": "math.place_value",
+     "item": "बत्तीस में तीन दहाई दो इकाई",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "इमरान ने बत्तीस में तीन दहाई दो इकाई सही बताया।",
+     "rationale": "correctly said 32 has 3 tens and 2 ones",
+     "attribution": "unique",
+     "candidates": [
+      "c25"
+     ],
+     "signals": {
+      "specificity": 0.85,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.879,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "अमन",
+     "child_id": "c06",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "किताब",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अमन ने किताब सही पढ़ी।",
+     "rationale": "read किताब correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c06"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m7",
+     "name_said": "पिंकी",
+     "child_id": "c04",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "घर",
+     "outcome": "partial",
+     "error_type": "segments_without_blending",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पिंकी ने घर को घ र पढ़ा, फिर से कोशिश की तो थोड़ा जोड़ा।",
+     "rationale": "read घर as घ-र, blended partly on a second try",
+     "attribution": "unique",
+     "candidates": [
+      "c04"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    }
+   ],
+   "questions": []
+  },
+  {
+   "back": 3,
+   "transcript": "रानी ने बतख सही पढ़ा। गोलू ने संतालीस को चौहत्तर पढ़ा। सीमा ने का कि की कु कू सब सही पढ़े। अजय ने बीस में से चार घटाकर सोलह बताया। फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया। पीछे वाला लड़का नाव नहीं पढ़ पाया।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "रानी ने बतख सही पढ़ा।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "गोलू ने संतालीस को चौहत्तर पढ़ा।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "सीमा ने का कि की कु कू सब सही पढ़े।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "अजय ने बीस में से चार घटाकर सोलह बताया।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया।"
+    },
+    {
+     "sent_id": "s6",
+     "text": "पीछे वाला लड़का नाव नहीं पढ़ पाया।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c22",
+     "skill_code": "hi.blend_no_matra",
+     "item": "बतख",
+     "reason": "confirm",
+     "from_day": "2026-10-22",
+     "said": ""
+    },
+    {
+     "child_id": "c15",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    },
+    {
+     "child_id": "c16",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c19",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "कमल"
+    },
+    {
+     "child_id": "c23",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "मटर"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "रानी",
+      "child_id": "c26",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "बतख",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "रानी ने बतख सही पढ़ा।",
+      "rationale": "read बतख correctly"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "गोलू",
+      "child_id": "c28",
+      "kind": "observation",
+      "skill_code": "math.number_recognition",
+      "item": "संतालीस",
+      "outcome": "incorrect",
+      "error_type": "number_reversal",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "गोलू ने संतालीस को चौहत्तर पढ़ा।",
+      "rationale": "read 47 as 74, digits reversed"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "सीमा",
+      "child_id": "c29",
+      "kind": "observation",
+      "skill_code": "hi.matras",
+      "item": "का कि की कु कू",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सीमा ने का कि की कु कू सब सही पढ़े।",
+      "rationale": "read all vowel-sign syllables का कि की कु कू correctly"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "अजय",
+      "child_id": "c30",
+      "kind": "observation",
+      "skill_code": "math.subtraction",
+      "item": "बीस में से चार",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अजय ने बीस में से चार घटाकर सोलह बताया।",
+      "rationale": "solved 20 - 4 = 16 correctly"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "फ़ातिमा",
+      "child_id": "c11",
+      "kind": "observation",
+      "skill_code": "hi.comprehension",
+      "item": "मछली कहाँ रहती है",
+      "outcome": "partial",
+      "error_type": "meaning_not_understood",
+      "when": "today",
+      "home_language": "helped",
+      "teacher_quote": "फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया।",
+      "rationale": "could not answer where the fish lives until the question was explained in Bhojpuri, then answered"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s6"
+      ],
+      "name_said": "पीछे वाला लड़का",
+      "child_id": null,
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव",
+      "outcome": "incorrect",
+      "error_type": "not_stated",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पीछे वाला लड़का नाव नहीं पढ़ पाया।",
+      "rationale": "could not read नाव; mistake not described"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "पीछे वाला लड़का",
+      "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला — न और व अलग-अलग पढ़े या आ की मात्रा छोड़ दी?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "पीछे वाला लड़का",
+     "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला — न और व अलग-अलग पढ़े या आ की मात्रा छोड़ दी?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 314,
+    "output_tokens": 1547,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0334,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 12.3
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "रानी",
+     "child_id": "c26",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "बतख",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "रानी ने बतख सही पढ़ा।",
+     "rationale": "read बतख correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c26"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "गोलू",
+     "child_id": "c28",
+     "kind": "observation",
+     "skill_code": "math.number_recognition",
+     "item": "संतालीस",
+     "outcome": "incorrect",
+     "error_type": "number_reversal",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "गोलू ने संतालीस को चौहत्तर पढ़ा।",
+     "rationale": "read 47 as 74, digits reversed",
+     "attribution": "unique",
+     "candidates": [
+      "c28"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "सीमा",
+     "child_id": "c29",
+     "kind": "observation",
+     "skill_code": "hi.matras",
+     "item": "का कि की कु कू",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सीमा ने का कि की कु कू सब सही पढ़े।",
+     "rationale": "read all vowel-sign syllables का कि की कु कू correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c29"
+     ],
+     "signals": {
+      "specificity": 0.85,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.879,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "अजय",
+     "child_id": "c30",
+     "kind": "observation",
+     "skill_code": "math.subtraction",
+     "item": "बीस में से चार",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अजय ने बीस में से चार घटाकर सोलह बताया।",
+     "rationale": "solved 20 - 4 = 16 correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c30"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "फ़ातिमा",
+     "child_id": "c11",
+     "kind": "observation",
+     "skill_code": "hi.comprehension",
+     "item": "मछली कहाँ रहती है",
+     "outcome": "partial",
+     "error_type": "meaning_not_understood",
+     "when": "today",
+     "home_language": "helped",
+     "teacher_quote": "फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया।",
+     "rationale": "could not answer where the fish lives until the question was explained in Bhojpuri, then answered",
+     "attribution": "unique",
+     "candidates": [
+      "c11"
+     ],
+     "signals": {
+      "specificity": 0.85,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.879,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "पीछे वाला लड़का",
+     "child_id": null,
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "नाव",
+     "outcome": "incorrect",
+     "error_type": "not_stated",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पीछे वाला लड़का नाव नहीं पढ़ पाया।",
+     "rationale": "could not read नाव; mistake not described",
+     "attribution": "none",
+     "candidates": [],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 0.4,
+      "recency": 1.0
+     },
+     "confidence": 0.0,
+     "status": "unattributed"
+    }
+   ],
+   "questions": [
+    {
+     "mention_id": "m6",
+     "type": "who_is_this",
+     "name_said": "पीछे वाला लड़का",
+     "candidates": [],
+     "answer": null
+    }
+   ]
+  },
+  {
+   "back": 2,
+   "transcript": "पिंकी ने मटर को म ट र पढ़ा, जोड़ नहीं पाई। सोनू ने मछली को मछल पढ़ा। काजल अक्सर मात्रा में गलती करती है। सुरेश आया था, उसने कमल सही पढ़ा। करण ने चौदह और तीन जोड़कर सत्रह बताया।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "पिंकी ने मटर को म ट र पढ़ा, जोड़ नहीं पाई।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "सोनू ने मछली को मछल पढ़ा।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "काजल अक्सर मात्रा में गलती करती है।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "सुरेश आया था, उसने कमल सही पढ़ा।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "करण ने चौदह और तीन जोड़कर सत्रह बताया।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c22",
+     "skill_code": "hi.blend_no_matra",
+     "item": "बतख",
+     "reason": "confirm",
+     "from_day": "2026-10-22",
+     "said": ""
+    },
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c07",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c13",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "मटर"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "पिंकी",
+      "child_id": "c04",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "मटर",
+      "outcome": "incorrect",
+      "error_type": "segments_without_blending",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "पिंकी ने मटर को म ट र पढ़ा, जोड़ नहीं पाई।",
+      "rationale": "read मटर as म-ट-र without blending"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "सोनू",
+      "child_id": "c08",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "मछली",
+      "outcome": "incorrect",
+      "error_type": "matra_omitted",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "सोनू ने मछली को मछल पढ़ा।",
+      "rationale": "read मछली as मछल, dropping the ी matra"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "काजल",
+      "child_id": "c15",
+      "kind": "opinion",
+      "skill_code": "hi.matras",
+      "item": "",
+      "outcome": "unclear",
+      "error_type": "not_stated",
+      "when": "general",
+      "home_language": "none",
+      "teacher_quote": "काजल अक्सर मात्रा में गलती करती है।",
+      "rationale": "general remark about matra mistakes, no specific word named"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "सुरेश",
+      "child_id": "c07",
+      "kind": "observation",
+      "skill_code": "hi.blend_no_matra",
+      "item": "कमल",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "उसने कमल सही पढ़ा।",
+      "rationale": "read कमल correctly"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "करण",
+      "child_id": "c13",
+      "kind": "observation",
+      "skill_code": "math.addition",
+      "item": "चौदह और तीन",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "करण ने चौदह और तीन जोड़कर सत्रह बताया।",
+      "rationale": "added 14 + 3 and answered 17"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "काजल",
+      "question_hi": "काजल ने आज कौन सा शब्द पढ़ा, और उसमें कौन सी मात्रा गलत पढ़ी?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "काजल",
+     "question_hi": "काजल ने आज कौन सा शब्द पढ़ा, और उसमें कौन सी मात्रा गलत पढ़ी?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 271,
+    "output_tokens": 1221,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0267,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 11.3
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "पिंकी",
+     "child_id": "c04",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "मटर",
+     "outcome": "incorrect",
+     "error_type": "segments_without_blending",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "पिंकी ने मटर को म ट र पढ़ा, जोड़ नहीं पाई।",
+     "rationale": "read मटर as म-ट-र without blending",
+     "attribution": "unique",
+     "candidates": [
+      "c04"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "सोनू",
+     "child_id": "c08",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "मछली",
+     "outcome": "incorrect",
+     "error_type": "matra_omitted",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "सोनू ने मछली को मछल पढ़ा।",
+     "rationale": "read मछली as मछल, dropping the ी matra",
+     "attribution": "unique",
+     "candidates": [
+      "c08"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "काजल",
+     "child_id": "c15",
+     "kind": "opinion",
+     "skill_code": "hi.matras",
+     "item": "",
+     "outcome": "unclear",
+     "error_type": "not_stated",
+     "when": "general",
+     "home_language": "none",
+     "teacher_quote": "काजल अक्सर मात्रा में गलती करती है।",
+     "rationale": "general remark about matra mistakes, no specific word named",
+     "attribution": "unique",
+     "candidates": [
+      "c15"
+     ],
+     "signals": {
+      "specificity": 0.2,
+      "concreteness": 0.0,
+      "recency": 0.3
+     },
+     "confidence": 0.152,
+     "status": "check_tomorrow"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "सुरेश",
+     "child_id": "c07",
+     "kind": "observation",
+     "skill_code": "hi.blend_no_matra",
+     "item": "कमल",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "उसने कमल सही पढ़ा।",
+     "rationale": "read कमल correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c07"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "करण",
+     "child_id": "c13",
+     "kind": "observation",
+     "skill_code": "math.addition",
+     "item": "चौदह और तीन",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "करण ने चौदह और तीन जोड़कर सत्रह बताया।",
+     "rationale": "added 14 + 3 and answered 17",
+     "attribution": "unique",
+     "candidates": [
+      "c13"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    }
+   ],
+   "questions": []
+  },
+  {
+   "back": 1,
+   "transcript": "अमन ने मछली सही पढ़ी, बिना रुके। गोलू ने नब्बे सही पढ़ा पर बत्तीस को फिर तेईस पढ़ा। मोहन ने आज कुछ शब्द गलत पढ़े। प्रिया ने फूल को फल पढ़ा। गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा।",
+   "sentences": [
+    {
+     "sent_id": "s1",
+     "text": "अमन ने मछली सही पढ़ी, बिना रुके।"
+    },
+    {
+     "sent_id": "s2",
+     "text": "गोलू ने नब्बे सही पढ़ा पर बत्तीस को फिर तेईस पढ़ा।"
+    },
+    {
+     "sent_id": "s3",
+     "text": "मोहन ने आज कुछ शब्द गलत पढ़े।"
+    },
+    {
+     "sent_id": "s4",
+     "text": "प्रिया ने फूल को फल पढ़ा।"
+    },
+    {
+     "sent_id": "s5",
+     "text": "गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा।"
+    }
+   ],
+   "listening": [
+    {
+     "child_id": "c15",
+     "skill_code": "hi.matras",
+     "item": "कि",
+     "reason": "confirm",
+     "from_day": "2026-10-24",
+     "said": "काजल अक्सर मात्रा में गलती करती है।"
+    },
+    {
+     "child_id": "c22",
+     "skill_code": "hi.blend_no_matra",
+     "item": "बतख",
+     "reason": "confirm",
+     "from_day": "2026-10-22",
+     "said": ""
+    },
+    {
+     "child_id": "c16",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "नमक"
+    },
+    {
+     "child_id": "c19",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "कमल"
+    },
+    {
+     "child_id": "c20",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "कमल"
+    }
+   ],
+   "claude": {
+    "mentions": [
+     {
+      "mention_id": "m1",
+      "sent_ids": [
+       "s1"
+      ],
+      "name_said": "अमन",
+      "child_id": "c06",
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "मछली",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "अमन ने मछली सही पढ़ी, बिना रुके।",
+      "rationale": "read मछली correctly and fluently without pausing"
+     },
+     {
+      "mention_id": "m2",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "गोलू",
+      "child_id": "c28",
+      "kind": "observation",
+      "skill_code": "math.number_recognition",
+      "item": "नब्बे",
+      "outcome": "correct",
+      "error_type": "none",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "गोलू ने नब्बे सही पढ़ा",
+      "rationale": "read the number 90 correctly"
+     },
+     {
+      "mention_id": "m3",
+      "sent_ids": [
+       "s2"
+      ],
+      "name_said": "गोलू",
+      "child_id": "c28",
+      "kind": "observation",
+      "skill_code": "math.number_recognition",
+      "item": "बत्तीस",
+      "outcome": "incorrect",
+      "error_type": "number_reversal",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "बत्तीस को फिर तेईस पढ़ा",
+      "rationale": "read 32 as 23, reversing the digits again"
+     },
+     {
+      "mention_id": "m4",
+      "sent_ids": [
+       "s3"
+      ],
+      "name_said": "मोहन",
+      "child_id": "c14",
+      "kind": "observation",
+      "skill_code": null,
+      "item": "",
+      "outcome": "incorrect",
+      "error_type": "not_stated",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "मोहन ने आज कुछ शब्द गलत पढ़े।",
+      "rationale": "misread some words today; words and mistake not specified"
+     },
+     {
+      "mention_id": "m5",
+      "sent_ids": [
+       "s4"
+      ],
+      "name_said": "प्रिया",
+      "child_id": null,
+      "kind": "observation",
+      "skill_code": "hi.words_with_matras",
+      "item": "फूल",
+      "outcome": "incorrect",
+      "error_type": "matra_omitted",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "प्रिया ने फूल को फल पढ़ा।",
+      "rationale": "read फूल as फल, dropping the ू vowel sign"
+     },
+     {
+      "mention_id": "m6",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "गीता",
+      "child_id": "c20",
+      "kind": "observation",
+      "skill_code": "hi.sentence",
+      "item": "कमल का फूल सुंदर है",
+      "outcome": "partial",
+      "error_type": "other",
+      "when": "today",
+      "home_language": "none",
+      "teacher_quote": "गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा।",
+      "rationale": "read the sentence कमल का फूल सुंदर है haltingly, with repeated pauses"
+     }
+    ],
+    "follow_ups": [
+     {
+      "name_said": "मोहन",
+      "question_hi": "मोहन ने कौन से शब्द गलत पढ़े, और उन्हें कैसे पढ़ा?"
+     },
+     {
+      "name_said": "गीता",
+      "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और क्या उसने अक्षर-अक्षर करके पढ़ा?"
+     }
+    ]
+   },
+   "problems": [],
+   "follow_ups": [
+    {
+     "name_said": "मोहन",
+     "question_hi": "मोहन ने कौन से शब्द गलत पढ़े, और उन्हें कैसे पढ़ा?"
+    },
+    {
+     "name_said": "गीता",
+     "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और क्या उसने अक्षर-अक्षर करके पढ़ा?"
+    }
+   ],
+   "usage": {
+    "input_tokens": 283,
+    "output_tokens": 1688,
+    "cache_write_tokens": 0,
+    "cache_read_tokens": 5809,
+    "usd": 0.0361,
+    "prompt": "observations.v2.md"
+   },
+   "timings": {
+    "claude_s": 14.8
+   },
+   "records": [
+    {
+     "mention_id": "m1",
+     "name_said": "अमन",
+     "child_id": "c06",
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "मछली",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "अमन ने मछली सही पढ़ी, बिना रुके।",
+     "rationale": "read मछली correctly and fluently without pausing",
+     "attribution": "unique",
+     "candidates": [
+      "c06"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m2",
+     "name_said": "गोलू",
+     "child_id": "c28",
+     "kind": "observation",
+     "skill_code": "math.number_recognition",
+     "item": "नब्बे",
+     "outcome": "correct",
+     "error_type": "none",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "गोलू ने नब्बे सही पढ़ा",
+     "rationale": "read the number 90 correctly",
+     "attribution": "unique",
+     "candidates": [
+      "c28"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m3",
+     "name_said": "गोलू",
+     "child_id": "c28",
+     "kind": "observation",
+     "skill_code": "math.number_recognition",
+     "item": "बत्तीस",
+     "outcome": "incorrect",
+     "error_type": "number_reversal",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "बत्तीस को फिर तेईस पढ़ा",
+     "rationale": "read 32 as 23, reversing the digits again",
+     "attribution": "unique",
+     "candidates": [
+      "c28"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.95,
+     "status": "evidence"
+    },
+    {
+     "mention_id": "m4",
+     "name_said": "मोहन",
+     "child_id": "c14",
+     "kind": "observation",
+     "skill_code": null,
+     "item": "",
+     "outcome": "incorrect",
+     "error_type": "not_stated",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "मोहन ने आज कुछ शब्द गलत पढ़े।",
+     "rationale": "misread some words today; words and mistake not specified",
+     "attribution": "unique",
+     "candidates": [
+      "c14"
+     ],
+     "signals": {
+      "specificity": 0.2,
+      "concreteness": 0.4,
+      "recency": 1.0
+     },
+     "confidence": 0.399,
+     "status": "check_tomorrow"
+    },
+    {
+     "mention_id": "m5",
+     "name_said": "प्रिया",
+     "child_id": null,
+     "kind": "observation",
+     "skill_code": "hi.words_with_matras",
+     "item": "फूल",
+     "outcome": "incorrect",
+     "error_type": "matra_omitted",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "प्रिया ने फूल को फल पढ़ा।",
+     "rationale": "read फूल as फल, dropping the ू vowel sign",
+     "attribution": "none",
+     "candidates": [
+      "c12",
+      "c27"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 1.0,
+      "recency": 1.0
+     },
+     "confidence": 0.0,
+     "status": "unattributed"
+    },
+    {
+     "mention_id": "m6",
+     "name_said": "गीता",
+     "child_id": "c20",
+     "kind": "observation",
+     "skill_code": "hi.sentence",
+     "item": "कमल का फूल सुंदर है",
+     "outcome": "partial",
+     "error_type": "other",
+     "when": "today",
+     "home_language": "none",
+     "teacher_quote": "गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा।",
+     "rationale": "read the sentence कमल का फूल सुंदर है haltingly, with repeated pauses",
+     "attribution": "unique",
+     "candidates": [
+      "c20"
+     ],
+     "signals": {
+      "specificity": 1.0,
+      "concreteness": 0.7,
+      "recency": 1.0
+     },
+     "confidence": 0.864,
+     "status": "evidence"
+    }
+   ],
+   "questions": [
+    {
+     "mention_id": "m5",
+     "type": "which_child",
+     "name_said": "प्रिया",
+     "candidates": [
+      "c12",
+      "c27"
+     ],
+     "answer": null
+    }
+   ]
+  }
+ ],
+ "brief": {
+  "picture": {
+   "today": "2026-10-27",
+   "grid": {
+    "c01": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c02": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.74,
+      "moments": 2,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c03": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c04": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "needs support",
+      "p": 0.25,
+      "moments": 4,
+      "days": 4
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c05": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": 0.51,
+      "moments": 2,
+      "days": 1
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c06": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "on track",
+      "p": 0.79,
+      "moments": 3,
+      "days": 3
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c07": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c08": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "needs support",
+      "p": 0.21,
+      "moments": 3,
+      "days": 3
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c09": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c10": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.5,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c11": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": 0.64,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": 0.5,
+      "moments": 2,
+      "days": 2
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c12": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": 0.67,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c13": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": 0.74,
+      "moments": 2,
+      "days": 2
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c14": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c15": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c16": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c17": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.34,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c18": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": 0.74,
+      "moments": 2,
+      "days": 1
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c19": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c20": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": 0.5,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c21": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": 0.34,
+      "moments": 1,
+      "days": 1
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c22": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c23": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c24": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": 0.35,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c25": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": 0.65,
+      "moments": 1,
+      "days": 1
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c26": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c27": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c28": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "needs support",
+      "p": 0.34,
+      "moments": 4,
+      "days": 3
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c29": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": 0.65,
+      "moments": 1,
+      "days": 1
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    },
+    "c30": {
+     "hi.letters": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.blend_no_matra": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.words_with_matras": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.conjuncts": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.sentence": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "hi.comprehension": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.number_recognition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.place_value": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.addition": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     },
+     "math.subtraction": {
+      "status": "not enough evidence",
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
+     },
+     "en.words": {
+      "status": "not enough evidence",
+      "p": null,
+      "moments": 0,
+      "days": 0
+     }
+    }
+   },
+   "needs_support": [
+    {
+     "child_id": "c04",
+     "skill_code": "hi.blend_no_matra",
+     "status": "needs support",
+     "p": 0.25,
+     "moments": 4,
+     "days": 4
+    },
+    {
+     "child_id": "c08",
+     "skill_code": "hi.words_with_matras",
+     "status": "needs support",
+     "p": 0.21,
+     "moments": 3,
+     "days": 3
+    },
+    {
+     "child_id": "c28",
+     "skill_code": "math.number_recognition",
+     "status": "needs support",
+     "p": 0.34,
+     "moments": 4,
+     "days": 3
+    }
+   ],
+   "on_track": [
+    {
+     "child_id": "c06",
+     "skill_code": "hi.words_with_matras"
+    }
+   ],
+   "silent": [
+    "c01",
+    "c02",
+    "c03",
+    "c05",
+    "c09",
+    "c10",
+    "c12",
+    "c15",
+    "c16",
+    "c17",
+    "c18",
+    "c19",
+    "c22",
+    "c27"
+   ],
+   "heard_this_week": [
+    "c04",
+    "c06",
+    "c07",
+    "c08",
+    "c11",
+    "c13",
+    "c14",
+    "c20",
+    "c21",
+    "c23",
+    "c24",
+    "c25",
+    "c26",
+    "c28",
+    "c29",
+    "c30"
+   ],
+   "listen_today": [
+    {
+     "child_id": "c14",
+     "skill_code": "hi.blend_no_matra",
+     "item": "घर",
+     "reason": "confirm",
+     "from_day": "2026-10-26",
+     "said": "मोहन ने आज कुछ शब्द गलत पढ़े।"
+    },
+    {
+     "child_id": "c15",
+     "skill_code": "hi.matras",
+     "item": "कि",
+     "reason": "confirm",
+     "from_day": "2026-10-24",
+     "said": "काजल अक्सर मात्रा में गलती करती है।"
+    },
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "not_heard",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c13",
+     "skill_code": "hi.blend_no_matra",
+     "reason": "least_known",
+     "item": "कमल"
+    }
+   ],
+   "language_flags": [
+    {
+     "child_id": "c11",
+     "signal": "helped",
+     "skill_code": "hi.comprehension",
+     "day": "2026-10-23"
+    }
+   ]
+  },
+  "brief": {
+   "needs_support": [
+    {
+     "child_id": "c04",
+     "skill_code": "hi.blend_no_matra"
+    },
+    {
+     "child_id": "c08",
+     "skill_code": "hi.words_with_matras"
+    },
+    {
+     "child_id": "c28",
+     "skill_code": "math.number_recognition"
+    }
+   ],
+   "stuck_where": [
+    {
+     "skill_code": "hi.blend_no_matra",
+     "child_ids": [
+      "c04"
+     ],
+     "what_hi": "अक्षर अलग-अलग बोलती है (घ-र, म-ट-र), पर उन्हें जोड़कर पूरा शब्द नहीं पढ़ पाती; दूसरी बार में घर थोड़ा जोड़ा।"
+    },
+    {
+     "skill_code": "hi.words_with_matras",
+     "child_ids": [
+      "c08"
+     ],
+     "what_hi": "शब्द पढ़ते समय इ और ई की मात्रा छूट जाती है: किताब को कताब, मछली को मछल पढ़ा।"
+    },
+    {
+     "skill_code": "math.number_recognition",
+     "child_ids": [
+      "c28"
+     ],
+     "what_hi": "दो अंकों की संख्या में अंक उलट जाते हैं: सैंतालीस को चौहत्तर, बत्तीस को तेईस पढ़ा; नब्बे सही पढ़ा।"
+    }
+   ],
+   "today": [
+    {
+     "group": "शब्द बनाओ समूह",
+     "child_ids": [
+      "c04",
+      "c08"
+     ],
+     "activity_id": "act-word-build",
+     "minutes": 10
+    },
+    {
+     "group": "संख्या कार्ड समूह",
+     "child_ids": [
+      "c28"
+     ],
+     "activity_id": "act-number-cards",
+     "minutes": 10
+    }
+   ],
+   "listen_today": [
+    {
+     "child_id": "c14",
+     "item": "घर"
+    },
+    {
+     "child_id": "c15",
+     "item": "कि"
+    },
+    {
+     "child_id": "c03",
+     "item": "बतख"
+    },
+    {
+     "child_id": "c11",
+     "item": "मटर"
+    },
+    {
+     "child_id": "c13",
+     "item": "कमल"
+    }
+   ],
+   "silent": [
+    "c01",
+    "c02",
+    "c03",
+    "c05",
+    "c09",
+    "c10",
+    "c12",
+    "c15",
+    "c16",
+    "c17",
+    "c18",
+    "c19",
+    "c22",
+    "c27"
+   ],
+   "text_hi": "नमस्ते दीदी, सुप्रभात! इस हफ़्ते आपने तीस में से सोलह बच्चों के बारे में अलग से बताया। अब किसे किसमें मदद चाहिए: पिंकी को अक्षर जोड़कर शब्द पढ़ने में मदद चाहिए। वह घ-र और म-ट-र अलग-अलग बोलती है, पर जोड़कर पूरा शब्द नहीं पढ़ पाती। सोनू को मात्रा वाले शब्दों में मदद चाहिए। उसने किताब को कताब और मछली को मछल पढ़ा, मात्रा छूट जाती है। गोलू को संख्या पहचान में मदद चाहिए। उसने सैंतालीस को चौहत्तर और बत्तीस को तेईस पढ़ा, अंक उलट जाते हैं, पर नब्बे सही पढ़ा। आज की गतिविधि: पिंकी और सोनू के साथ दस मिनट 'शब्द बनाओ'। अक्षर और मात्रा कार्ड से आज के पाठ का शब्द बनवाएँ और पढ़वाएँ। गोलू के साथ दस मिनट 'संख्या कार्ड', तेईस-बत्तीस और सैंतालीस-चौहत्तर जैसी जोड़ियों के साथ। आज इन बच्चों को सुनें: मोहन से घर पढ़वाएँ। काजल से कि। रवि से बतख। फ़ातिमा से मटर। करण से कमल। फ़ातिमा ने एक सवाल भोजपुरी में समझाने पर जवाब दे दिया था, तो हो सकता है बात भाषा की हो, समझ की नहीं। इन बच्चों के बारे में पाँच दिन से अलग से कुछ नहीं सुना: आरव, सिमरन, रवि, अंजलि, अर्जुन, रीना, प्रिया रोल बारह, काजल, नेहा, विकास, पूजा, दीपक, सलमा, और प्रिया रोल सत्ताईस। क्लास के बाद एक छोटा-सा वॉइस नोट ज़रूर भेजिए। धन्यवाद!",
+   "summary_en": "Good morning! This week you described 16 of 30 children. Support needed: Pinki with blending letters into words (says घ-र, म-ट-र separately); Sonu with words with vowel signs (drops ि/ी: कताब, मछल); Golu with number recognition (reverses digits: 47 as 74, 32 as 23; read 90 correctly). Today: Pinki and Sonu, Build the word, 10 min; Golu, Number cards, 10 min. Listen to: Mohan (घर), Kajal (कि), Ravi (बतख), Fatima (मटर), Karan (कमल). Fatima answered once it was explained in Bhojpuri, so the gap may be language. Not yet described: Aarav, Simran, Ravi, Anjali, Arjun, Reena, Priya (12), Kajal, Neha, Vikas, Pooja, Deepak, Salma, Priya (27). Please send a short voice note after class."
+  },
+  "problems": [],
+  "usage": {
+   "input_tokens": 4040,
+   "output_tokens": 3190,
+   "cache_write_tokens": 4983,
+   "cache_read_tokens": 0,
+   "usd": 0.1049,
+   "prompt": "brief.v2.md"
+  },
+  "audio_file": "samples/synthetic/audio/demo_brief.mp3"
+ }
+}

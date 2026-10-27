@@ -44,16 +44,14 @@ def clone_demo() -> str:
                 _apply_answer(cid, q_id, qq["answer"])
     b = fx.get("brief")
     if b:
-        pic = jobs.morning_picture(c, today)
-        same = [(x["child_id"], x["item"]) for x in pic["listen_today"]] == \
-               [(x["child_id"], x["item"]) for x in b["picture"]["listen_today"]]
-        if same and sorted(pic["silent"]) == sorted(b["picture"]["silent"]):
-            src = store.ROOT / b["audio_file"] if b.get("audio_file") else None
-            has_audio = bool(src and src.exists())
-            store.put_brief(cid, today.isoformat(), status="done", picture_json=pic, brief_json=b["brief"],
-                            problems_json=b.get("problems", []), usage_json=b.get("usage"),
-                            audio_file=f"{cid}_{today.isoformat()}.mp3" if has_audio else None,
-                            audio=src.read_bytes() if has_audio else None)
+        # This morning's brief and its picture are used together, exactly as seeded, so the brief's
+        # words always match the lists on screen. From "next morning" on, the live planner takes over.
+        src = store.ROOT / b["audio_file"] if b.get("audio_file") else None
+        has_audio = bool(src and src.exists())
+        store.put_brief(cid, today.isoformat(), status="done", picture_json=b["picture"], brief_json=b["brief"],
+                        problems_json=b.get("problems", []), usage_json=b.get("usage"),
+                        audio_file=f"{cid}_{today.isoformat()}.mp3" if has_audio else None,
+                        audio=src.read_bytes() if has_audio else None)
     return cid
 
 

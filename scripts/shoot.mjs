@@ -20,8 +20,9 @@ await new Promise((r) => ws.addEventListener("open", r));
 let id = 0; const pending = new Map();
 ws.addEventListener("message", (e) => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } });
 const send = (method, params = {}) => new Promise((r) => { const i = ++id; pending.set(i, r); ws.send(JSON.stringify({ id: i, method, params })); });
-const W = 390, H = 844;
-await send("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: 2, mobile: true });
+const W = +(process.env.W || 390), H = +(process.env.H || 844), MOBILE = W < 700, DPR = MOBILE ? 2 : 1;
+await send("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: DPR, mobile: MOBILE });
+if (process.env.LANG_PREF) { await send("Page.navigate", { url: base }); await sleep(800); await send("Runtime.evaluate", { expression: `localStorage.setItem("suno_lang", "${process.env.LANG_PREF}")` }); }
 await send("Page.enable");
 await send("Page.navigate", { url: base });
 await sleep(1500);
@@ -42,12 +43,12 @@ for (const s of steps) {
     if (s.full) {
       const r = await send("Runtime.evaluate", { expression: "Math.max(document.documentElement.scrollHeight, (document.querySelector('.sheet')||{}).scrollHeight||0)", returnByValue: true });
       const h = Math.min(r.result.result.value || H, 4000);
-      await send("Emulation.setDeviceMetricsOverride", { width: W, height: h, deviceScaleFactor: 2, mobile: true });
+      await send("Emulation.setDeviceMetricsOverride", { width: W, height: h, deviceScaleFactor: DPR, mobile: MOBILE });
       await sleep(400);
     }
     const shot = await send("Page.captureScreenshot", { format: "png" });
     writeFileSync(`${outdir}/${s.shot}.png`, Buffer.from(shot.result.data, "base64"));
-    if (s.full) await send("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: 2, mobile: true });
+    if (s.full) await send("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: DPR, mobile: MOBILE });
     console.log("shot", s.shot);
   }
 }

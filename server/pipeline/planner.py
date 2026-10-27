@@ -137,7 +137,9 @@ def listen_today(roster: list[dict], lesson: dict, records: list[dict], state, t
     plan = []
     for x in _confirm_list(records, today)[:2]:
         if not x["skill_code"] or not lesson["items"].get(x["skill_code"]):
-            x["skill_code"] = _least_known(x["child_id"], state, focus)
+            # A remark that names no skill ("read some words wrong") is about reading: check reading.
+            reading = [f for f in focus if f.startswith("hi.")] or focus
+            x["skill_code"] = _least_known(x["child_id"], state, reading)
             x["item"] = ""
         x["item"] = x["item"] or _item_for(lesson, x["skill_code"], by_id[x["child_id"]]["roll_no"] + seen.get(x["child_id"], 0))
         plan.append(x)

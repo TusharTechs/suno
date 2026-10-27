@@ -29,33 +29,53 @@
    "listening": [
     {
      "child_id": "c01",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "घर"
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c02",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "नमक"
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c03",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "बतख"
+     "item": "फूल",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c04",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "मटर"
+     "item": "नाव",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c05",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "कमल"
+     "item": "पानी",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     }
    ],
    "claude": {
@@ -74,7 +94,7 @@
       "error_type": "none",
       "when": "today",
       "home_language": "none",
-      "teacher_quote": "आरव ने कमल सही पढ़ा",
+      "teacher_quote": "आज आरव ने कमल सही पढ़ा।",
       "rationale": "read कमल correctly"
      },
      {
@@ -91,7 +111,7 @@
       "error_type": "none",
       "when": "today",
       "home_language": "none",
-      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए।",
       "rationale": "blended and read घर correctly"
      },
      {
@@ -108,7 +128,7 @@
       "error_type": "none",
       "when": "today",
       "home_language": "none",
-      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+      "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए।",
       "rationale": "blended and read नमक correctly"
      },
      {
@@ -121,11 +141,11 @@
       "kind": "observation",
       "skill_code": "hi.blend_no_matra",
       "item": "कमल",
-      "outcome": "incorrect",
+      "outcome": "partial",
       "error_type": "segments_without_blending",
       "when": "today",
       "home_language": "none",
-      "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई",
+      "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई।",
       "rationale": "read कमल as क-म-ल without blending"
      },
      {
@@ -161,40 +181,57 @@
       "home_language": "none",
       "teacher_quote": "कु पर अटक गई",
       "rationale": "got stuck on कु; mistake not described"
+     },
+     {
+      "mention_id": "m7",
+      "sent_ids": [
+       "s5"
+      ],
+      "name_said": "रवि",
+      "child_id": "c03",
+      "kind": "opinion",
+      "skill_code": null,
+      "item": "",
+      "outcome": "unclear",
+      "error_type": "not_stated",
+      "when": "general",
+      "home_language": "none",
+      "teacher_quote": "रवि तो बहुत होशियार है।",
+      "rationale": "general praise with no item or reading described"
      }
     ],
     "follow_ups": [
      {
-      "name_said": "अंजलि",
-      "question_hi": "अंजलि ने कु को क्या पढ़ा, कू या कुछ और?"
+      "name_said": "रवि",
+      "question_hi": "रवि ने आज फूल शब्द कैसे पढ़ा?"
      },
      {
-      "name_said": "रवि",
-      "question_hi": "रवि ने आज बतख कैसे पढ़ा, जोड़कर या अक्षर-अक्षर?"
+      "name_said": "अंजलि",
+      "question_hi": "अंजलि ने कु को क्या पढ़ा?"
      }
     ]
    },
    "problems": [],
    "follow_ups": [
     {
-     "name_said": "अंजलि",
-     "question_hi": "अंजलि ने कु को क्या पढ़ा, कू या कुछ और?"
+     "name_said": "रवि",
+     "question_hi": "रवि ने आज फूल शब्द कैसे पढ़ा?"
     },
     {
-     "name_said": "रवि",
-     "question_hi": "रवि ने आज बतख कैसे पढ़ा, जोड़कर या अक्षर-अक्षर?"
+     "name_said": "अंजलि",
+     "question_hi": "अंजलि ने कु को क्या पढ़ा?"
     }
    ],
    "usage": {
-    "input_tokens": 272,
-    "output_tokens": 1460,
-    "cache_write_tokens": 0,
-    "cache_read_tokens": 5809,
-    "usd": 0.0314,
+    "input_tokens": 273,
+    "output_tokens": 1705,
+    "cache_write_tokens": 5809,
+    "cache_read_tokens": 0,
+    "usd": 0.0642,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 12.8
+    "claude_s": 14.8
    },
    "records": [
     {
@@ -208,7 +245,7 @@
      "error_type": "none",
      "when": "today",
      "home_language": "none",
-     "teacher_quote": "आरव ने कमल सही पढ़ा",
+     "teacher_quote": "आज आरव ने कमल सही पढ़ा।",
      "rationale": "read कमल correctly",
      "attribution": "unique",
      "candidates": [
@@ -233,7 +270,7 @@
      "error_type": "none",
      "when": "today",
      "home_language": "none",
-     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए।",
      "rationale": "blended and read घर correctly",
      "attribution": "unique",
      "candidates": [
@@ -258,7 +295,7 @@
      "error_type": "none",
      "when": "today",
      "home_language": "none",
-     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए",
+     "teacher_quote": "सिमरन ने घर और नमक दोनों जोड़कर पढ़ लिए।",
      "rationale": "blended and read नमक correctly",
      "attribution": "unique",
      "candidates": [
@@ -279,11 +316,11 @@
      "kind": "observation",
      "skill_code": "hi.blend_no_matra",
      "item": "कमल",
-     "outcome": "incorrect",
+     "outcome": "partial",
      "error_type": "segments_without_blending",
      "when": "today",
      "home_language": "none",
-     "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई",
+     "teacher_quote": "पिंकी ने कमल को क म ल पढ़ा, जोड़ नहीं पाई।",
      "rationale": "read कमल as क-म-ल without blending",
      "attribution": "unique",
      "candidates": [
@@ -346,6 +383,31 @@
      },
      "confidence": 0.779,
      "status": "evidence"
+    },
+    {
+     "mention_id": "m7",
+     "name_said": "रवि",
+     "child_id": "c03",
+     "kind": "opinion",
+     "skill_code": null,
+     "item": "",
+     "outcome": "unclear",
+     "error_type": "not_stated",
+     "when": "general",
+     "home_language": "none",
+     "teacher_quote": "रवि तो बहुत होशियार है।",
+     "rationale": "general praise with no item or reading described",
+     "attribution": "unique",
+     "candidates": [
+      "c03"
+     ],
+     "signals": {
+      "specificity": 0.2,
+      "concreteness": 0.0,
+      "recency": 0.3
+     },
+     "confidence": 0.152,
+     "status": "check_tomorrow"
     }
    ],
    "questions": []
@@ -381,34 +443,56 @@
    ],
    "listening": [
     {
-     "child_id": "c06",
+     "child_id": "c03",
      "skill_code": "hi.blend_no_matra",
+     "item": "मटर",
+     "reason": "confirm",
+     "from_day": "2026-10-17",
+     "said": "रवि तो बहुत होशियार है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव"
+     }
+    },
+    {
+     "child_id": "c06",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "घर"
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c07",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "नमक"
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c08",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "बतख"
+     "item": "फूल",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c09",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "मटर"
-    },
-    {
-     "child_id": "c10",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "कमल"
+     "item": "नाव",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     }
    ],
    "claude": {
@@ -496,7 +580,7 @@
       "when": "today",
       "home_language": "none",
       "teacher_quote": "रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा।",
-      "rationale": "read बतख as ब-त-ख, blended only with teacher's help"
+      "rationale": "sounded out बतख as ब-त-ख, blended only with teacher's help"
      },
      {
       "mention_id": "m6",
@@ -521,15 +605,15 @@
    "problems": [],
    "follow_ups": [],
    "usage": {
-    "input_tokens": 299,
-    "output_tokens": 1298,
+    "input_tokens": 300,
+    "output_tokens": 1241,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0283,
+    "usd": 0.0272,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 10.5
+    "claude_s": 9.9
    },
    "records": [
     {
@@ -640,7 +724,7 @@
      "when": "today",
      "home_language": "none",
      "teacher_quote": "रीना ने बतख को ब त ख पढ़ा, फिर मेरे साथ जोड़ा।",
-     "rationale": "read बतख as ब-त-ख, blended only with teacher's help",
+     "rationale": "sounded out बतख as ब-त-ख, blended only with teacher's help",
      "attribution": "unique",
      "candidates": [
       "c10"
@@ -710,32 +794,54 @@
     {
      "child_id": "c03",
      "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "बतख"
-    },
-    {
-     "child_id": "c07",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "बतख"
+     "item": "मटर",
+     "reason": "confirm",
+     "from_day": "2026-10-17",
+     "said": "रवि तो बहुत होशियार है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव"
+     }
     },
     {
      "child_id": "c11",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "घर"
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c12",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "नमक"
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c13",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "बतख"
+     "item": "फूल",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
+    },
+    {
+     "child_id": "c14",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "नाव",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     }
    ],
    "claude": {
@@ -772,7 +878,7 @@
       "when": "today",
       "home_language": "helped",
       "teacher_quote": "कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया",
-      "rationale": "could not answer the question in Hindi, answered at once when asked in Bhojpuri"
+      "rationale": "could not answer the question in Hindi but answered at once when asked in Bhojpuri"
      },
      {
       "mention_id": "m3",
@@ -859,14 +965,14 @@
    ],
    "usage": {
     "input_tokens": 331,
-    "output_tokens": 1582,
+    "output_tokens": 1550,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0341,
+    "usd": 0.0335,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 14.1
+    "claude_s": 13.1
    },
    "records": [
     {
@@ -906,7 +1012,7 @@
      "when": "today",
      "home_language": "helped",
      "teacher_quote": "कमल कहाँ खिलता है पूछा तो नहीं बता पाई, फिर भोजपुरी में पूछा तो तुरंत बता दिया",
-     "rationale": "could not answer the question in Hindi, answered at once when asked in Bhojpuri",
+     "rationale": "could not answer the question in Hindi but answered at once when asked in Bhojpuri",
      "attribution": "unique",
      "candidates": [
       "c11"
@@ -1065,34 +1171,56 @@
    ],
    "listening": [
     {
-     "child_id": "c15",
+     "child_id": "c03",
      "skill_code": "hi.blend_no_matra",
+     "item": "मटर",
+     "reason": "confirm",
+     "from_day": "2026-10-17",
+     "said": "रवि तो बहुत होशियार है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव"
+     }
+    },
+    {
+     "child_id": "c15",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "कमल"
+     "item": "पानी",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c16",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "घर"
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
      "child_id": "c17",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "नमक"
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
      "child_id": "c18",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "बतख"
-    },
-    {
-     "child_id": "c19",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "मटर"
+     "item": "फूल",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     }
    ],
    "claude": {
@@ -1128,7 +1256,7 @@
       "error_type": "letter_confusion",
       "when": "today",
       "home_language": "none",
-      "teacher_quote": "ग और घ में गड़बड़ की, घर को गर पढ़ा।",
+      "teacher_quote": "विकास ने ग और घ में गड़बड़ की, घर को गर पढ़ा।",
       "rationale": "read घर as गर, confusing घ with ग"
      },
      {
@@ -1223,14 +1351,14 @@
    "follow_ups": [],
    "usage": {
     "input_tokens": 295,
-    "output_tokens": 1560,
+    "output_tokens": 1499,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0335,
+    "usd": 0.0323,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 13.1
+    "claude_s": 13.8
    },
    "records": [
     {
@@ -1269,7 +1397,7 @@
      "error_type": "letter_confusion",
      "when": "today",
      "home_language": "none",
-     "teacher_quote": "ग और घ में गड़बड़ की, घर को गर पढ़ा।",
+     "teacher_quote": "विकास ने ग और घ में गड़बड़ की, घर को गर पढ़ा।",
      "rationale": "read घर as गर, confusing घ with ग",
      "attribution": "unique",
      "candidates": [
@@ -1444,32 +1572,54 @@
     {
      "child_id": "c03",
      "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "बतख"
-    },
-    {
-     "child_id": "c07",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "not_heard",
-     "item": "मटर"
-    },
-    {
-     "child_id": "c11",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "बतख"
-    },
-    {
-     "child_id": "c13",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "मटर"
+     "item": "मटर",
+     "reason": "confirm",
+     "from_day": "2026-10-17",
+     "said": "रवि तो बहुत होशियार है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव"
+     }
     },
     {
      "child_id": "c20",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "कमल"
+     "item": "पानी",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
+    },
+    {
+     "child_id": "c21",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
+    },
+    {
+     "child_id": "c22",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
+    },
+    {
+     "child_id": "c23",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "फूल",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     }
    ],
    "claude": {
@@ -1506,7 +1656,7 @@
       "when": "general",
       "home_language": "none",
       "teacher_quote": "",
-      "rationale": "general remark about reading with no specific word or mistake named"
+      "rationale": "general judgement about reading with no specific word or mistake described"
      },
      {
       "mention_id": "m3",
@@ -1540,7 +1690,7 @@
       "when": "today",
       "home_language": "none",
       "teacher_quote": "मनीष ने कि और की में फर्क नहीं किया।",
-      "rationale": "did not distinguish short and long i signs in कि and की"
+      "rationale": "did not distinguish between कि and की (short/long i matra)"
      },
      {
       "mention_id": "m5",
@@ -1551,7 +1701,7 @@
       "child_id": "c25",
       "kind": "observation",
       "skill_code": "math.place_value",
-      "item": "बत्तीस में तीन दहाई दो इकाई",
+      "item": "बत्तीस",
       "outcome": "correct",
       "error_type": "none",
       "when": "today",
@@ -1597,7 +1747,7 @@
     "follow_ups": [
      {
       "name_said": "सलमा",
-      "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और किस अक्षर या मात्रा पर अटकी?"
+      "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और उसमें कहाँ अटकी?"
      }
     ]
    },
@@ -1605,19 +1755,19 @@
    "follow_ups": [
     {
      "name_said": "सलमा",
-     "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और किस अक्षर या मात्रा पर अटकी?"
+     "question_hi": "सलमा ने आज कौन सा शब्द पढ़ा, और उसमें कहाँ अटकी?"
     }
    ],
    "usage": {
-    "input_tokens": 349,
-    "output_tokens": 1585,
+    "input_tokens": 345,
+    "output_tokens": 1597,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0343,
+    "usd": 0.0345,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 13.6
+    "claude_s": 13.0
    },
    "records": [
     {
@@ -1657,7 +1807,7 @@
      "when": "general",
      "home_language": "none",
      "teacher_quote": "",
-     "rationale": "general remark about reading with no specific word or mistake named",
+     "rationale": "general judgement about reading with no specific word or mistake described",
      "attribution": "unique",
      "candidates": [
       "c22"
@@ -1707,7 +1857,7 @@
      "when": "today",
      "home_language": "none",
      "teacher_quote": "मनीष ने कि और की में फर्क नहीं किया।",
-     "rationale": "did not distinguish short and long i signs in कि and की",
+     "rationale": "did not distinguish between कि and की (short/long i matra)",
      "attribution": "unique",
      "candidates": [
       "c24"
@@ -1726,7 +1876,7 @@
      "child_id": "c25",
      "kind": "observation",
      "skill_code": "math.place_value",
-     "item": "बत्तीस में तीन दहाई दो इकाई",
+     "item": "बत्तीस",
      "outcome": "correct",
      "error_type": "none",
      "when": "today",
@@ -1738,11 +1888,11 @@
       "c25"
      ],
      "signals": {
-      "specificity": 0.85,
+      "specificity": 1.0,
       "concreteness": 1.0,
       "recency": 1.0
      },
-     "confidence": 0.879,
+     "confidence": 0.95,
      "status": "evidence"
     },
     {
@@ -1834,31 +1984,53 @@
      "item": "बतख",
      "reason": "confirm",
      "from_day": "2026-10-22",
-     "said": ""
+     "said": "",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "फूल"
+     }
+    },
+    {
+     "child_id": "c03",
+     "skill_code": "hi.blend_no_matra",
+     "item": "मटर",
+     "reason": "confirm",
+     "from_day": "2026-10-17",
+     "said": "रवि तो बहुत होशियार है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "नाव"
+     }
+    },
+    {
+     "child_id": "c05",
+     "skill_code": "math.place_value",
+     "reason": "not_heard",
+     "item": "47 में कितनी इकाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "20 - 4"
+     }
     },
     {
      "child_id": "c15",
-     "skill_code": "hi.blend_no_matra",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "कमल"
+     "item": "पानी",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
-     "child_id": "c16",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "नमक"
-    },
-    {
-     "child_id": "c19",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "कमल"
-    },
-    {
-     "child_id": "c23",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "मटर"
+     "child_id": "c26",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "किताब",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     }
    ],
    "claude": {
@@ -1929,7 +2101,7 @@
       "when": "today",
       "home_language": "none",
       "teacher_quote": "अजय ने बीस में से चार घटाकर सोलह बताया।",
-      "rationale": "solved 20 - 4 = 16 correctly"
+      "rationale": "answered 20 - 4 = 16 correctly"
      },
      {
       "mention_id": "m5",
@@ -1946,7 +2118,7 @@
       "when": "today",
       "home_language": "helped",
       "teacher_quote": "फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया।",
-      "rationale": "could not answer where the fish lives until the question was explained in Bhojpuri, then answered"
+      "rationale": "did not understand the question where the fish lives until it was explained in Bhojpuri, then answered"
      },
      {
       "mention_id": "m6",
@@ -1969,7 +2141,7 @@
     "follow_ups": [
      {
       "name_said": "पीछे वाला लड़का",
-      "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला — न और व अलग-अलग पढ़े या आ की मात्रा छोड़ दी?"
+      "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला? कौन सा अक्षर या मात्रा गलत हुई?"
      }
     ]
    },
@@ -1977,19 +2149,19 @@
    "follow_ups": [
     {
      "name_said": "पीछे वाला लड़का",
-     "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला — न और व अलग-अलग पढ़े या आ की मात्रा छोड़ दी?"
+     "question_hi": "नाव पढ़ते समय बच्चे ने क्या बोला? कौन सा अक्षर या मात्रा गलत हुई?"
     }
    ],
    "usage": {
-    "input_tokens": 314,
-    "output_tokens": 1547,
+    "input_tokens": 324,
+    "output_tokens": 1614,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0334,
+    "usd": 0.0347,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 12.3
+    "claude_s": 13.5
    },
    "records": [
     {
@@ -2079,7 +2251,7 @@
      "when": "today",
      "home_language": "none",
      "teacher_quote": "अजय ने बीस में से चार घटाकर सोलह बताया।",
-     "rationale": "solved 20 - 4 = 16 correctly",
+     "rationale": "answered 20 - 4 = 16 correctly",
      "attribution": "unique",
      "candidates": [
       "c30"
@@ -2104,7 +2276,7 @@
      "when": "today",
      "home_language": "helped",
      "teacher_quote": "फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया।",
-     "rationale": "could not answer where the fish lives until the question was explained in Bhojpuri, then answered",
+     "rationale": "did not understand the question where the fish lives until it was explained in Bhojpuri, then answered",
      "attribution": "unique",
      "candidates": [
       "c11"
@@ -2183,31 +2355,51 @@
      "item": "बतख",
      "reason": "confirm",
      "from_day": "2026-10-22",
-     "said": ""
+     "said": "",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "फूल"
+     }
     },
     {
-     "child_id": "c03",
-     "skill_code": "hi.blend_no_matra",
+     "child_id": "c10",
+     "skill_code": "math.place_value",
      "reason": "not_heard",
-     "item": "बतख"
+     "item": "47 में कितनी इकाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "20 - 4"
+     }
     },
     {
-     "child_id": "c07",
-     "skill_code": "hi.blend_no_matra",
+     "child_id": "c20",
+     "skill_code": "hi.words_with_matras",
      "reason": "not_heard",
-     "item": "मटर"
+     "item": "पानी",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
     },
     {
-     "child_id": "c11",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "मटर"
+     "child_id": "c27",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     },
     {
-     "child_id": "c13",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "मटर"
+     "child_id": "c01",
+     "skill_code": "math.place_value",
+     "reason": "not_heard",
+     "item": "32 में कितनी दहाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "15 - 6"
+     }
     }
    ],
    "claude": {
@@ -2261,7 +2453,7 @@
       "when": "general",
       "home_language": "none",
       "teacher_quote": "काजल अक्सर मात्रा में गलती करती है।",
-      "rationale": "general remark about matra mistakes, no specific word named"
+      "rationale": "general remark about frequent vowel-sign mistakes, no specific word named"
      },
      {
       "mention_id": "m4",
@@ -2301,7 +2493,7 @@
     "follow_ups": [
      {
       "name_said": "काजल",
-      "question_hi": "काजल ने आज कौन सा शब्द पढ़ा, और उसमें कौन सी मात्रा गलत पढ़ी?"
+      "question_hi": "काजल ने किस शब्द में मात्रा गलत पढ़ी, और उसे क्या पढ़ा?"
      }
     ]
    },
@@ -2309,19 +2501,19 @@
    "follow_ups": [
     {
      "name_said": "काजल",
-     "question_hi": "काजल ने आज कौन सा शब्द पढ़ा, और उसमें कौन सी मात्रा गलत पढ़ी?"
+     "question_hi": "काजल ने किस शब्द में मात्रा गलत पढ़ी, और उसे क्या पढ़ा?"
     }
    ],
    "usage": {
-    "input_tokens": 271,
-    "output_tokens": 1221,
+    "input_tokens": 287,
+    "output_tokens": 1280,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0267,
+    "usd": 0.0279,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 11.3
+    "claude_s": 10.6
    },
    "records": [
     {
@@ -2386,7 +2578,7 @@
      "when": "general",
      "home_language": "none",
      "teacher_quote": "काजल अक्सर मात्रा में गलती करती है।",
-     "rationale": "general remark about matra mistakes, no specific word named",
+     "rationale": "general remark about frequent vowel-sign mistakes, no specific word named",
      "attribution": "unique",
      "candidates": [
       "c15"
@@ -2484,7 +2676,11 @@
      "item": "कि",
      "reason": "confirm",
      "from_day": "2026-10-24",
-     "said": "काजल अक्सर मात्रा में गलती करती है।"
+     "said": "काजल अक्सर मात्रा में गलती करती है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "किताब"
+     }
     },
     {
      "child_id": "c22",
@@ -2492,25 +2688,41 @@
      "item": "बतख",
      "reason": "confirm",
      "from_day": "2026-10-22",
-     "said": ""
+     "said": "",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "फूल"
+     }
     },
     {
-     "child_id": "c16",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "नमक"
-    },
-    {
-     "child_id": "c19",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "कमल"
-    },
-    {
-     "child_id": "c20",
-     "skill_code": "hi.blend_no_matra",
+     "child_id": "c05",
+     "skill_code": "math.place_value",
      "reason": "not_heard",
-     "item": "कमल"
+     "item": "47 में कितनी इकाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "20 - 4"
+     }
+    },
+    {
+     "child_id": "c03",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "नाव",
+     "also": {
+      "skill_code": "hi.conjuncts",
+      "item": "प्यार"
+     }
+    },
+    {
+     "child_id": "c09",
+     "skill_code": "math.place_value",
+     "reason": "not_heard",
+     "item": "32 में कितनी दहाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "15 - 6"
+     }
     }
    ],
    "claude": {
@@ -2625,7 +2837,7 @@
      },
      {
       "name_said": "गीता",
-      "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और क्या उसने अक्षर-अक्षर करके पढ़ा?"
+      "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और वह शब्द कैसे पढ़ा?"
      }
     ]
    },
@@ -2637,19 +2849,19 @@
     },
     {
      "name_said": "गीता",
-     "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और क्या उसने अक्षर-अक्षर करके पढ़ा?"
+     "question_hi": "गीता वाक्य में किस शब्द पर अटकी, और वह शब्द कैसे पढ़ा?"
     }
    ],
    "usage": {
-    "input_tokens": 283,
-    "output_tokens": 1688,
+    "input_tokens": 306,
+    "output_tokens": 1672,
     "cache_write_tokens": 0,
     "cache_read_tokens": 5809,
-    "usd": 0.0361,
+    "usd": 0.0358,
     "prompt": "observations.v2.md"
    },
    "timings": {
-    "claude_s": 14.8
+    "claude_s": 14.3
    },
    "records": [
     {
@@ -2825,45 +3037,45 @@
     "c01": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.96,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.87,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.87,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.22,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -2899,45 +3111,45 @@
     "c02": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.99,
+      "moments": 2,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.95,
+      "moments": 2,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.74,
+      "p": 0.95,
       "moments": 2,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.72,
+      "moments": 2,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.48,
+      "moments": 2,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.48,
+      "moments": 2,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.24,
+      "moments": 2,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3046,46 +3258,46 @@
     },
     "c04": {
      "hi.letters": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.89,
+      "moments": 4,
+      "days": 4
      },
      "hi.matras": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.04,
+      "moments": 4,
+      "days": 4
      },
      "hi.blend_no_matra": {
       "status": "needs support",
-      "p": 0.25,
+      "p": 0.04,
       "moments": 4,
       "days": 4
      },
      "hi.words_with_matras": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.03,
+      "moments": 4,
+      "days": 4
      },
      "hi.conjuncts": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.02,
+      "moments": 4,
+      "days": 4
      },
      "hi.sentence": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.02,
+      "moments": 4,
+      "days": 4
      },
      "hi.comprehension": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.01,
+      "moments": 4,
+      "days": 4
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3121,45 +3333,45 @@
     "c05": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.86,
+      "moments": 2,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": 0.51,
+      "p": 0.65,
       "moments": 2,
       "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.65,
+      "moments": 2,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.49,
+      "moments": 2,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.33,
+      "moments": 2,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.33,
+      "moments": 2,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.16,
+      "moments": 2,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3194,46 +3406,46 @@
     },
     "c06": {
      "hi.letters": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 1.0,
+      "moments": 3,
+      "days": 3
      },
      "hi.matras": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 1.0,
+      "moments": 3,
+      "days": 3
      },
      "hi.blend_no_matra": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 1.0,
+      "moments": 3,
+      "days": 3
      },
      "hi.words_with_matras": {
       "status": "on track",
-      "p": 0.79,
+      "p": 0.98,
       "moments": 3,
       "days": 3
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.66,
+      "moments": 3,
+      "days": 3
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.66,
+      "moments": 3,
+      "days": 3
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.33,
+      "moments": 3,
+      "days": 3
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3269,45 +3481,45 @@
     "c07": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.97,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.89,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.89,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.67,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.22,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3342,46 +3554,46 @@
     },
     "c08": {
      "hi.letters": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.99,
+      "moments": 3,
+      "days": 3
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.7,
+      "moments": 3,
+      "days": 3
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.7,
+      "moments": 3,
+      "days": 3
      },
      "hi.words_with_matras": {
       "status": "needs support",
-      "p": 0.21,
+      "p": 0.02,
       "moments": 3,
       "days": 3
      },
      "hi.conjuncts": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.01,
+      "moments": 3,
+      "days": 3
      },
      "hi.sentence": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.01,
+      "moments": 3,
+      "days": 3
      },
      "hi.comprehension": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.01,
+      "moments": 3,
+      "days": 3
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3417,45 +3629,45 @@
     "c09": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.96,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.88,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.88,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.22,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3491,45 +3703,45 @@
     "c10": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.86,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.56,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.5,
+      "p": 0.56,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.42,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.28,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.28,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.14,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3564,45 +3776,45 @@
     },
     "c11": {
      "hi.letters": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.98,
+      "moments": 3,
+      "days": 2
      },
      "hi.matras": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.97,
+      "moments": 3,
+      "days": 2
      },
      "hi.blend_no_matra": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.97,
+      "moments": 3,
+      "days": 2
      },
      "hi.words_with_matras": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.95,
+      "moments": 3,
+      "days": 2
      },
      "hi.conjuncts": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "on track",
+      "p": 0.88,
+      "moments": 3,
+      "days": 2
      },
      "hi.sentence": {
-      "status": "not enough evidence",
-      "p": 0.64,
-      "moments": 1,
-      "days": 1
+      "status": "on track",
+      "p": 0.88,
+      "moments": 3,
+      "days": 2
      },
      "hi.comprehension": {
-      "status": "not enough evidence",
-      "p": 0.5,
-      "moments": 2,
+      "status": "needs support",
+      "p": 0.16,
+      "moments": 3,
       "days": 2
      },
      "math.number_recognition": {
@@ -3639,45 +3851,45 @@
     "c12": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.96,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.91,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.91,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": 0.67,
+      "p": 0.82,
       "moments": 1,
       "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.54,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.54,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3755,27 +3967,27 @@
      },
      "math.number_recognition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.99,
+      "moments": 2,
+      "days": 2
      },
      "math.place_value": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.93,
+      "moments": 2,
+      "days": 2
      },
      "math.addition": {
       "status": "not enough evidence",
-      "p": 0.74,
+      "p": 0.93,
       "moments": 2,
       "days": 2
      },
      "math.subtraction": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.46,
+      "moments": 2,
+      "days": 2
      },
      "en.words": {
       "status": "not enough evidence",
@@ -3787,45 +3999,45 @@
     "c14": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.95,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.91,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.91,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.81,
       "moments": 1,
       "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.54,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.54,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -3935,45 +4147,45 @@
     "c16": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.94,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.88,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.88,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.82,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.7,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.7,
       "moments": 1,
       "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.35,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4009,45 +4221,45 @@
     "c17": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.58,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.28,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.34,
+      "p": 0.28,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.21,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.14,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.14,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.07,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4083,45 +4295,45 @@
     "c18": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.99,
+      "moments": 2,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.98,
+      "moments": 2,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.98,
+      "moments": 2,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": 0.74,
+      "p": 0.94,
       "moments": 2,
       "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.63,
+      "moments": 2,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.63,
+      "moments": 2,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.31,
+      "moments": 2,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4199,25 +4411,25 @@
      },
      "math.number_recognition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.9,
+      "moments": 1,
+      "days": 1
      },
      "math.place_value": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.8,
+      "moments": 1,
+      "days": 1
      },
      "math.addition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.8,
+      "moments": 1,
+      "days": 1
      },
      "math.subtraction": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.59,
       "moments": 1,
       "days": 1
      },
@@ -4231,45 +4443,45 @@
     "c20": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.81,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.62,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.62,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.43,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.2,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": 0.5,
+      "p": 0.2,
       "moments": 1,
       "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.1,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4347,27 +4559,27 @@
      },
      "math.number_recognition": {
       "status": "not enough evidence",
-      "p": 0.34,
+      "p": 0.4,
       "moments": 1,
       "days": 1
      },
      "math.place_value": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "math.addition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "math.subtraction": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.13,
+      "moments": 1,
+      "days": 1
      },
      "en.words": {
       "status": "not enough evidence",
@@ -4453,45 +4665,45 @@
     "c23": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.94,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.89,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.89,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.83,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.7,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.7,
       "moments": 1,
       "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.35,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4527,45 +4739,45 @@
     "c24": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.85,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": 0.35,
+      "p": 0.54,
       "moments": 1,
       "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.54,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.4,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.27,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.14,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4643,27 +4855,27 @@
      },
      "math.number_recognition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.94,
+      "moments": 1,
+      "days": 1
      },
      "math.place_value": {
       "status": "not enough evidence",
-      "p": 0.65,
+      "p": 0.79,
       "moments": 1,
       "days": 1
      },
      "math.addition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.79,
+      "moments": 1,
+      "days": 1
      },
      "math.subtraction": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.4,
+      "moments": 1,
+      "days": 1
      },
      "en.words": {
       "status": "not enough evidence",
@@ -4675,45 +4887,45 @@
     "c26": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.96,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.89,
+      "moments": 1,
+      "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.89,
       "moments": 1,
       "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.67,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.22,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -4865,27 +5077,27 @@
      },
      "math.number_recognition": {
       "status": "needs support",
-      "p": 0.34,
+      "p": 0.08,
       "moments": 4,
       "days": 3
      },
      "math.place_value": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.06,
+      "moments": 4,
+      "days": 3
      },
      "math.addition": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.06,
+      "moments": 4,
+      "days": 3
      },
      "math.subtraction": {
-      "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "status": "needs support",
+      "p": 0.03,
+      "moments": 4,
+      "days": 3
      },
      "en.words": {
       "status": "not enough evidence",
@@ -4897,45 +5109,45 @@
     "c29": {
      "hi.letters": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.96,
+      "moments": 1,
+      "days": 1
      },
      "hi.matras": {
       "status": "not enough evidence",
-      "p": 0.65,
+      "p": 0.88,
       "moments": 1,
       "days": 1
      },
      "hi.blend_no_matra": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.88,
+      "moments": 1,
+      "days": 1
      },
      "hi.words_with_matras": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.66,
+      "moments": 1,
+      "days": 1
      },
      "hi.conjuncts": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.sentence": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.44,
+      "moments": 1,
+      "days": 1
      },
      "hi.comprehension": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.22,
+      "moments": 1,
+      "days": 1
      },
      "math.number_recognition": {
       "status": "not enough evidence",
@@ -5013,25 +5225,25 @@
      },
      "math.number_recognition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.91,
+      "moments": 1,
+      "days": 1
      },
      "math.place_value": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.81,
+      "moments": 1,
+      "days": 1
      },
      "math.addition": {
       "status": "not enough evidence",
-      "p": null,
-      "moments": 0,
-      "days": 0
+      "p": 0.81,
+      "moments": 1,
+      "days": 1
      },
      "math.subtraction": {
       "status": "not enough evidence",
-      "p": 0.66,
+      "p": 0.6,
       "moments": 1,
       "days": 1
      },
@@ -5048,7 +5260,7 @@
      "child_id": "c04",
      "skill_code": "hi.blend_no_matra",
      "status": "needs support",
-     "p": 0.25,
+     "p": 0.04,
      "moments": 4,
      "days": 4
     },
@@ -5056,23 +5268,75 @@
      "child_id": "c08",
      "skill_code": "hi.words_with_matras",
      "status": "needs support",
-     "p": 0.21,
+     "p": 0.02,
      "moments": 3,
      "days": 3
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.comprehension",
+     "status": "needs support",
+     "p": 0.16,
+     "moments": 3,
+     "days": 2
     },
     {
      "child_id": "c28",
      "skill_code": "math.number_recognition",
      "status": "needs support",
-     "p": 0.34,
+     "p": 0.08,
      "moments": 4,
      "days": 3
     }
    ],
    "on_track": [
     {
+     "child_id": "c04",
+     "skill_code": "hi.letters"
+    },
+    {
+     "child_id": "c06",
+     "skill_code": "hi.letters"
+    },
+    {
+     "child_id": "c06",
+     "skill_code": "hi.matras"
+    },
+    {
+     "child_id": "c06",
+     "skill_code": "hi.blend_no_matra"
+    },
+    {
      "child_id": "c06",
      "skill_code": "hi.words_with_matras"
+    },
+    {
+     "child_id": "c08",
+     "skill_code": "hi.letters"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.letters"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.matras"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.blend_no_matra"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.words_with_matras"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.conjuncts"
+    },
+    {
+     "child_id": "c11",
+     "skill_code": "hi.sentence"
     }
    ],
    "silent": [
@@ -5109,14 +5373,398 @@
     "c29",
     "c30"
    ],
+   "levels": {
+    "c01": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.041,
+       0.086,
+       0.218,
+       0.218,
+       0.218,
+       0.218
+      ]
+     }
+    },
+    "c02": {
+     "hindi": {
+      "level": null,
+      "moments": 2,
+      "days": 1,
+      "post": [
+       0.008,
+       0.037,
+       0.239,
+       0.239,
+       0.239,
+       0.239
+      ]
+     }
+    },
+    "c04": {
+     "hindi": {
+      "level": 1,
+      "moments": 4,
+      "days": 4,
+      "post": [
+       0.109,
+       0.855,
+       0.009,
+       0.009,
+       0.009,
+       0.009
+      ]
+     }
+    },
+    "c05": {
+     "hindi": {
+      "level": null,
+      "moments": 2,
+      "days": 1,
+      "post": [
+       0.137,
+       0.213,
+       0.162,
+       0.162,
+       0.162,
+       0.162
+      ]
+     }
+    },
+    "c06": {
+     "hindi": {
+      "level": null,
+      "moments": 3,
+      "days": 3,
+      "post": [
+       0.001,
+       0.001,
+       0.015,
+       0.327,
+       0.327,
+       0.327
+      ]
+     }
+    },
+    "c08": {
+     "hindi": {
+      "level": 2,
+      "moments": 3,
+      "days": 3,
+      "post": [
+       0.011,
+       0.288,
+       0.678,
+       0.008,
+       0.008,
+       0.008
+      ]
+     }
+    },
+    "c09": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.039,
+       0.083,
+       0.219,
+       0.219,
+       0.219,
+       0.219
+      ]
+     }
+    },
+    "c10": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.144,
+       0.299,
+       0.139,
+       0.139,
+       0.139,
+       0.139
+      ]
+     }
+    },
+    "c28": {
+     "maths": {
+      "level": 0,
+      "moments": 4,
+      "days": 3,
+      "post": [
+       0.917,
+       0.028,
+       0.028,
+       0.028
+      ]
+     }
+    },
+    "c11": {
+     "hindi": {
+      "level": 4,
+      "moments": 3,
+      "days": 2,
+      "post": [
+       0.016,
+       0.016,
+       0.016,
+       0.075,
+       0.72,
+       0.156
+      ]
+     }
+    },
+    "c12": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.043,
+       0.043,
+       0.097,
+       0.272,
+       0.272,
+       0.272
+      ]
+     }
+    },
+    "c13": {
+     "maths": {
+      "level": null,
+      "moments": 2,
+      "days": 2,
+      "post": [
+       0.012,
+       0.061,
+       0.464,
+       0.464
+      ]
+     }
+    },
+    "c14": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.046,
+       0.046,
+       0.101,
+       0.269,
+       0.269,
+       0.269
+      ]
+     }
+    },
+    "c16": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.058,
+       0.058,
+       0.058,
+       0.128,
+       0.349,
+       0.349
+      ]
+     }
+    },
+    "c17": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.419,
+       0.305,
+       0.069,
+       0.069,
+       0.069,
+       0.069
+      ]
+     }
+    },
+    "c18": {
+     "hindi": {
+      "level": null,
+      "moments": 2,
+      "days": 1,
+      "post": [
+       0.009,
+       0.009,
+       0.042,
+       0.313,
+       0.313,
+       0.313
+      ]
+     }
+    },
+    "c19": {
+     "maths": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.098,
+       0.098,
+       0.216,
+       0.588
+      ]
+     }
+    },
+    "c21": {
+     "maths": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.602,
+       0.133,
+       0.133,
+       0.133
+      ]
+     }
+    },
+    "c23": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.057,
+       0.057,
+       0.057,
+       0.127,
+       0.351,
+       0.351
+      ]
+     }
+    },
+    "c24": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.152,
+       0.31,
+       0.135,
+       0.135,
+       0.135,
+       0.135
+      ]
+     }
+    },
+    "c25": {
+     "maths": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.064,
+       0.143,
+       0.396,
+       0.396
+      ]
+     }
+    },
+    "c26": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.035,
+       0.079,
+       0.222,
+       0.222,
+       0.222,
+       0.222
+      ]
+     }
+    },
+    "c29": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.04,
+       0.084,
+       0.219,
+       0.219,
+       0.219,
+       0.219
+      ]
+     }
+    },
+    "c30": {
+     "maths": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.094,
+       0.094,
+       0.213,
+       0.599
+      ]
+     }
+    },
+    "c07": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.034,
+       0.078,
+       0.222,
+       0.222,
+       0.222,
+       0.222
+      ]
+     }
+    },
+    "c20": {
+     "hindi": {
+      "level": null,
+      "moments": 1,
+      "days": 1,
+      "post": [
+       0.191,
+       0.191,
+       0.191,
+       0.223,
+       0.102,
+       0.102
+      ]
+     }
+    }
+   },
    "listen_today": [
     {
      "child_id": "c14",
-     "skill_code": "hi.blend_no_matra",
-     "item": "घर",
+     "skill_code": "math.number_recognition",
+     "item": "23",
      "reason": "confirm",
      "from_day": "2026-10-26",
-     "said": "मोहन ने आज कुछ शब्द गलत पढ़े।"
+     "said": "मोहन ने आज कुछ शब्द गलत पढ़े।",
+     "also": {
+      "skill_code": "math.place_value",
+      "item": "32 में कितनी दहाई?"
+     }
     },
     {
      "child_id": "c15",
@@ -5124,25 +5772,41 @@
      "item": "कि",
      "reason": "confirm",
      "from_day": "2026-10-24",
-     "said": "काजल अक्सर मात्रा में गलती करती है।"
+     "said": "काजल अक्सर मात्रा में गलती करती है।",
+     "also": {
+      "skill_code": "hi.words_with_matras",
+      "item": "किताब"
+     }
     },
     {
-     "child_id": "c03",
-     "skill_code": "hi.blend_no_matra",
+     "child_id": "c10",
+     "skill_code": "math.place_value",
      "reason": "not_heard",
-     "item": "बतख"
+     "item": "47 में कितनी इकाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "20 - 4"
+     }
     },
     {
-     "child_id": "c11",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "मटर"
+     "child_id": "c17",
+     "skill_code": "math.place_value",
+     "reason": "not_heard",
+     "item": "32 में कितनी दहाई?",
+     "also": {
+      "skill_code": "math.subtraction",
+      "item": "15 - 6"
+     }
     },
     {
-     "child_id": "c13",
-     "skill_code": "hi.blend_no_matra",
-     "reason": "least_known",
-     "item": "कमल"
+     "child_id": "c27",
+     "skill_code": "hi.words_with_matras",
+     "reason": "not_heard",
+     "item": "मछली",
+     "also": {
+      "skill_code": "hi.sentence",
+      "item": "मछली पानी में रहती है।"
+     }
     }
    ],
    "language_flags": [
@@ -5165,6 +5829,10 @@
      "skill_code": "hi.words_with_matras"
     },
     {
+     "child_id": "c11",
+     "skill_code": "hi.comprehension"
+    },
+    {
      "child_id": "c28",
      "skill_code": "math.number_recognition"
     }
@@ -5175,35 +5843,41 @@
      "child_ids": [
       "c04"
      ],
-     "what_hi": "अक्षर अलग-अलग बोलती है (घ-र, म-ट-र), पर उन्हें जोड़कर पूरा शब्द नहीं पढ़ पाती; दूसरी बार में घर थोड़ा जोड़ा।"
+     "what_hi": "अक्षर पहचानती है, पर घ-र, म-ट-र अलग-अलग बोलती है, जोड़कर घर, मटर नहीं पढ़ पाती।"
     },
     {
      "skill_code": "hi.words_with_matras",
      "child_ids": [
       "c08"
      ],
-     "what_hi": "शब्द पढ़ते समय इ और ई की मात्रा छूट जाती है: किताब को कताब, मछली को मछल पढ़ा।"
+     "what_hi": "शब्द पढ़ता है, पर मात्रा छोड़ देता है: किताब को कताब, मछली को मछल पढ़ा।"
+    },
+    {
+     "skill_code": "hi.comprehension",
+     "child_ids": [
+      "c11"
+     ],
+     "what_hi": "'मछली कहाँ रहती है' सवाल हिंदी में नहीं समझी, भोजपुरी में समझाने पर सही जवाब दिया। शायद बात भाषा की है, समझ की नहीं।"
     },
     {
      "skill_code": "math.number_recognition",
      "child_ids": [
       "c28"
      ],
-     "what_hi": "दो अंकों की संख्या में अंक उलट जाते हैं: सैंतालीस को चौहत्तर, बत्तीस को तेईस पढ़ा; नब्बे सही पढ़ा।"
+     "what_hi": "नब्बे सही पढ़ा, पर सैंतालीस को चौहत्तर और बत्तीस को तेईस पढ़ा; अंक उलट जाते हैं।"
     }
    ],
    "today": [
     {
-     "group": "शब्द बनाओ समूह",
+     "group": "आवाज़ें जोड़ो",
      "child_ids": [
-      "c04",
-      "c08"
+      "c04"
      ],
-     "activity_id": "act-word-build",
+     "activity_id": "act-blend-slide",
      "minutes": 10
     },
     {
-     "group": "संख्या कार्ड समूह",
+     "group": "संख्या कार्ड",
      "child_ids": [
       "c28"
      ],
@@ -5214,23 +5888,23 @@
    "listen_today": [
     {
      "child_id": "c14",
-     "item": "घर"
+     "item": "23"
     },
     {
      "child_id": "c15",
      "item": "कि"
     },
     {
-     "child_id": "c03",
-     "item": "बतख"
+     "child_id": "c10",
+     "item": "47 में कितनी इकाई?"
     },
     {
-     "child_id": "c11",
-     "item": "मटर"
+     "child_id": "c17",
+     "item": "32 में कितनी दहाई?"
     },
     {
-     "child_id": "c13",
-     "item": "कमल"
+     "child_id": "c27",
+     "item": "मछली"
     }
    ],
    "silent": [
@@ -5249,17 +5923,17 @@
     "c22",
     "c27"
    ],
-   "text_hi": "नमस्ते दीदी, सुप्रभात! इस हफ़्ते आपने तीस में से सोलह बच्चों के बारे में अलग से बताया। अब किसे किसमें मदद चाहिए: पिंकी को अक्षर जोड़कर शब्द पढ़ने में मदद चाहिए। वह घ-र और म-ट-र अलग-अलग बोलती है, पर जोड़कर पूरा शब्द नहीं पढ़ पाती। सोनू को मात्रा वाले शब्दों में मदद चाहिए। उसने किताब को कताब और मछली को मछल पढ़ा, मात्रा छूट जाती है। गोलू को संख्या पहचान में मदद चाहिए। उसने सैंतालीस को चौहत्तर और बत्तीस को तेईस पढ़ा, अंक उलट जाते हैं, पर नब्बे सही पढ़ा। आज की गतिविधि: पिंकी और सोनू के साथ दस मिनट 'शब्द बनाओ'। अक्षर और मात्रा कार्ड से आज के पाठ का शब्द बनवाएँ और पढ़वाएँ। गोलू के साथ दस मिनट 'संख्या कार्ड', तेईस-बत्तीस और सैंतालीस-चौहत्तर जैसी जोड़ियों के साथ। आज इन बच्चों को सुनें: मोहन से घर पढ़वाएँ। काजल से कि। रवि से बतख। फ़ातिमा से मटर। करण से कमल। फ़ातिमा ने एक सवाल भोजपुरी में समझाने पर जवाब दे दिया था, तो हो सकता है बात भाषा की हो, समझ की नहीं। इन बच्चों के बारे में पाँच दिन से अलग से कुछ नहीं सुना: आरव, सिमरन, रवि, अंजलि, अर्जुन, रीना, प्रिया रोल बारह, काजल, नेहा, विकास, पूजा, दीपक, सलमा, और प्रिया रोल सत्ताईस। क्लास के बाद एक छोटा-सा वॉइस नोट ज़रूर भेजिए। धन्यवाद!",
-   "summary_en": "Good morning! This week you described 16 of 30 children. Support needed: Pinki with blending letters into words (says घ-र, म-ट-र separately); Sonu with words with vowel signs (drops ि/ी: कताब, मछल); Golu with number recognition (reverses digits: 47 as 74, 32 as 23; read 90 correctly). Today: Pinki and Sonu, Build the word, 10 min; Golu, Number cards, 10 min. Listen to: Mohan (घर), Kajal (कि), Ravi (बतख), Fatima (मटर), Karan (कमल). Fatima answered once it was explained in Bhojpuri, so the gap may be language. Not yet described: Aarav, Simran, Ravi, Anjali, Arjun, Reena, Priya (12), Kajal, Neha, Vikas, Pooja, Deepak, Salma, Priya (27). Please send a short voice note after class."
+   "text_hi": "नमस्ते दीदी, सुप्रभात! इस हफ़्ते आपने तीस में से सोलह बच्चों के बारे में बताया। किसे किस बात में मदद चाहिए: पिंकी को अक्षर जोड़कर शब्द पढ़ने में, वह घ-र, म-ट-र अलग बोलती है। सोनू को मात्रा वाले शब्दों में, वह किताब को कताब और मछली को मछल पढ़ता है। फ़ातिमा ने सवाल भोजपुरी में समझाने पर सही जवाब दिया, तो शायद बात भाषा की है, समझ की नहीं; उससे घर की भाषा में भी पूछ लीजिए। गोलू को संख्या पहचान में मदद चाहिए, सैंतालीस को चौहत्तर पढ़ता है। आज दस मिनट: पिंकी के साथ 'आवाज़ें जोड़ो', उँगली फिसलाकर क-म-ल, कमल। गोलू के साथ 'संख्या कार्ड', तेईस और बत्तीस जैसी जोड़ियाँ। आज इन्हें सुनिए: मोहन से तेईस, फिर बत्तीस में कितनी दहाई। काजल से कि, फिर किताब। रीना से सैंतालीस में कितनी इकाई, फिर बीस में से चार। विकास से बत्तीस में कितनी दहाई, फिर पंद्रह में से छह। प्रिया, रोल सत्ताईस, से मछली, फिर 'मछली पानी में रहती है'। इनके अलावा इन बच्चों के बारे में पाँच दिन से कुछ नहीं सुना, इनके बारे में अभी पक्का नहीं कह सकते: आरव, सिमरन, रवि, अंजलि, अर्जुन, प्रिया रोल बारह, नेहा, पूजा, दीपक और सलमा। क्लास के बाद एक छोटा-सा वॉइस नोट ज़रूर भेजिए। धन्यवाद!",
+   "summary_en": "Good morning. 16 of 30 children described this week. Support needed: Pinki with blending (घ-र, म-ट-र), Sonu with vowel-sign words (drops matras), Fatima with comprehension (answered once explained in Bhojpuri, likely a language gap), Golu with number recognition (reverses digits). Today: Pinki – Slide the sounds; Golu – Number cards (10 min each). Listen to: Mohan 23 then tens in 32; Kajal कि then किताब; Reena ones in 47 then 20-4; Vikas tens in 32 then 15-6; Priya (roll 27) मछली then the sentence. Not described in 5 days: Aarav, Simran, Ravi, Anjali, Arjun, Priya (roll 12), Neha, Pooja, Deepak, Salma, plus those above. Please send a voice note after class."
   },
   "problems": [],
   "usage": {
-   "input_tokens": 4040,
-   "output_tokens": 3190,
-   "cache_write_tokens": 4983,
+   "input_tokens": 4439,
+   "output_tokens": 2778,
+   "cache_write_tokens": 5143,
    "cache_read_tokens": 0,
-   "usd": 0.1049,
-   "prompt": "brief.v2.md"
+   "usd": 0.099,
+   "prompt": "brief.v3.md"
   },
   "audio_file": "samples/synthetic/audio/demo_brief.mp3"
  }

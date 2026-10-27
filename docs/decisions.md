@@ -44,11 +44,18 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 24 | Web app (installable PWA, offline recording queue) instead of a native Android app; SQLite instead of Postgres | 4 days left; judges test a hosted link; a PWA records offline and installs on a ₹8k Android phone | 27 Oct | Decided |
 | 25 | Maths (number reading, tens and ones, addition, subtraction) and English words join the skill ladder | Teacher speech makes them cheap: no child speech recognition needed. Numeracy is the organisers' own example | 27 Oct | Decided |
 | 26 | The language-or-concept flag returns from the roadmap: when the teacher says a child understood once it was explained in the home language, SUNO flags it on the child and in the brief | Claude reads it straight from her words; it was cut only because classroom audio couldn't support it | 27 Oct | Decided |
+| 27 | Test SUNO in simulation before real classrooms: Stage A runs the real pipeline on simulated teachers' voice notes (4 styles, real Sarvam speech-to-text, ground truth known); Stage B runs 200 simulated 12-week terms with the real tracker and planner. Everything labelled SIMULATED | Real classroom evidence isn't possible before 1 Nov; a simulation with stated assumptions tests the logic and finds design flaws early | 27 Oct | Decided |
+| 28 | Track each child's **level on the ladder** (Bayesian over ASER/TaRL levels) instead of independent per-skill counts; the described mistake implies lower skills ("क-म-ल" means letters are known); "needs support" = the lowest rung not reached | Stage B: the first planner made detection *worse* than no planner (it spread ~5 observations a day over 35 children × 5 skills, so no cell reached 3 observations). With the ladder, the quietest third's gaps found by week 8 rose from 4% (perfect diary) to 41% at 98–99% precision (`eval/results/sim_term.md`) | 27 Oct | Decided |
+| 29 | The listening list asks for **two items per child**: one at the likely level, one a rung up or down (ASER's mini-ladder), picked by expected information | Stage B: children who need support found by week 8 rose from 41% (one item) to 54% (two items); costs no extra class time, since the child reads a line anyway | 27 Oct | Decided |
+| 30 | Unknown names get the nearest-sounding roster names as one-tap suggestions (मिकास → विकास), never automatic attribution | Stage A: speech-to-text misheard names; the teacher should tap, not scroll a list of 30 | 27 Oct | Decided |
+| 31 | Ready for a real classroom: roster from a photo of the attendance register (Claude vision, first names only, teacher checks), weekly lesson words set by the teacher, readable class codes, Hindi-only mode, delete a note, free Postgres so classes persist | "Hand it over to a teacher" (Tushar, 27 Oct); the Ideate deck promised the register photo | 27 Oct | Decided |
 
 ## Evidence for the Build deck
 - [x] Technical mentor call (20 Oct): inputs, and what changed (6 rows above; F1 feasibility test, `docs/feasibility.md`)
 - [x] F1: voice matching on real child voices, simulated classroom (`eval/results/f1_voice_id.md`, chart `f1_voice_id.png`): it cannot name the child
-- [ ] F2: right vs wrong on real child readings (`eval/results/f2_answer_check.md`), needs the Sarvam key
+- [x] Simulation Stage A: SUNO's pipeline on 32 simulated voice notes, 4 teacher styles, real speech-to-text (`eval/results/sim_pipeline.md`), SIMULATED
+- [x] Simulation Stage B: 200 simulated terms, listening list vs perfect diary (`eval/results/sim_term.md`), SIMULATED; it changed the design (decisions 28–29)
+- [ ] F2: right vs wrong on real child readings (superseded by decision 20: no child speech is transcribed)
 - [ ] F3: attribution on the mentor's hard cases, synthetic (`eval/results/f3_claude_attribution.md`), needs the Anthropic key
 - [ ] Home distance test: accuracy by distance, desk vs worn phone
 - [ ] ASER dataset: answer-checker accuracy on real child speech

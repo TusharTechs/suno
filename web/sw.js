@@ -3,7 +3,7 @@
    - Brief audio and sample audio: cache first (they never change once made).
    - API GETs: network first, fall back to the last cached answer (the app marks it as offline).
    - Writes (notes, answers, feedback) are never cached; the app queues notes itself in IndexedDB. */
-const SHELL = "suno-shell-v1", MEDIA = "suno-media-v1", API = "suno-api-v1";
+const SHELL = "suno-shell-v2", MEDIA = "suno-media-v1", API = "suno-api-v1";
 const SHELL_FILES = ["/", "/index.html", "/app.js", "/style.css", "/manifest.webmanifest", "/icon.svg"];
 
 self.addEventListener("install", (e) => {

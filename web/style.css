@@ -173,3 +173,18 @@ pre.json { background: #0f1430; color: #d7dcf5; font-size: 11.5px; padding: 10px
 .status.failed { background: var(--redSoft); color: var(--red); }
 .status.done { background: var(--greenSoft); color: var(--green); }
 .status.queued_offline { background: var(--accentSoft); color: var(--accentText); }
+
+/* Hindi-only mode: English sub-labels hidden for teachers */
+body.hi-only .en { display: none !important; }
+.cell.lvl { background: #E8ECFF; color: #3A4AB0; font-weight: 700; }
+.listen .item.also { font-size: 15px; margin-top: 4px; background: #fff; }
+.menu-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.roster-row { display: flex; gap: 6px; align-items: center; padding: 4px 0; }
+.roster-row input { padding: 9px; }
+.roster-row .roll { width: 54px; flex: none; text-align: center; }
+.roster-row .nick { width: 30%; }
+.roster-row button { flex: none; border: 0; background: var(--soft2); border-radius: 8px; width: 36px; height: 36px; }
+.onboard { background: var(--accentSoft); border: 1px solid var(--accentLine); }
+.onboard ol { margin: 6px 0 0; padding-left: 20px; }
+.lesson-skill { padding: 8px 0; border-top: 1px solid var(--line); }
+.lesson-skill label { display: flex; gap: 8px; align-items: center; font-weight: 700; }

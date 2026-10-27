@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS classes (
   class_id TEXT PRIMARY KEY, name TEXT NOT NULL, grade INTEGER, school TEXT,
   roster_json TEXT NOT NULL, lesson_json TEXT NOT NULL,
   day_offset INTEGER NOT NULL DEFAULT 0,      -- demo only: "next morning" moves the class clock
-  synthetic INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL
+  synthetic INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL, code TEXT
 );
 CREATE TABLE IF NOT EXISTS notes (
   note_id TEXT PRIMARY KEY, class_id TEXT NOT NULL, day TEXT NOT NULL, created_at TEXT NOT NULL,
@@ -80,12 +80,17 @@ def _connect():
                     .replace(" REAL", " DOUBLE PRECISION")
         for stmt in [x.strip() for x in ddl.split(";") if x.strip()]:
             conn.execute(stmt)
+        conn.execute("ALTER TABLE classes ADD COLUMN IF NOT EXISTS code TEXT")
         return conn
     VAR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH, check_same_thread=False, isolation_level=None)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA.replace("SERIALID", "INTEGER PRIMARY KEY AUTOINCREMENT").replace("BLOBTYPE", "BLOB"))
+    try:
+        conn.execute("ALTER TABLE classes ADD COLUMN code TEXT")  # databases made before class codes
+    except sqlite3.OperationalError:
+        pass
     return conn
 
 
@@ -154,12 +159,37 @@ def new_id(prefix: str) -> str:
 
 # ---- classes ---------------------------------------------------------------
 
+CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"   # no 0/O, 1/I/L: easy to read out on the phone
+
+
+def new_code() -> str:
+    import secrets
+    while True:
+        raw = "".join(secrets.choice(CODE_ALPHABET) for _ in range(8))
+        code = f"{raw[:4]}-{raw[4:]}"
+        if not q("SELECT 1 FROM classes WHERE code=?", (code,)):
+            return code
+
+
 def create_class(name: str, grade: int, school: str, roster: list[dict], lesson: dict,
                  synthetic: bool = False, class_id: str | None = None) -> str:
     cid = class_id or new_id("cls")
-    x("INSERT INTO classes VALUES (?,?,?,?,?,?,?,?,?)",
-      (cid, name, grade, school, j(roster), j(lesson), 0, int(synthetic), now()))
+    x("INSERT INTO classes (class_id, name, grade, school, roster_json, lesson_json, day_offset, synthetic, created_at, code) "
+      "VALUES (?,?,?,?,?,?,?,?,?,?)",
+      (cid, name, grade, school, j(roster), j(lesson), 0, int(synthetic), now(), None if synthetic else new_code()))
     return cid
+
+
+def class_by_code(code: str) -> str | None:
+    c = code.strip().upper().replace(" ", "")
+    if len(c) == 8:
+        c = f"{c[:4]}-{c[4:]}"
+    rows = q("SELECT class_id FROM classes WHERE code=?", (c,))
+    return rows[0]["class_id"] if rows else None
+
+
+def update_lesson(class_id: str, lesson: dict) -> None:
+    x("UPDATE classes SET lesson_json=? WHERE class_id=?", (j(lesson), class_id))
 
 
 def get_class(class_id: str) -> dict | None:

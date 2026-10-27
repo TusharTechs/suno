@@ -1,7 +1,7 @@
 # Render Blueprint: SUNO on the FREE plan (no paid resources).
-# Free web services sleep after 15 minutes without traffic (about 1 minute to wake) and their
-# disk is wiped on sleep or redeploy: demo classes are re-created at every login, so the demo
-# is unaffected, but a class created by a user does not survive a sleep.
+# - Web service (free): sleeps after 15 minutes without traffic, about 1 minute to wake.
+# - Postgres (free): keeps teachers' classes across sleeps and redeploys. Render expires free
+#   databases 30 days after creation (covers judging and the 18 Nov finale); upgrade or recreate after.
 services:
   - type: web
     name: suno
@@ -19,6 +19,10 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
+      - key: SUNO_DATABASE_URL
+        fromDatabase:
+          name: suno-db
+          property: connectionString
       - key: CLAUDE_MODEL
         value: claude-opus-5-5
       - key: SUNO_NOTE_EFFORT
@@ -37,3 +41,11 @@ services:
         value: "12"
       - key: VO_SPEAKER
         value: shubh
+
+databases:
+  - name: suno-db
+    plan: free
+    region: singapore
+    databaseName: suno
+    user: suno
+    ipAllowList: []   # reachable only from Render services

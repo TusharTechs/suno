@@ -72,8 +72,13 @@ def client():
 
 
 def call_structured(*, prompt: str, schema: dict, stable_context: str, request: str,
-                    effort: str = "high", max_tokens: int = 32000, usage: Usage | None = None) -> dict:
-    """Ask Claude for JSON matching `schema`. `stable_context` is cached across calls."""
+                    effort: str = "high", max_tokens: int = 32000, usage: Usage | None = None,
+                    image: tuple[str, str] | None = None) -> dict:
+    """Ask Claude for JSON matching `schema`. `stable_context` is cached across calls.
+    `image` is (media_type, base64 data), placed before the request text."""
+    content = request if image is None else [
+        {"type": "image", "source": {"type": "base64", "media_type": image[0], "data": image[1]}},
+        {"type": "text", "text": request}]
     with client().beta.messages.stream(
         model=MODEL,
         max_tokens=max_tokens,
@@ -83,7 +88,7 @@ def call_structured(*, prompt: str, schema: dict, stable_context: str, request: 
             {"type": "text", "text": prompt},
             {"type": "text", "text": stable_context, "cache_control": {"type": "ephemeral"}},
         ],
-        messages=[{"role": "user", "content": request}],
+        messages=[{"role": "user", "content": content}],
         betas=[FALLBACK_BETA],
         fallbacks="default",
     ) as stream:

@@ -22,6 +22,9 @@ from pydantic import BaseModel
 
 from . import demo, jobs, store
 from .pipeline import claude_observations, planner
+from .pipeline import roster_photo as roster_photo_mod
+from .pipeline.claude_client import ClaudeOutputError
+from .pipeline.roster_photo import first_name_only
 from .pipeline.config import ACTIVITIES, SKILLS
 from .pipeline.guardrails import mask_banned, settle_attribution
 
@@ -147,8 +150,8 @@ def login(body: Login, response: Response):
     code = body.code.strip()
     if code.upper() == DEMO_CODE:
         cid = demo.clone_demo()
-    elif store.get_class(code):
-        cid = code
+    elif store.class_by_code(code):
+        cid = store.class_by_code(code)
     else:
         raise HTTPException(401, "code not recognised")
     _set_session(response, cid)
@@ -158,20 +161,90 @@ def login(body: Login, response: Response):
 class NewClass(BaseModel):
     name: str
     grade: int = 2
-    names: list[str]
+    names: list[str] = []
+
+
+def _clean_roster(entries: list[dict], old: list[dict]) -> list[dict]:
+    """First names only; existing children keep their ids (their evidence stays theirs)."""
+    old_by_id = {c["child_id"]: c for c in old}
+    used = {c["child_id"] for c in old}
+    next_n = max([int(c["child_id"][1:]) for c in old if c["child_id"][1:].isdigit()] + [0]) + 1
+    out, rolls = [], set()
+    for i, e in enumerate(entries[:80], 1):
+        name = first_name_only(e.get("first_name", ""))
+        if not name:
+            continue
+        cid = e.get("child_id") if e.get("child_id") in old_by_id else None
+        if cid is None:
+            while f"c{next_n:02d}" in used:
+                next_n += 1
+            cid = f"c{next_n:02d}"
+            used.add(cid)
+        roll = e.get("roll_no") if isinstance(e.get("roll_no"), int) and e.get("roll_no") > 0 else None
+        if roll is None or roll in rolls:
+            roll = max(rolls | {0}) + 1
+        rolls.add(roll)
+        aliases = [first_name_only(a) for a in (e.get("aliases") or [])][:3]
+        out.append({"child_id": cid, "first_name": name, "roll_no": roll, "aliases": [a for a in aliases if a]})
+    return out
 
 
 @app.post("/api/classes")
 def create_class(body: NewClass, response: Response):
-    names = [n.strip() for n in body.names if n.strip()][:60]
-    if not names:
-        raise HTTPException(400, "add at least one child")
-    roster = [{"child_id": f"c{i:02d}", "first_name": n.split()[0], "roll_no": i, "aliases": []}
-              for i, n in enumerate(names, 1)]
-    lesson = demo.json.loads(demo.CLASS.read_text())["lesson"]  # starts on the demo week's lesson
-    cid = store.create_class(body.name.strip()[:60] or "मेरी कक्षा", body.grade, "", roster, lesson)
+    roster = _clean_roster([{"first_name": n, "roll_no": i} for i, n in enumerate(body.names, 1)], [])
+    lesson = demo.json.loads(demo.CLASS.read_text())["lesson"]  # starts on a sample week; the teacher edits it
+    lesson = dict(lesson, title="इस हफ़्ते का पाठ (बदलें)")
+    cid = store.create_class(body.name.strip()[:60] or "मेरी कक्षा", max(1, min(body.grade, 5)), "", roster, lesson)
     _set_session(response, cid)
-    return {"class_id": cid}
+    return {"class_id": cid, "code": store.get_class(cid)["code"]}
+
+
+class RosterBody(BaseModel):
+    children: list[dict]
+
+
+@app.put("/api/roster")
+def put_roster(body: RosterBody, c: dict = Depends(current_class)):
+    roster = _clean_roster(body.children, c["roster"])
+    if not roster:
+        raise HTTPException(400, "add at least one child")
+    store.update_roster(c["class_id"], roster)
+    return {"roster": roster}
+
+
+@app.post("/api/roster/photo")
+async def roster_photo(photo: UploadFile = File(...), c: dict = Depends(current_class)):
+    """Claude reads a photo of the attendance register into a draft list. Nothing is saved here;
+    the teacher reviews the list and saves it with PUT /api/roster. The photo is not stored."""
+    data = await photo.read(MAX_UPLOAD + 1)
+    if len(data) > MAX_UPLOAD:
+        raise HTTPException(413, "photo too large")
+    try:
+        return roster_photo_mod.read_register(data, photo.content_type or "")
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    except ClaudeOutputError as e:
+        raise HTTPException(502, f"could not read the photo: {e}")
+
+
+class LessonBody(BaseModel):
+    title: str
+    focus_skills: list[str]
+    items: dict[str, list[str]]
+
+
+@app.put("/api/lesson")
+def put_lesson(body: LessonBody, c: dict = Depends(current_class)):
+    codes = {s["code"] for s in SKILLS["skills"]}
+    items = {k: [i.strip()[:40] for i in v if i.strip()][:10] for k, v in body.items.items() if k in codes}
+    items = {k: v for k, v in items.items() if v}
+    if not items:
+        raise HTTPException(400, "add at least one word or sum")
+    focus = [f for f in body.focus_skills if f in items] or list(items)
+    lesson = {"lesson_id": c["lesson"].get("lesson_id", "week"), "title": body.title.strip()[:80] or "इस हफ़्ते का पाठ",
+              "focus_skills": focus, "items": items}
+    store.update_lesson(c["class_id"], lesson)
+    return {"lesson": lesson}
 
 
 @app.post("/api/logout")
@@ -182,7 +255,7 @@ def logout(response: Response):
 
 @app.get("/api/me")
 def me(c: dict = Depends(current_class)):
-    return {"class_id": c["class_id"], "name": c["name"], "grade": c["grade"], "school": c["school"],
+    return {"class_id": c["class_id"], "code": c.get("code"), "name": c["name"], "grade": c["grade"], "school": c["school"],
             "synthetic": bool(c["synthetic"]), "roster": c["roster"], "lesson": c["lesson"],
             "today": jobs.class_today(c).isoformat(), "day_offset": c["day_offset"],
             "skills": SKILLS, "activities": ACTIVITIES}

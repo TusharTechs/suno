@@ -85,3 +85,46 @@ def test_bad_inputs(client):
     assert client.post("/api/notes", data={"text": "x" * 4000}).status_code == 413
     assert client.post("/api/login", json={"code": "nope"}).status_code == 401
     assert client.get("/api/audio/../../etc/passwd").status_code == 404
+
+
+def test_real_class_setup(client, monkeypatch):
+    r = client.post("/api/classes", json={"name": "कक्षा 2-अ", "grade": 2})
+    code = r.json()["code"]
+    assert len(code) == 9 and code[4] == "-" and not set(code) & set("0O1IL")
+    me = client.get("/api/me").json()
+    assert me["roster"] == [] and not me["synthetic"] and me["code"] == code
+
+    # First names only; numbers and surnames dropped; duplicate roll numbers fixed.
+    r = client.put("/api/roster", json={"children": [
+        {"first_name": "प्रिया शर्मा", "roll_no": 1}, {"first_name": "12. रवि", "roll_no": 1},
+        {"first_name": "  ", "roll_no": 3}, {"first_name": "गोलू", "aliases": ["गुड्डू सिंह"]}]})
+    roster = r.json()["roster"]
+    assert [c["first_name"] for c in roster] == ["प्रिया", "रवि", "गोलू"]
+    assert len({c["roll_no"] for c in roster}) == 3 and roster[2]["aliases"] == ["गुड्डू"]
+
+    # Editing keeps existing ids (their evidence stays theirs) and adds new ones.
+    keep = roster[0]["child_id"]
+    r = client.put("/api/roster", json={"children": [dict(roster[0], first_name="प्रिया"), {"first_name": "नेहा"}]})
+    ids = [c["child_id"] for c in r.json()["roster"]]
+    assert ids[0] == keep and ids[1] not in {c["child_id"] for c in roster}
+
+    r = client.put("/api/lesson", json={"title": "पाठ 3", "focus_skills": ["hi.matras", "nope"],
+                                        "items": {"hi.matras": ["का", " कि ", ""], "bogus": ["x"]}})
+    assert r.json()["lesson"]["items"] == {"hi.matras": ["का", "कि"]} and r.json()["lesson"]["focus_skills"] == ["hi.matras"]
+    assert client.put("/api/lesson", json={"title": "", "focus_skills": [], "items": {}}).status_code == 400
+
+    # Sign in again on "another phone" with the code, typed loosely.
+    client.post("/api/logout"); client.cookies.clear()
+    assert client.post("/api/login", json={"code": code.lower().replace("-", " ")}).status_code == 200
+    assert client.get("/api/me").json()["name"] == "कक्षा 2-अ"
+
+
+def test_roster_photo_keeps_first_names_only(client, monkeypatch):
+    from server.pipeline import roster_photo
+    monkeypatch.setattr(roster_photo, "call_structured", lambda **kw: {
+        "children": [{"roll_no": 1, "first_name": "आरव यादव"}, {"roll_no": 1, "first_name": "Golu Singh"},
+                     {"roll_no": None, "first_name": "७"}], "unreadable": 1, "note": ""})
+    client.post("/api/classes", json={"name": "x"})
+    r = client.post("/api/roster/photo", files={"photo": ("r.jpg", b"\xff\xd8fake", "image/jpeg")})
+    assert r.json()["children"] == [{"roll_no": 1, "first_name": "आरव"}, {"roll_no": None, "first_name": "Golu"}]
+    assert client.post("/api/roster/photo", files={"photo": ("r.txt", b"hi", "text/plain")}).status_code == 400

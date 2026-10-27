@@ -8,7 +8,7 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 
 ## Try it
 
-- **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Demo classes are re-created at every login, so the demo is unaffected; a class you create yourself is lost when the server sleeps.
+- **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Classes are kept in a free Postgres database.
 - **Code:** `SUNO-DEMO`. Each login gets its own fresh copy of a **synthetic** Grade 2 class: 30 fictional children, eight school days of teacher notes already run through the pipeline, and this morning's brief.
 
 **Suggested path, about 5 minutes:**
@@ -23,7 +23,7 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 4. **कक्षा (Class):** the child × skill grid. A cell changes only after 3+ checked observations on 2+ days. Tap a child for their evidence.
 5. **Today → "अगली सुबह / next morning":** moves the demo class one school day forward and builds that morning's brief live, including your note (about 30 s).
 
-You can also create your own class from the login page and use it for real.
+**Use it for a real class:** on the login page, choose *create your own class*. Photograph your attendance register (Claude reads first names only; you check the list, and the photo is not stored), set this week's words, and send your first note after class. Your class code (like `K7Q2-M9XD`) opens your class on any phone. Data is kept in a free Render Postgres database.
 
 ## How it works
 
@@ -36,8 +36,13 @@ Teacher's voice note (phone, offline-capable)
     "किताब को किताब पढ़ा" (speech-to-text erasing the misreading) can't be "correct"
   → code confidence (who × how specific × how concrete × how recent); gate 0.75
        below the gate, and every opinion → "listen again tomorrow", never a label
-  → tracker (Beta per child × skill; named only with ≥3 observations over ≥2 days),
-    Silence Ledger, listening plan (code, no AI)
+  → ladder (code, no AI): for each child, a probability for each level of the Hindi-reading and maths
+    ladders (ASER/TaRL levels), updated by Bayes' rule; one observation informs several skills, and
+    the described mistake counts ("क-म-ल" means the letters are known). A child is named only after
+    ≥3 observations over ≥2 days; "needs support" = the lowest rung not yet reached (TaRL groups)
+  → listening plan (code): the 5 children and items that would tell SUNO the most, confirm-first,
+    quiet children included; two items each (one at the likely level, one a rung away)
+  → Silence Ledger (code)
   → Claude ②  words the brief from code-decided facts                    [prompts/brief.v2.md, schemas/brief.v2.json]
   → code checks: no unbacked "needs support", exact listening list and ledger, activity fits the skill, banned words
        fail twice → the app shows the code facts without prose (fail closed)
@@ -49,11 +54,38 @@ Teacher's voice note (phone, offline-capable)
 | Input | Teacher's voice note (or typed note) | `web/app.js` (MediaRecorder, offline queue in IndexedDB) |
 | Processing | Speech-to-text; sentences; Claude ① | `server/pipeline/asr.py`, `claude_observations.py` |
 | Guardrails | Grounding, roster resolution, item check, labels, erased-misreading check, computed confidence | `server/pipeline/guardrails.py`, `names.py`, `confidence.py` |
-| Decisions | Tracker, Silence Ledger, listening plan | `server/pipeline/tracker.py`, `planner.py` |
+| Decisions | Ladder levels, Silence Ledger, listening plan | `server/pipeline/ladder.py`, `planner.py` |
+| Setup | Roster from a photo of the attendance register (Claude ③, vision), checked by code and the teacher | `server/pipeline/roster_photo.py` |
 | Output | Claude ② brief, checked; Hindi voice | `server/pipeline/brief.py`, `tts.py` |
 | Teacher feedback | ✓/✗ on every observation (✗ removes it from the tracker); one-tap name questions | `server/api.py` |
 
 **Claude** (`claude-opus-5-5`, adaptive thinking, JSON-schema structured outputs, explicit effort, prompt-cached roster and lesson, server-side refusal fallback) makes two calls: reading the note, and wording the brief. **Code computes every confidence, decides every fact, and checks everything Claude returns.**
+
+### Tested in simulation, because real classroom evidence wasn't possible in time
+
+**SIMULATED**, not real children or teachers. Every number comes from a script; the assumptions are written in `eval/sim/`.
+
+- **The pipeline on simulated classrooms** (`eval/results/sim_pipeline.md`): 32 voice notes from simulated teachers in 4 styles (precise, brief, impressionistic, Hinglish), including shared names, unknown nicknames, labels and opinions. Each was voiced by Sarvam text-to-speech and transcribed by Sarvam speech-to-text. Results:
+  - **0 of 114** evidence records were about the wrong child;
+  - **114 of 114** had the right right/wrong direction;
+  - **0 of 42** opinions, labels or vague remarks became evidence;
+  - labels were never repeated;
+  - **24 of 24** unclear names were resolved with one tap.
+- **A 12-week term, 200 times over** (`eval/results/sim_term.md`), with SUNO's real tracker and planner and the error rates above (floored at 3/n). Compared with a *perfect diary* of what the teacher naturally notices, SUNO's listening list (followed 80% of the time):
+  - hears the quietest third of the class far sooner: **94% vs 42%** by week 2;
+  - finds **54% vs 28%** of the children who need support in Hindi reading by week 8;
+  - finds **41% vs 4%** of the quiet children's gaps;
+  - keeps precision at 98–99%.
+- **The simulation changed the design.** The first planner made detection *worse*: it spread a teacher's few observations too thin. That led to the ladder model and the two-item mini-ladder (`docs/decisions.md`).
+- **Honest limits:**
+  - At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.
+  - The simulated teacher speaks clean, synthetic Hindi.
+  - Real teachers' speech, habits and judgement are untested until classroom testing in November.
+
+```bash
+uv run python eval/sim/run_pipeline_sim.py --days 8    # Stage A, about $3 of Claude credit
+uv run python eval/sim/run_term_sim.py --runs 200      # Stage B, no API calls
+```
 
 ### Offline and low network
 
@@ -99,14 +131,14 @@ uv run python eval/make_samples.py
 
 | Path | What |
 | --- | --- |
-| `server/api.py`, `jobs.py`, `store.py`, `demo.py` | Web API, background jobs, SQLite storage, per-login demo sandboxes |
+| `server/api.py`, `jobs.py`, `store.py`, `demo.py` | Web API, background jobs, storage (SQLite locally, Postgres hosted), per-login demo sandboxes |
 | `server/pipeline/` | One module per stage: `asr`, `claude_observations`, `names`, `guardrails`, `confidence`, `tracker`, `planner`, `brief`, `tts` |
 | `prompts/`, `schemas/` | Versioned prompts and JSON schemas for every Claude call |
 | `config/` | Skill ladder (Hindi reading, maths, English words) and activity bank (placeholder, not NCERT text) |
 | `web/` | Teacher web app (installable PWA, Hindi first, English sub-labels for reviewers) |
 | `samples/synthetic/` | **Synthetic** demo class, demo history, sample notes and audio |
 | `tests/` | Guardrail and adversarial tests, planner, brief checks, API flow |
-| `eval/` | Feasibility tests (F1 voice matching), demo seeding, evaluation scripts |
+| `eval/` | Simulation (`eval/sim/`), feasibility tests (F1 voice matching), demo seeding |
 | `docs/` | Handoff, design-change log, feasibility and strategy notes |
 
 **Retired v0 pipeline:** `claude_moments.py`, `claude_evidence.py`, `claude_brief.py` and `prompts/*.v1.md` (moments, evidence, brief) belong to the first design, which recorded the whole lesson. The F1 test (`docs/feasibility.md`) showed that voice matching cannot tell which child answered. Classroom constraints did the rest: distance from the back bench, phone heat, starting and stopping per period, and children's-voice consent. We kept those files as the record of what we tried.

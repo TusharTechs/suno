@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "roll_no": {"anyOf": [{"type": "integer"}, {"type": "null"}]},
+          "first_name": {"type": "string"}
+        },
+        "required": ["roll_no", "first_name"],
+        "additionalProperties": false
+      }
+    },
+    "unreadable": {"type": "integer"},
+    "note": {"type": "string"}
+  },
+  "required": ["children", "unreadable", "note"],
+  "additionalProperties": false
+}

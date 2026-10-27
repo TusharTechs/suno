@@ -8,7 +8,7 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 
 ## Try it
 
-- **Hosted:** _link added at deploy_. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Demo classes are re-created at every login, so the demo is unaffected; a class you create yourself is lost when the server sleeps.
+- **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Demo classes are re-created at every login, so the demo is unaffected; a class you create yourself is lost when the server sleeps.
 - **Code:** `SUNO-DEMO`. Each login gets its own fresh copy of a **synthetic** Grade 2 class: 30 fictional children, eight school days of teacher notes already run through the pipeline, and this morning's brief.
 
 **Suggested path, about 5 minutes:**

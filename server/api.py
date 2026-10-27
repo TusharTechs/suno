@@ -469,7 +469,7 @@ def sample_audio(name: str):
 
 @app.get("/healthz")
 def healthz():
-    return {"ok": True, "demo_fixture": demo.FIXTURE.exists()}
+    return {"ok": True, "demo_fixture": demo.FIXTURE.exists(), "storage": "postgres" if store.PG else "sqlite"}
 
 
 @app.exception_handler(HTTPException)

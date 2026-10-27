@@ -13,7 +13,6 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-import anthropic
 import jsonschema
 from dotenv import load_dotenv
 
@@ -59,12 +58,15 @@ def load_schema(name: str) -> dict:
     return json.loads((ROOT / "schemas" / name).read_text())
 
 
-_client: anthropic.Anthropic | None = None
+_client = None
 
 
-def client() -> anthropic.Anthropic:
+def client():
+    """The SDK is imported on first use: it is the slowest import, and a free 0.1-CPU instance
+    should answer its health check before anyone has asked Claude anything."""
     global _client
     if _client is None:
+        import anthropic
         _client = anthropic.Anthropic()
     return _client
 

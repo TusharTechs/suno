@@ -1,16 +1,22 @@
-# Real-speech test: read these notes aloud (about 30 minutes)
+# Real-speech test, one person (about 30 minutes)
 
-**Why:** the simulation used a synthetic voice. This checks SUNO on real human speech, on ordinary phones, in ordinary rooms. The words are scripted (a fictional class), so we know exactly what SUNO should find.
+**Why:** the simulation used a synthetic voice. This checks SUNO on a real human voice, an ordinary phone and real rooms. The words are scripted (a fictional class), so we know exactly what SUNO should find. No children are recorded; the names are fictional.
 
-**What you need:** 2–4 adults (Hindi speakers; one can be you), any smartphone voice recorder.
+**Honest limit:** one adult speaker. Most primary teachers are women, and accents vary; the simulation's synthetic voices cover female voices, and classroom testing in November covers real teachers.
 
-**How:**
-1. Each person reads 2–5 of the notes below, at a natural pace, the way a teacher would speak after class. Small slips are fine; don't restart.
-2. Vary the setting: a quiet room, a room with a fan, near a window with street noise, the phone held normally (not at the mouth).
-3. Save each recording as `note03_<name>_<place>.m4a` (the note number first) and copy them to `data/raw/real_notes/` on the Mac. That folder is git-ignored: recordings never go to GitHub.
-4. Run `uv run python eval/real_notes/score.py`. It writes `eval/results/real_notes.md`.
+## How
 
-No children are recorded. The names are fictional.
+1. Use your phone's voice recorder. Hold the phone normally, about 20–30 cm away, the way a teacher would after class (not at your mouth).
+2. Read each note **once in each of these settings** (about 40 seconds per note):
+   - `quiet`: a closed room
+   - `fan`: ceiling fan on full
+   - `noise`: a classroom-noise or street-noise video playing on a laptop about 2 m away, at a normal volume (search YouTube for "Indian classroom noise")
+   - optional `outside`: a balcony or near an open window
+3. Read at a natural pace, like a teacher who is a bit tired. Small slips are fine; don't restart. You may speed up on some notes.
+4. Name each file `<note>_<setting>`, for example `note03_fan.m4a`, and copy them (AirDrop is fine) to `data/raw/real_notes/` on the Mac. That folder is git-ignored: recordings never go to GitHub.
+5. Tell Claude, or run `uv run python eval/real_notes/score.py`. It writes `eval/results/real_notes.md`, with results per setting.
+
+Minimum useful set: all 10 notes in `quiet` and `fan` (20 recordings). Better: add `noise` (30).
 
 ## note01 (precise)
 

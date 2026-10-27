@@ -477,5 +477,16 @@ async def http_error(_, exc: HTTPException):
     return JSONResponse({"error": exc.detail}, status_code=exc.status_code)
 
 
+@app.middleware("http")
+async def no_stale_shell(request, call_next):
+    """The page, the service worker and the app files must never be served stale by a browser or
+    proxy cache after a deploy (offline caching is the service worker's job, network first)."""
+    resp = await call_next(request)
+    p = request.url.path
+    if p in ("/", "/index.html", "/sw.js", "/app.js", "/style.css", "/manifest.webmanifest"):
+        resp.headers["Cache-Control"] = "no-cache"
+    return resp
+
+
 if WEB.exists():
     app.mount("/", StaticFiles(directory=WEB, html=True), name="web")

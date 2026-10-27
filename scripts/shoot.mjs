@@ -8,7 +8,7 @@ import { resolve } from "node:path";
 const [, , base = "http://localhost:8765", outdir = ".cache/shots", stepsFile] = process.argv;
 mkdirSync(outdir, { recursive: true });
 const PORT = 9334, prof = resolve(".cache/cdp-profile");
-rmSync(prof, { recursive: true, force: true });
+if (!process.env.KEEP_PROFILE) rmSync(prof, { recursive: true, force: true });
 const chrome = spawn("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   ["--headless=new", "--disable-gpu", "--hide-scrollbars", `--remote-debugging-port=${PORT}`, `--user-data-dir=${prof}`, "about:blank"], { stdio: "ignore" });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

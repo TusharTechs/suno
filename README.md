@@ -11,6 +11,8 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 - **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Classes are kept in a free Postgres database.
 - **Code:** `SUNO-DEMO`. Each login gets its own fresh copy of a **synthetic** Grade 2 class: 30 fictional children, eight school days of teacher notes already run through the pipeline, and this morning's brief.
 
+**For reviewers:** the landing page links to **How we tested SUNO** (`/#evidence`): where each model call happens, how wrong AI output is handled, the simulation results with their limits, and running cost. **Privacy** (`/#privacy`) lists what is never stored, and lets a teacher delete her class.
+
 **Suggested path, about 5 minutes:**
 1. **आज (Today):** play the brief. It names three children who need support, with what, and today's activity. Below it are the five children to listen to today.
 2. **बोलिए (Note):** record a note, type one, or open *sample notes* and send one as audio (Sarvam-voiced, synthetic). Try **"Hard cases"**: two children named Priya, a label ("कमज़ोर"), a name that isn't on the roster, and an opinion.
@@ -86,6 +88,14 @@ Teacher's voice note (phone, offline-capable)
 uv run python eval/sim/run_pipeline_sim.py --days 8    # Stage A, about $3 of Claude credit
 uv run python eval/sim/run_term_sim.py --runs 200      # Stage B, no API calls
 ```
+
+### Running cost
+
+About **₹15.5 per teacher per school day** (Claude and Sarvam), about **₹103 per child per year**, computed by `eval/cost.py` from logged API usage and Sarvam's published prices (`eval/results/cost.md`). A leaner configuration of the same design is estimated at about half that.
+
+### Real-speech test
+
+`docs/real-notes-protocol.md` has 10 scripted teacher notes (a fictional class) for real people to read aloud on ordinary phones; `eval/real_notes/score.py` scores the recordings against the scripts' ground truth (`eval/results/real_notes.md`).
 
 ### Offline and low network
 

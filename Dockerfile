@@ -13,6 +13,8 @@ COPY prompts ./prompts
 COPY schemas ./schemas
 COPY config ./config
 COPY samples ./samples
+COPY eval/results ./eval/results
+COPY eval/cost.py ./eval/cost.py
 RUN /app/.venv/bin/python -m compileall -q server
 ENV SUNO_VAR=/data PORT=8000 PYTHONUNBUFFERED=1
 EXPOSE 8000

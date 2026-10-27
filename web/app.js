@@ -131,6 +131,14 @@ if ("serviceWorker" in navigator) {
 }
 setLang(S.lang);
 
+window.addEventListener("hashchange", () => route());
+function route() {
+  if (location.hash === "#evidence") return renderEvidence();
+  if (location.hash === "#privacy") return renderPrivacy();
+  return boot();
+}
+const pageBack = () => { history.pushState("", document.title, location.pathname); boot(); };
+
 async function boot() {
   try {
     S.me = await api("/api/me");
@@ -162,6 +170,7 @@ function renderLanding(err = "") {
         <div><b>2×</b><span>${t("मदद चाहने वाले बच्चे 8 हफ़्ते में मिले, एक पूरी डायरी की तुलना में", "the children who need support found by week 8, vs a perfect diary")}</span></div>
       </div>
       <div class="proof-note">${t("सिमुलेशन के नतीजे (असली बच्चे नहीं): eval/results/ में स्क्रिप्ट और मान्यताएँ।", "Simulated results, not real children: scripts and assumptions in eval/results/.")}</div>
+      <div style="display:flex;gap:16px;margin-top:14px;flex-wrap:wrap"><a href="#evidence" style="color:var(--accent);font-weight:700">${t("हमने SUNO को कैसे परखा →", "How we tested SUNO →")}</a><a href="#privacy" style="color:#c9cfee">${t("निजता", "Privacy")}</a></div>
       <div class="badges"><span>🔇 ${t("किसी बच्चे की आवाज़ रिकॉर्ड नहीं", "No child's voice recorded")}</span><span>🚫 ${t("कोई टेस्ट नहीं", "No tests")}</span><span>🙅 ${t("शिक्षक का कोई स्कोर नहीं", "No teacher score")}</span><span>📶 ${t("ऑफ़लाइन चलता है", "Works offline")}</span></div>
     </section>
     <section class="signin"><div class="box">
@@ -253,11 +262,14 @@ function openMenu() {
       <button class="btn alt block" id="m-roster">👧🏽 ${t(`बच्चों की सूची (${S.me.roster.length})`, `Children (${S.me.roster.length})`)}</button>
       <button class="btn alt block" id="m-lesson">📖 ${t("इस हफ़्ते का पाठ", "This week's lesson")}</button>
       <button class="btn alt block" id="m-howto">❓ ${t("SUNO कैसे काम करता है", "How SUNO works")}</button>
+      <a class="btn alt block" href="#evidence">📊 ${t("हमने SUNO को कैसे परखा", "Evidence: how we tested SUNO")}</a>
+      <a class="btn alt block" href="#privacy">🔒 ${t("निजता और डेटा", "Privacy and your data")}</a>
       <button class="btn alt block" id="m-out">${t("बाहर निकलें", "Sign out")}</button>
     </div>`);
   $("#m-roster").onclick = () => openRoster();
   $("#m-lesson").onclick = openLesson;
   $("#m-howto").onclick = () => sheet(howTo());
+  document.querySelectorAll('#sheet a[href^="#"]').forEach((a) => (a.onclick = () => closeSheet()));
   $("#m-out").onclick = async () => { try { await api("/api/logout", { method: "POST" }); } catch (_) {} await clearCached(); closeSheet(); renderLanding(); };
 }
 const howTo = () => `
@@ -790,4 +802,112 @@ function openLesson() {
   };
 }
 
-boot();
+// ---------- Evidence page (public): numbers come from /api/evidence, i.e. from the scripts' output ----------
+const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : "–");
+const pc = (x) => (x == null || x !== x ? "–" : `${Math.round(100 * x)}%`);
+function pageShell(title, body) {
+  $("#app").innerHTML = `
+  <header class="top"><div class="row"><div class="brandmark" style="width:32px;height:32px;border-radius:9px">स</div>
+    <div class="wordmark" style="font-size:18px">SUNO<span class="deva">सुनो</span></div><div class="spacer"></div>${langSwitch()}
+    <button class="btn alt" id="back" style="padding:7px 12px">← ${t("वापस", "Back")}</button></div></header>
+  <main class="view" style="max-width:920px;margin:0 auto;padding-top:18px"><h1 style="font-size:28px;margin:6px 0 4px">${title}</h1>${body}</main>`;
+  $("#back").onclick = pageBack;
+  wireLang($("header.top"), route);
+  window.scrollTo(0, 0);
+}
+
+async function renderEvidence() {
+  pageShell(t("हमने SUNO को कैसे परखा", "How we tested SUNO"), `<div class="loading"><span class="spin"></span></div>`);
+  let e = {};
+  try { e = await api("/api/evidence"); } catch (_) {}
+  const P = e.pipeline, T = e.term, C = e.cost;
+  const arm = (a, wk, m) => (T && T.arms[a] && T.arms[a][wk] ? pc(T.arms[a][wk][m]) : "–");
+  const body = `
+    <p class="muted">${t("असली कक्षा का सबूत 1 नवंबर से पहले संभव नहीं था, इसलिए हमने SUNO को सिमुलेशन में परखा। हर संख्या एक स्क्रिप्ट से आती है; मान्यताएँ eval/sim/ में लिखी हैं। नवंबर में असली कक्षाओं में परीक्षण।", "Real classroom evidence wasn't possible before 1 Nov, so we tested SUNO in simulation. Every number below comes from a script in the repo, and the assumptions are written in eval/sim/. Classroom testing follows in November.")}</p>
+
+    <h2 class="sec">${t("1. AI कहाँ और कैसे", "1. Where the AI is, layer by layer")}</h2>
+    <div class="card small"><ol style="margin:0;padding-left:20px;line-height:1.7">
+      <li><b>${t("इनपुट", "Input")}</b>: ${t("शिक्षक का 60 सेकंड का वॉइस नोट (या लिखा नोट)। किसी बच्चे की आवाज़ नहीं।", "the teacher's 60-second voice note (or a typed note). No child's voice, no classroom recording.")}</li>
+      <li><b>${t("बोली से लिखाई", "Speech to text")}</b>: Sarvam <code>saaras:v4</code> → ${t("गिने हुए वाक्य", "numbered sentences")}.</li>
+      <li><b>Claude ①</b> <code>claude-opus-5-5</code>: ${t("हर बच्चे की बात अलग: कौशल, शब्द, नतीजा, गलती का प्रकार, घर की भाषा।", "splits the note into per-child observations: skill, item, outcome, mistake type, home-language signal.")} <span class="tiny">prompts/observations.v2.md · schemas/observations.v1.json</span></li>
+      <li><b>${t("कोड की जाँच", "Code guardrails")}</b>: ${t("नीचे देखें।", "see section 2.")}</li>
+      <li><b>${t("कोड का फ़ैसला", "Code decides")}</b>: ${t("बच्चे का सीढ़ी पर स्तर (Bayes), चुप्पी की सूची, आज किसे सुनें।", "each child's level on the ladder (Bayesian), the Silence Ledger, and whom to listen to today.")}</li>
+      <li><b>Claude ②</b>: ${t("कोड के तय तथ्यों को सरल हिंदी सार में लिखता है; कोड फिर जाँचता है।", "words the morning brief from facts code decided; code checks it again.")} <span class="tiny">prompts/brief.v3.md · schemas/brief.v2.json</span></li>
+      <li><b>${t("आउटपुट", "Output")}</b>: Sarvam <code>bulbul:v3</code> ${t("हिंदी आवाज़ में सार।", "speaks the brief in Hindi.")}</li>
+      <li><b>${t("सेटअप", "Setup")}</b>: ${t("Claude ③ (vision) हाज़िरी रजिस्टर की फ़ोटो से सिर्फ़ पहले नाम पढ़ता है; शिक्षक जाँचती हैं।", "Claude ③ (vision) reads first names from a photo of the attendance register; the teacher checks the list.")}</li>
+    </ol></div>
+
+    <h2 class="sec">${t("2. गलत या अनुचित AI जवाब कैसे रोके जाते हैं", "2. How wrong or inappropriate AI output is handled")}</h2>
+    <div class="card small"><ul style="margin:0;padding-left:20px;line-height:1.7">
+      <li>${t("हर बात को शिक्षक के असली वाक्य का हवाला देना होगा; नाम, उद्धरण और शब्द उनके शब्दों में होने चाहिए, नहीं तो हटाया जाता है।", "Every claim must cite the teacher's real sentences; the name, quote and item must appear in her words, or they are removed.")}</li>
+      <li>${t("बच्चा कोड तय करता है (नाम का ध्वनि-मिलान, रोल नंबर); Claude से न मिले तो एक टैप का सवाल।", "Code resolves the child itself (phonetic name matching, roll numbers in digits or Hindi words) and must agree with Claude; any mismatch or shared name becomes a one-tap question.")}</li>
+      <li>${t("भरोसा कोड गिनता है, Claude कभी नहीं; 0.75 से नीचे की बात “कल फिर सुनें” बनती है।", "Confidence is computed in code, never by Claude; below 0.75 a claim becomes “listen again tomorrow”.")}</li>
+      <li>${t("राय और लेबल (“कमज़ोर”) कभी सबूत नहीं; लेबल छिपाए जाते हैं और कभी दोहराए नहीं जाते।", "Opinions and labels (“weak”, कमज़ोर) never become evidence; labels are masked and never repeated.")}</li>
+      <li>${t("बोली-से-लिखाई अगर बच्चे की गलती मिटा दे (“किताब को किताब पढ़ा”), तो उसे “सही” नहीं माना जाता।", "If speech-to-text erases the child's misreading (“किताब को किताब पढ़ा”), it can't count as correct.")}</li>
+      <li>${t("नाम तभी, जब दो दिनों में तीन या ज़्यादा पक्की बातें हों।", "A child is named only after 3+ checked observations over 2+ days.")}</li>
+      <li>${t("सार की हर बात कोड के तथ्यों से जाँची जाती है; दो बार फ़ेल होने पर सिर्फ़ कोड के तथ्य दिखते हैं।", "The brief is checked against code's facts; if it fails twice, the app shows only the code-checked facts (fail closed).")}</li>
+      <li>${t("शिक्षक हर बात पर ✓/✗ कर सकती हैं; ✗ उसे हटा देता है।", "The teacher can mark any observation ✓ or ✗; ✗ removes it from the tracker.")}</li>
+      <li>${t("हर नोट का पूरा ब्योरा ऐप में: Claude का कच्चा जवाब, हर जाँच, भरोसे का हिसाब।", "Every note has a trace in the app: Claude's raw output, every code check, the confidence arithmetic.")}</li>
+    </ul></div>
+
+    <h2 class="sec">${t("3. नकली कक्षाओं पर असली पाइपलाइन", "3. The real pipeline on simulated classrooms")}</h2>
+    ${P ? `<div class="card small"><p style="margin-top:0">${t(`${P.notes} वॉइस नोट, 4 शिक्षण शैलियाँ (${P.styles.join(", ")}): नकली शिक्षक बताती हैं कि बच्चों ने असल में क्या किया, जिसमें एक जैसे नाम, अनजाने उपनाम, लेबल और राय भी हैं। Sarvam आवाज़ बनाता और फिर लिखता है; SUNO की असली पाइपलाइन; सच्चाई पहले से पता।`, `${P.notes} voice notes from simulated teachers in 4 styles (${P.styles.join(", ")}), stating what children actually did, including shared names, unknown nicknames, labels and opinions. Each was voiced and transcribed by Sarvam and run through SUNO's real pipeline, with ground truth known.`)}</p>
+      <table class="signals" style="width:100%;font-size:14px">
+        <tr><td>${t("गलत बच्चे पर सबूत", "Evidence about the wrong child")}</td><td><b>${P.wrong_child_evidence} / ${P.evidence}</b></td></tr>
+        <tr><td>${t("सही/गलत की दिशा सही", "Right/wrong direction correct")}</td><td><b>${P.direction_ok} / ${P.evidence}</b></td></tr>
+        <tr><td>${t("राय, लेबल, अस्पष्ट बातें जो सबूत बनीं", "Opinions, labels, vague remarks that became evidence")}</td><td><b>${P.not_evidence_became_evidence} / ${P.not_evidence}</b></td></tr>
+        <tr><td>${t("लेबल दोहराए गए", "Labels repeated by SUNO")}</td><td><b>${P.labels_repeated}</b> (${t(`${P.labels_used} बातों में लेबल था`, `${P.labels_used} statements used one`)})</td></tr>
+        <tr><td>${t("साफ़ नाम वाली ठोस बातें जो सबूत बनीं", "Specific observations about a clearly named child that became evidence")}</td><td><b>${pct(P.clear_obs_evidence, P.clear_obs)}</b> (${P.clear_obs_evidence}/${P.clear_obs})</td></tr>
+        <tr><td>${t("अस्पष्ट नाम, एक टैप से सुलझे", "Unclear names resolved with one tap")}</td><td><b>${P.unclear_names_resolved} / ${P.unclear_names}</b></td></tr>
+      </table><p class="tiny">eval/results/sim_pipeline.md</p></div>` : `<p class="muted">–</p>`}
+
+    <h2 class="sec">${t("4. 12 हफ़्ते का सत्र, 200 बार", "4. A 12-week term, simulated 200 times")}</h2>
+    ${T ? `<div class="card small"><p style="margin-top:0">${t("SUNO के असली ट्रैकर और प्लानर के साथ; ऊपर की गलती दरें (कम से कम 3/n)। तुलना: शिक्षक जो अपने आप देखती हैं उसकी एक पूरी डायरी।", "Uses SUNO's real tracker and planner, with the error rates above (floored at 3/n). The baseline is a perfect written diary of what the teacher notices on her own.")}</p>
+      <table class="signals" style="width:100%;font-size:14px">
+        <tr><td></td><td><b>${t("पूरी डायरी", "Perfect diary")}</b></td><td><b>${t("SUNO की सूची, 80% माना", "SUNO's list, followed 80%")}</b></td></tr>
+        <tr><td>${t("सबसे शांत तिहाई, 2 हफ़्ते में सुने गए", "Quietest third heard by week 2")}</td><td>${arm("no_list", "2", "quiet_with_evidence")}</td><td><b>${arm("list_80", "2", "quiet_with_evidence")}</b></td></tr>
+        <tr><td>${t("मदद चाहने वाले बच्चे, 8 हफ़्ते में मिले", "Children who need support found by week 8")}</td><td>${arm("no_list", "8", "children_found")}</td><td><b>${arm("list_80", "8", "children_found")}</b></td></tr>
+        <tr><td>${t("शांत बच्चों की कमियाँ, 8 हफ़्ते में", "Quiet children's gaps found by week 8")}</td><td>${arm("no_list", "8", "quiet_struggling_found")}</td><td><b>${arm("list_80", "8", "quiet_struggling_found")}</b></td></tr>
+        <tr><td>${t("“मदद चाहिए” जो सही थे", "“Needs support” flags that were right")}</td><td>${arm("no_list", "12", "children_flag_precision")}</td><td><b>${arm("list_80", "12", "children_flag_precision")}</b></td></tr>
+      </table>
+      <p style="margin-bottom:0">${t("सिमुलेशन ने डिज़ाइन बदला: पहला प्लानर पहचान को बिगाड़ रहा था (थोड़ी बातें बहुत बच्चों में बँट जाती थीं)। इसलिए सीढ़ी-आधारित स्तर और हर बच्चे से दो शब्द।", "The simulation changed the design: the first planner made detection worse (a few observations spread over too many children). That led to the ladder model and two words per child.")}</p><p class="tiny">eval/results/sim_term.md · ${T.runs} runs</p></div>` : `<p class="muted">–</p>`}
+
+    <h2 class="sec">${t("5. चलाने का खर्च", "5. Running cost")}</h2>
+    ${C ? `<div class="card small">${t(`हर स्कूल दिन, हर शिक्षक: ₹${C.day_inr.toFixed(1)} (Claude + Sarvam), यानी लगभग <b>₹${Math.round(C.child_year_inr)} प्रति बच्चा प्रति वर्ष</b>। उसी डिज़ाइन में सस्ता तरीका: अनुमानित ₹${Math.round(C.lean_child_year_inr)}।`, `Per teacher per school day: ₹${C.day_inr.toFixed(1)} (Claude + Sarvam), about <b>₹${Math.round(C.child_year_inr)} per child per year</b>. A leaner configuration of the same design: about ₹${Math.round(C.lean_child_year_inr)} (estimate).`)}<p class="tiny">eval/results/cost.md · ${t("लॉग किए गए असली उपयोग से", "from logged usage")}</p></div>` : ""}
+
+    <h2 class="sec">${t("6. सीमाएँ, साफ़-साफ़", "6. Limits, stated plainly")}</h2>
+    <div class="card small"><ul style="margin:0;padding-left:20px;line-height:1.7">
+      <li>${t("यह सिमुलेशन है: नकली शिक्षक साफ़, कृत्रिम हिंदी बोलती हैं; असली बोली, आदतें और राय अभी परखी जानी हैं।", "This is simulation: the simulated teacher speaks clean, synthetic Hindi; real teachers' speech, habits and judgement are still to be tested.")}</li>
+      <li>${t("दिन में ~5 बच्चों पर, किसी बच्चे की कमी पक्के तौर पर लगभग 6 हफ़्ते में दिखती है।", "At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.")}</li>
+      <li>${t("SUNO शिक्षक की बात पर चलता है; अगले कदम में ASER टेस्ट से तुलना (वही बच्चे) होगी।", "SUNO relies on what the teacher reports; next is a comparison with the ASER test on the same children.")}</li>
+    </ul></div>`;
+  pageShell(t("हमने SUNO को कैसे परखा", "How we tested SUNO"), body);
+}
+
+// ---------- Privacy page (public), with "delete my class" when signed in ----------
+async function renderPrivacy() {
+  let me = null;
+  try { me = await api("/api/me"); } catch (_) {}
+  pageShell(t("निजता और आपका डेटा", "Privacy and your data"), `
+    <div class="card"><h3>${t("SUNO क्या कभी नहीं रखता", "What SUNO never keeps")}</h3><ul class="small" style="line-height:1.7;padding-left:20px;margin:0">
+      <li>${t("किसी बच्चे की आवाज़: कक्षा रिकॉर्ड नहीं होती।", "Any child's voice: the classroom is never recorded.")}</li>
+      <li>${t("शिक्षक का वॉइस नोट: लिखाई के बाद तुरंत हटाया जाता है।", "The teacher's voice note: it is deleted right after transcription.")}</li>
+      <li>${t("रजिस्टर की फ़ोटो: पढ़कर हटाई जाती है।", "The register photo: read, then discarded.")}</li>
+      <li>${t("उपनाम, पिता का नाम, जन्मतिथि, फ़ोटो: कभी नहीं।", "Surnames, fathers' names, dates of birth, photos: never.")}</li>
+      <li>${t("शिक्षक का कोई स्कोर या प्रदर्शन का कोई खाना: कहीं नहीं।", "Any teacher score or performance field: none exists.")}</li></ul></div>
+    <div class="card"><h3>${t("SUNO क्या रखता है", "What SUNO keeps")}</h3><p class="small" style="margin:0">${t("बच्चों के पहले नाम और रोल नंबर; शिक्षक के नोट की लिखाई; उनसे बनी बातें (कौशल, शब्द, नतीजा); सुबह का सार और उसकी आवाज़। सिर्फ़ कक्षा कोड वाला ही इसे देख सकता है।", "Children's first names and roll numbers; the text of the teacher's notes; the observations drawn from them (skill, item, outcome); the morning brief and its audio. Only someone with the class code can see it.")}</p></div>
+    <div class="card"><h3>${t("डेटा किसका है", "Who owns the data")}</h3><p class="small" style="margin:0">${t("डेटा स्कूल या राज्य का है; SUNO उनकी ओर से प्रोसेस करता है (DPDP अधिनियम 2023 और नियम 2025 के अनुसार, शैक्षणिक संस्थान डेटा फ़िड्यूशियरी)। स्कूल में इस्तेमाल से पहले प्रधानाध्यापक की लिखित अनुमति और SMC बैठक में अभिभावकों को जानकारी। AI मॉडल इस डेटा पर प्रशिक्षित नहीं होते।", "The school or state owns the data; SUNO processes it on their behalf (under the DPDP Act 2023 and Rules 2025, the educational institution is the data fiduciary). Before use in a school: the head teacher's written permission, and parents informed at a School Management Committee meeting. AI models are not trained on this data.")}</p></div>
+    ${me ? `<div class="card" style="border-color:#F3C5C8"><h3>${t("अपनी कक्षा मिटाएँ", "Delete my class")}</h3>
+      <p class="small">${t("सारे बच्चे, नोट, बातें और सार हमेशा के लिए मिट जाएँगे। पुष्टि के लिए कक्षा कोड लिखें:", "All children, notes, observations and briefs are deleted for good. Type your class code to confirm:")} <b>${esc(me.code || me.name)}</b></p>
+      <input id="del-confirm" type="text" autocomplete="off">
+      <button class="btn block" id="del-class" style="margin-top:8px;background:var(--red)">${t("कक्षा हमेशा के लिए मिटाएँ", "Delete this class permanently")}</button></div>` : ""}
+    <p class="tiny">${t("यह हमारी समझ है, क़ानूनी सलाह नहीं।", "This is our reading of the law, not legal advice.")}</p>`);
+  $("#del-class") && ($("#del-class").onclick = async () => {
+    try {
+      await api("/api/class", { method: "DELETE", json: { confirm: $("#del-confirm").value } });
+      await clearCached(); toast(t("कक्षा मिटा दी गई", "Class deleted")); pageBack();
+    } catch (e) { toast(e.message); }
+  });
+}
+
+route();

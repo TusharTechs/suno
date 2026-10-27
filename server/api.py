@@ -467,6 +467,63 @@ def sample_audio(name: str):
     return FileResponse(f)
 
 
+@app.get("/api/evidence")
+def evidence():
+    """Public: the numbers on the Evidence page, read from the files the evaluation scripts write
+    (eval/results/), so the page can never drift from what the scripts report. SIMULATED results."""
+    import json
+    from collections import Counter
+    res = ROOT / "eval" / "results"
+    out: dict = {"label": "SIMULATED: simulated classrooms and teachers, not real children. Scripts and assumptions in eval/sim/."}
+    f = res / "sim_pipeline.json"
+    if f.exists():
+        d = json.loads(f.read_text())
+        before, after = Counter(), Counter()
+        for r in d["results"]:
+            before.update(r["totals"]["voice_before"])
+            after.update(r["totals"]["voice_after"])
+        out["pipeline"] = {
+            "notes": sum(len(r["notes"]) for r in d["results"]), "styles": [r["style"] for r in d["results"]],
+            "evidence": before["evidence"], "wrong_child_evidence": before["wrong_child_evidence"],
+            "direction_ok": before["evidence_direction_ok"],
+            "not_evidence": before["expect_not_evidence"], "not_evidence_became_evidence": before["not_evidence_became_evidence"],
+            "labels_used": before["statements_with_label"], "labels_repeated": before["banned_in_output"],
+            "clear_obs": before["expect_evidence"], "clear_obs_evidence": before["expect_evidence_became_evidence"],
+            "unclear_names": after["expect_ask_then_evidence"], "unclear_names_resolved": after["expect_ask_then_evidence_became_evidence"],
+            "questions": after["questions"],
+        }
+    f = res / "sim_term.json"
+    if f.exists():
+        d = json.loads(f.read_text())
+        pick = ["children_found", "children_flag_precision", "quiet_with_evidence", "quiet_struggling_found", "level_exact"]
+        out["term"] = {"runs": d["runs"], "rates": d["rates"],
+                       "arms": {arm: {wk: {m: v.get(m) for m in pick} for wk, v in weeks.items()} for arm, weeks in d["results"].items()}}
+    try:
+        import sys
+        sys.path.insert(0, str(ROOT))
+        from eval.cost import compute
+        out["cost"] = compute()
+    except Exception:
+        log.exception("cost computation unavailable")
+    return out
+
+
+class DeleteClass(BaseModel):
+    confirm: str  # the class code (or, for a demo class, its name)
+
+
+@app.delete("/api/class")
+def delete_class(body: DeleteClass, response: Response, c: dict = Depends(current_class)):
+    """Delete the class and everything in it: roster, notes, observations, briefs. Cannot be undone."""
+    want = (c.get("code") or c["name"]).strip().upper()
+    if body.confirm.strip().upper().replace(" ", "") != want.replace(" ", ""):
+        raise HTTPException(400, "type the class code to confirm")
+    for table in ("records", "questions", "notes", "briefs", "classes"):
+        store.x(f"DELETE FROM {table} WHERE class_id=?", (c["class_id"],))
+    response.delete_cookie("suno")
+    return {"ok": True}
+
+
 @app.get("/healthz")
 def healthz():
     return {"ok": True, "demo_fixture": demo.FIXTURE.exists(), "storage": "postgres" if store.PG else "sqlite"}

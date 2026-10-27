@@ -128,3 +128,18 @@ def test_roster_photo_keeps_first_names_only(client, monkeypatch):
     r = client.post("/api/roster/photo", files={"photo": ("r.jpg", b"\xff\xd8fake", "image/jpeg")})
     assert r.json()["children"] == [{"roll_no": 1, "first_name": "आरव"}, {"roll_no": None, "first_name": "Golu"}]
     assert client.post("/api/roster/photo", files={"photo": ("r.txt", b"hi", "text/plain")}).status_code == 400
+
+
+def test_evidence_is_public_and_from_the_scripts(client):
+    d = client.get("/api/evidence").json()
+    assert "SIMULATED" in d["label"]
+    assert d["pipeline"]["evidence"] > 0 and d["pipeline"]["wrong_child_evidence"] == 0
+    assert d["term"]["runs"] >= 30 and d["cost"]["child_year_inr"] > 0
+
+
+def test_delete_class_needs_the_code(client):
+    code = client.post("/api/classes", json={"name": "मिटाने वाली"}).json()["code"]
+    assert client.request("DELETE", "/api/class", json={"confirm": "wrong"}).status_code == 400
+    assert client.request("DELETE", "/api/class", json={"confirm": code.lower()}).status_code == 200
+    client.cookies.clear()
+    assert client.post("/api/login", json={"code": code}).status_code == 401

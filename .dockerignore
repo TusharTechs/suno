@@ -7,7 +7,9 @@
 var
 data
 assets
-eval
+eval/*
+!eval/results
+!eval/cost.py
 docs
 tests
 **/__pycache__

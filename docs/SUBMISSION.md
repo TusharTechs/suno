@@ -34,6 +34,7 @@ Deadline: **1 Nov 2026, 11:59 pm IST.** Aim to submit by early afternoon. **No c
 
 ## 4. PowerPoint deck
 
+- Hosted: https://suno-8qoh.onrender.com/deck (PDF, opens in the browser) and https://suno-8qoh.onrender.com/deck.pptx (PowerPoint download). Copies in `web/deck/`. For the form, a Google Drive link opens instantly (no free-hosting wake-up); paste that if you upload one.
 - File: `assets/deck/build/SUNO_build_deck.pptx` (16 slides; PDF alongside). Rebuild: `cd assets/deck/build && NODE_PATH=$PWD/node_modules PPTX_SKILL=<pptx skill dir> node build.js`.
 - What it covers:
 

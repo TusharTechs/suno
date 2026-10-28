@@ -626,6 +626,19 @@ def sample_image(name: str):
     return FileResponse(f, media_type="image/jpeg")
 
 
+@app.get("/deck")
+def deck():
+    """The Build-stage deck as a PDF that opens in the browser; /deck.pptx downloads the PowerPoint."""
+    return FileResponse(WEB / "deck" / "SUNO_build_deck.pdf", media_type="application/pdf",
+                        filename="SUNO_build_deck.pdf", content_disposition_type="inline")
+
+
+@app.get("/deck.pptx")
+def deck_pptx():
+    return FileResponse(WEB / "deck" / "SUNO_build_deck.pptx", filename="SUNO_build_deck.pptx",
+                        media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation")
+
+
 @app.get("/api/evidence")
 def evidence():
     """Public: the numbers on the Evidence page, read from the files the evaluation scripts write

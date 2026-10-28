@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "skill_code": {
+            "type": "string",
+            "enum": [
+              "hi.letters",
+              "hi.matras",
+              "hi.blend_no_matra",
+              "hi.words_with_matras",
+              "hi.conjuncts",
+              "hi.sentence",
+              "hi.comprehension",
+              "math.number_recognition",
+              "math.place_value",
+              "math.addition",
+              "math.subtraction",
+              "en.words"
+            ]
+          },
+          "item": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "skill_code",
+          "item"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "items",
+    "note"
+  ],
+  "additionalProperties": false
+}

@@ -35,6 +35,10 @@ const STATUS = {
 const OUTCOME = { correct: ["✓ सही", "✓ correct"], incorrect: ["✗ गलत", "✗ wrong"], partial: ["◐ आधा", "◐ partly"], unclear: ["? साफ़ नहीं", "? unclear"] };
 const CELL = { "needs support": [["मदद चाहिए", "Needs support"], "ns"], "on track": [["ठीक", "On track"], "ok"], "not enough evidence": [["—", "—"], "ne"] };
 const outcome = (o) => (OUTCOME[o] ? t(...OUTCOME[o]) : "");
+const SHARE = { most: ["ज़्यादातर बच्चे", "Most children"], many: ["कई बच्चे", "Many children"], some: ["कुछ बच्चे", "Some children"], few: ["दो-तीन बच्चे", "A few children"] };
+const DECISION = { reteach: ["दोबारा पढ़ाएँ", "Reteach"], move_on: ["आगे बढ़ें", "Move on"] };
+// ASER-style starting levels -> SUNO ladder levels (Hindi reading); maths uses SUNO's own rungs.
+const ASER_READING = [[null, "—", "—"], [0, "शुरुआत", "Beginner"], [1, "अक्षर", "Letter"], [3, "शब्द", "Word"], [4, "अनुच्छेद / वाक्य", "Paragraph"], [5, "कहानी", "Story"]];
 
 // ---------- api ----------
 async function api(path, opts = {}) {
@@ -273,6 +277,8 @@ function openMenu() {
     <div class="menu-list">
       <button class="btn alt block" id="m-roster">👧🏽 ${t(`बच्चों की सूची (${S.me.roster.length})`, `Children (${S.me.roster.length})`)}</button>
       <button class="btn alt block" id="m-lesson">📖 ${t("इस हफ़्ते का पाठ", "This week's lesson")}</button>
+      <button class="btn alt block" id="m-baseline">📋 ${t("शुरुआती स्तर (ASER जैसा)", "Starting levels (ASER-style check)")}</button>
+      <button class="btn alt block" id="m-remind">⏰ ${t("रोज़ याद दिलाएँ", "Daily reminder")}</button>
       <button class="btn alt block" id="m-howto">❓ ${t("SUNO कैसे काम करता है", "How SUNO works")}</button>
       <a class="btn alt block" href="/api/export/class.csv">⬇️ ${t("कक्षा की सूची (CSV) डाउनलोड करें", "Download class list (CSV)")}</a>
       <a class="btn alt block" href="#evidence">📊 ${t("हमने SUNO को कैसे परखा", "Evidence: how we tested SUNO")}</a>
@@ -281,6 +287,8 @@ function openMenu() {
     </div>`);
   $("#m-roster").onclick = () => openRoster();
   $("#m-lesson").onclick = openLesson;
+  $("#m-baseline").onclick = openBaseline;
+  $("#m-remind").onclick = openReminder;
   $("#m-howto").onclick = () => sheet(howTo());
   document.querySelectorAll('#sheet a[href^="#"]').forEach((a) => (a.onclick = () => closeSheet()));
   $("#m-out").onclick = async () => { try { await api("/api/logout", { method: "POST" }); } catch (_) {} await clearCached(); closeSheet(); renderLanding(); };
@@ -338,7 +346,8 @@ async function renderToday() {
   const fresh = !S.me.synthetic && !d.heard_this_week.length && !d.notes_today.length;
   v.innerHTML = `
     ${fresh ? `<div class="card onboard" style="margin-top:12px"><h3>${t("SUNO ऐसे चलता है", "How to start")}</h3>
-      <ol class="small"><li>${t("नीचे दिए 5 बच्चों को आज पढ़ते समय ध्यान से सुनिए, हर एक से दो शब्द।", "Today, listen to the 5 children below as they read: two words each.")}</li>
+      <ol class="small"><li>${t("(वैकल्पिक) अगर आपने ASER जैसा शुरुआती टेस्ट किया है, तो हर बच्चे का स्तर भरें: SUNO वहीं से शुरू करेगा।", "(Optional) If you have done an ASER-style starting check, enter each child's level: SUNO starts from there.")} <button class="linkbtn" id="ob-baseline">${t("स्तर भरें", "Enter levels")}</button></li>
+      <li>${t("नीचे दिए 5 बच्चों को आज पढ़ते समय ध्यान से सुनिए, हर एक से दो शब्द।", "Today, listen to the 5 children below as they read: two words each.")}</li>
       <li>${t("कक्षा के बाद “नोट बोलें” दबाकर 1 मिनट बताइए: किसने क्या पढ़ा, कहाँ अटका, कौन नहीं आया।", "After class, tap “Speak a note” and talk for a minute: who read what, where they got stuck, who was absent.")}</li>
       <li>${t("कल सुबह 2 मिनट का सार सुनिए।", "Tomorrow morning, listen to the 2-minute brief.")}</li></ol>
       <button class="linkbtn" id="ob-lesson">${t("पहले इस हफ़्ते के पाठ के शब्द देख लें →", "First check this week's lesson words →")}</button></div>` : ""}
@@ -356,7 +365,7 @@ async function renderToday() {
         <div class="card">${d.listen_today.length ? d.listen_today.map(listenRow).join("") : `<p class="muted">${t("सब बच्चों के बारे में ताज़ा जानकारी है।", "Everyone has recent evidence.")}</p>`}
           <p class="tiny" style="margin:10px 0 0">${t("पहले वे बातें जो पक्की करनी हैं, फिर जिनके बारे में SUNO सबसे कम जानता है। हर बच्चे से दो शब्द: एक उसके स्तर का, एक सीढ़ी पर ऊपर या नीचे।", "First anything to confirm, then the children SUNO knows least about. Two words each: one at the child's likely level, one a rung up or down.")}</p>
         </div>
-        <button class="btn warn block lg" id="to-speak">🎙️ ${t("कक्षा के बाद नोट बोलें", "After class: speak today's note")}</button>
+        <button class="btn warn block lg" id="to-speak">${d.notes_today.length ? "✓ " + t("आज का नोट भेज दिया", "Today's note is sent") : "🎙️ " + t("पढ़ाई के पीरियड के बाद: आज का नोट", "After the reading period: today's note")}</button>
         ${d.language_flags.length ? `<h2 class="sec">${t("घर की भाषा", "Home language")}</h2><div class="card small">${d.language_flags.map((f) => `<div>🗣️ <b>${nm(f.child_id)}</b>: ${f.signal === "helped" ? t("घर की भाषा में समझाने पर समझ गया/गई: दिक्कत भाषा की हो सकती है, समझ की नहीं।", "understood once it was explained in the home language: the gap may be the language, not the concept.") : t("पढ़ाई की भाषा समझने में दिक्कत।", "the language of instruction is a barrier.")}</div>`).join("")}</div>` : ""}
         <h2 class="sec">${t("5 दिन से अलग से नहीं सुना", "Not described for 5 school days")}<span class="tiny">${t("चुप्पी की सूची", "Silence Ledger")}</span></h2>
         <div class="chips">${d.silent.length ? d.silent.map((c) => `<span>${esc(nameOf(c))}</span>`).join("") : `<span>${t("कोई नहीं", "Nobody")}</span>`}</div>
@@ -364,6 +373,7 @@ async function renderToday() {
     </div>`;
   $("#to-speak").onclick = () => go("speak");
   $("#ob-lesson") && ($("#ob-lesson").onclick = openLesson);
+  $("#ob-baseline") && ($("#ob-baseline").onclick = openBaseline);
   $("#to-notes") && ($("#to-notes").onclick = () => go("notes"));
   $("#nextday") && ($("#nextday").onclick = async () => {
     $("#nextday").disabled = true;
@@ -395,6 +405,9 @@ function briefCard(b, d) {
       <div style="flex:1"><div class="meta"><span>${t("सुनिए", "Listen (Hindi voice)")}</span><span id="ptime"></span></div><progress id="pprog" value="0" max="1"></progress></div>
       <audio id="baudio" preload="auto" src="${esc(b.audio_url)}"></audio></div>` : `<p class="small" style="color:#c9cfee">🔇 ${t("आवाज़ उपलब्ध नहीं; नीचे पढ़ें।", "Voice unavailable; read it below.")}</p>`}
     ${S.lang === "en" ? `<p class="summary">${esc(br.summary_en)}</p>` : ""}
+    ${(br.class_plan || []).map((cp) => { const a = cp.activity_id ? (acts.find((x) => x.activity_id === cp.activity_id) || {}) : null;
+      return `<div class="group" style="border-left:4px solid var(--accent)"><b>${t("पूरी कक्षा", "Whole class")} · ${esc(skillName(cp.skill_code))}: ${t(...DECISION[cp.decision])}</b>${a ? ` · ${esc(t(a.title || "", a.title_en || ""))}` : ""}
+      ${a ? `<details><summary>${t("कैसे करें", "How")}</summary><div class="small deva" style="margin-top:6px">${esc(a.steps || "")}</div></details>` : ""}</div>`; }).join("")}
     ${br.stuck_where.length ? `<ul class="needs">${br.stuck_where.map((x) => `<li><b>${x.child_ids.map(nm).join(", ")}</b> · ${esc(skillName(x.skill_code))}<div class="what deva">${esc(x.what_hi)}</div></li>`).join("")}</ul>`
       : `<p class="summary">${t("अभी किसी बच्चे के बारे में “मदद चाहिए” कहने लायक पक्का सबूत नहीं।", "Not enough evidence yet to name anyone as needing support.")}</p>`}
     ${br.today.map((g) => { const a = acts.find((x) => x.activity_id === g.activity_id) || {};
@@ -436,7 +449,8 @@ async function renderSpeak() {
     <div>
       <h2 class="sec">${t("आज का नोट", "Today's note")}</h2>
       <div class="card">
-        <p class="small" style="margin-top:0">${t("लगभग 60 सेकंड, अपनी भाषा में: किसने क्या पढ़ा, कहाँ अटका, कौन नहीं आया।", "About 60 seconds, in your own words: who read what, where they got stuck, who was absent.")}</p>
+        <p class="small" style="margin-top:0">${t("<b>दिन में एक नोट</b>, पढ़ाई (FLN) के पीरियड के बाद। लगभग 60 सेकंड, अपनी भाषा में: पूरी कक्षा कैसी रही, किसने क्या पढ़ा, कहाँ अटका, कौन नहीं आया।", "<b>One note a day</b>, after the reading (FLN) period. About 60 seconds, in your own words: how the class did, who read what, where they got stuck, who was absent.")}</p>
+        ${d && d.notes_today && d.notes_today.length ? `<div class="tiny" style="color:var(--green)">✓ ${t("आज का नोट भेज दिया। कुछ छूट गया हो तो एक और जोड़ सकती हैं।", "Today's note is sent. You can add a short one if you missed something.")}</div>` : ""}
         <div class="recorder">
           <button class="mic" id="mic" aria-label="record">🎙️</button>
           <div class="timer" id="timer">0:00</div>
@@ -547,7 +561,18 @@ async function pollNote(id, el) {
 }
 
 // ---------- observation cards (shared) ----------
+function classCard(r) {
+  const sh = SHARE[r.share] || ["", ""];
+  return `<div class="card rec" style="border-left-color:var(--accent)">
+    <div class="head"><span class="name">${t("पूरी कक्षा", "Whole class")}</span><span class="tag check_tomorrow">${t(...sh)}</span></div>
+    <div class="what">${esc(skillName(r.skill_code))}${r.item ? ` · <span class="it">${esc(r.item)}</span>` : ""} ${r.outcome === "incorrect" ? t("✗ अटके", "✗ struggled") : t("✓ कर पाए", "✓ managed")}</div>
+    ${S.lang === "en" && r.rationale ? `<div class="why">${esc(r.rationale)}</div>` : ""}
+    ${r.teacher_quote ? `<div class="quote">${esc(r.teacher_quote)}</div>` : ""}
+    <div class="tiny" style="margin-top:6px">${t("कक्षा की बात: “दोबारा पढ़ाएँ या आगे बढ़ें” में गिनी जाती है, किसी बच्चे के नाम पर नहीं।", "A whole-class remark: it counts toward “reteach or move on”, never toward any one child.")}</div></div>`;
+}
+
 function recCard(r) {
+  if (r.kind === "class") return classCard(r);
   const st = r.kind === "opinion" && r.status === "check_tomorrow" ? ["राय, सबूत नहीं: कल सुनें", "Opinion, not evidence: listen tomorrow"] : STATUS[r.status] || [r.status, r.status];
   const who = r.child_id ? esc(nameOf(r.child_id)) : `“${esc(r.name_said || "?")}”`;
   const what = r.kind === "absent" ? t("आज अनुपस्थित", "Absent today")
@@ -586,8 +611,18 @@ function questionCard(q, n) {
     <div class="opts">${buttons}<button data-q="${q.q_id}" data-a="skip">${t("छोड़ें", "Skip")}</button></div>${select}</div>`;
 }
 
+function nudgeCard(n) {
+  const said = new Set(n.records.map((r) => r.child_id).filter(Boolean));
+  const missed = (n.listening || []).filter((x) => !said.has(x.child_id));
+  if (!missed.length || n.synthetic) return "";
+  return `<div class="card onboard"><b>${t("आज की सूची से इनके बारे में नहीं बताया", "Not mentioned from today's list")}:</b>
+    ${missed.map((x) => `<span class="deva">${esc(nameOf(x.child_id))}</span> (${esc(x.item)}${x.also ? ` → ${esc(x.also.item)}` : ""})`).join(", ")}
+    <div class="tiny" style="margin:4px 0 8px">${t("अगर इन्हें सुना था, तो 10 सेकंड में जोड़ दें। नहीं सुना, तो कोई बात नहीं: SUNO कल फिर याद दिलाएगा।", "If you heard them, add 10 seconds. If not, that's fine: SUNO will suggest them again.")}</div>
+    <button class="btn warn" data-nudge>🎙️ ${t("10 सेकंड में जोड़ें", "Add 10 seconds")}</button></div>`;
+}
+
 function noteBody(n) {
-  const order = { unattributed: 0, evidence: 1, check_tomorrow: 2, absent: 3, dismissed: 4 };
+  const order = { unattributed: 0, class: 1, evidence: 2, check_tomorrow: 3, absent: 4, dismissed: 5 };
   const recs = [...n.records].sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9));
   const qs = n.questions.filter((q) => !q.answered_at);
   const shown = recs.filter((r) => r.status !== "unattributed" || (r.kind === "observation" && !n.questions.some((q) => q.mention_id === r.mention_id)));
@@ -595,6 +630,7 @@ function noteBody(n) {
     ${n.synthetic ? `<p class="tiny">${t("काल्पनिक नमूना नोट।", "Synthetic sample note.")}</p>` : ""}
     ${qs.map((q) => questionCard(q, n)).join("")}
     ${shown.map(recCard).join("") || `<p class="muted">${t("इस नोट में किसी बच्चे के बारे में बात नहीं मिली।", "No child-specific statements found in this note.")}</p>`}
+    ${nudgeCard(n)}
     ${n.follow_ups.length ? `<div class="card flat small"><b>${t("अगली बार और साफ़ बताने के लिए", "To make it evidence next time")}</b>${n.follow_ups.map((f) => `<div class="deva" style="margin-top:4px">• ${esc(f.question_hi)}</div>`).join("")}</div>` : ""}
     <details class="card flat"><summary class="small">${t("आपका नोट (लिखा हुआ)", "Your note, as transcribed")}${n.seconds ? ` · ${n.seconds}s` : ""}</summary>
       <div style="margin-top:8px">${(n.sentences || []).map((s) => `<div class="sent"><span class="id">${s.sent_id}</span>${esc(s.text)}</div>`).join("")}</div></details>
@@ -622,6 +658,11 @@ function wireNote(el, n) {
   el.querySelectorAll("button[data-q]").forEach((b) => (b.onclick = () => answer(b.dataset.q, b.dataset.a)));
   el.querySelectorAll("select[data-qsel]").forEach((s) => (s.onchange = () => s.value && answer(s.dataset.qsel, s.value)));
   el.querySelectorAll("button[data-trace]").forEach((b) => (b.onclick = () => openTrace(b.dataset.trace)));
+  el.querySelectorAll("button[data-nudge]").forEach((b) => (b.onclick = () => {
+    closeSheet();
+    const start = () => { $("#mic")?.scrollIntoView({ behavior: "smooth", block: "center" }); if (!REC) toggleRec(); };
+    if (S.tab !== "speak") { go("speak"); setTimeout(start, 600); } else start();
+  }));
 }
 
 // ---------- NOTES ----------
@@ -696,6 +737,8 @@ async function renderClass() {
   Object.values(c.grid).forEach((row) => skills.forEach((s) => { const st = row[s.code].status; if (st === "needs support") ns++; if (st === "on track") ok++; }));
   $("#cg").innerHTML = `
     <div class="areas">${areas.map((a) => `<button data-a="${a.area}" class="${a.area === S.area ? "on" : ""}">${esc(t(a.label_hi, a.label_en))}</button>`).join("")}</div>
+    ${(c.class_view || []).length ? `<div class="card"><h3>${t("पूरी कक्षा", "Whole class")}</h3>${c.class_view.map((x) => `<div class="g" style="margin-top:6px"><span class="cell ${x.decision === "reteach" ? "ns" : "ok"}">${t(...DECISION[x.decision])}</span> ${esc(skillName(x.skill_code))}
+      <span class="tiny">${x.latest ? `· ${t("आपने कहा", "you said")}: <span class="deva">“${esc(x.latest.quote)}”</span>` : ""}${x.children_known ? ` · ${x.children_need_support}/${x.children_known} ${t("बच्चों को मदद चाहिए", "children need support")}` : ""}</span></div>`).join("")}</div>` : ""}
     ${Object.keys(groups).length ? `<div class="card groups"><h3>${t("स्तर के हिसाब से समूह", "Groups by level")}<span class="tiny" style="font-weight:500"> · Teaching at the Right Level</span></h3>
       ${Object.keys(groups).sort().map((l) => `<div class="g"><span class="cell lvl">${esc(levelName(S.area, +l))}</span> ${groups[l].map(nm).join(", ")}</div>`).join("")}</div>` : ""}
     <div class="legend"><span><span class="cell ns">${t("मदद चाहिए", "Needs support")}</span> ${ns}</span><span><span class="cell ok">${t("ठीक", "On track")}</span> ${ok}</span><span><span class="cell ne">—</span> ${t("अभी पता नहीं", "Not enough evidence yet")}</span></div>
@@ -723,6 +766,10 @@ async function openChild(id) {
     <h2><span class="deva">${esc(nameOf(id))}</span> <span class="tiny">${t("रोल", "Roll")} ${d.child.roll_no}</span></h2>
     ${d.language_flag ? `<div class="card flat small">🗣️ ${d.language_flag.signal === "helped" ? t("घर की भाषा में समझाने पर समझ जाता/जाती है: दिक्कत भाषा की हो सकती है, समझ की नहीं।", "Understands once it's explained in the home language: the gap may be the language, not the concept.") : t("पढ़ाई की भाषा समझने में दिक्कत।", "The language of instruction is a barrier.")}</div>` : ""}
     ${lv ? `<div class="card small">${lv}</div>` : ""}
+    ${(d.progress || []).some((p) => p.hindi !== null || p.maths !== null) ? `<div class="card small"><b>${t("हफ़्ते दर हफ़्ते", "Week by week")}</b>
+      ${["hindi", "maths"].filter((a) => d.progress.some((p) => p[a] !== null)).map((a) => `<div style="margin-top:8px">${esc(t(areaOf(a).label_hi, areaOf(a).label_en))}:
+        ${d.progress.map((p) => `<span class="cell ${p[a] !== null ? "lvl" : "ne"}" title="${p.day}" style="margin:2px">${p[a] !== null ? esc(levelName(a, p[a])) : "—"}</span>`).join("→")}</div>`).join("")}
+      <div class="tiny" style="margin-top:6px">${t("हर हफ़्ते के अंत में स्तर (पिछले 6 हफ़्ते)।", "Level at the end of each of the last 6 weeks.")}</div></div>` : ""}
     <div class="card">${rows.length ? rows.map((s) => { const g = d.grid[s.code]; const [w, cls] = CELL[g.status];
       return `<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0"><span>${esc(skillName(s.code))}</span><span class="cell ${cls}">${t(...w)}</span></div>`; }).join("")
       : `<p class="muted small">${t("अभी कोई पक्की बात नहीं।", "No checked observations yet.")}</p>`}</div>
@@ -798,11 +845,29 @@ function openLesson() {
   const sh = sheet(`
     <h2>${t("इस हफ़्ते का पाठ", "This week's lesson")}</h2>
     <p class="small muted">${t("इस हफ़्ते की किताब के शब्द और सवाल। SUNO इन्हीं से बताएगा कि किस बच्चे से क्या पढ़वाएँ। ✓ = इस हफ़्ते का मुख्य हिस्सा।", "Words and sums from this week's pages. SUNO picks today's listening items from these. ✓ = this week's focus.")}</p>
+    <label class="btn warn block" style="margin:8px 0">📷 ${t("किताब के पन्ने की फ़ोटो से भरें", "Fill from a photo of the textbook page")}
+      <input type="file" id="page-photo" accept="image/*" capture="environment" style="display:none"></label>
+    <div id="page-status" class="small"></div>
     <input id="l-title" class="deva" type="text" value="${esc(L.title || "")}" placeholder="${t("पाठ का नाम, जैसे: पाठ 12, कमल का फूल", "Lesson name, e.g. Lesson 12")}">
     ${S.me.skills.areas.map((a) => `<h3 style="margin-top:16px">${esc(t(a.label_hi, a.label_en))}</h3>` + S.me.skills.skills.filter((sk) => sk.area === a.area).map((sk) => `
       <div class="lesson-skill"><label><input type="checkbox" data-focus="${sk.code}" ${(L.focus_skills || []).includes(sk.code) ? "checked" : ""}> ${esc(skillName(sk.code))}</label>
       <input type="text" class="deva" data-items="${sk.code}" value="${esc((L.items[sk.code] || []).join(", "))}" placeholder="${esc(sk.example)}"></div>`).join("")).join("")}
     <button class="btn block" id="save-lesson" style="margin-top:14px">${t("सहेजें", "Save")}</button>`);
+  $("#page-photo", sh).onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    $("#page-status", sh).innerHTML = `<span class="spin"></span> ${t("पन्ना पढ़ रहे हैं…", "Reading the page (Claude)…")}`;
+    const fd = new FormData(); fd.append("photo", await shrink(f), "page.jpg");
+    try {
+      const r = await api("/api/lesson/photo", { method: "POST", body: fd });
+      if (r.title) $("#l-title", sh).value = r.title;
+      Object.entries(r.items).forEach(([code, list]) => {
+        const inp = sh.querySelector(`[data-items="${code}"]`); if (inp) inp.value = list.join(", ");
+        const cb = sh.querySelector(`[data-focus="${code}"]`); if (cb) cb.checked = true;
+      });
+      const n = Object.values(r.items).reduce((a, l) => a + l.length, 0);
+      $("#page-status", sh).innerHTML = `✓ ${t(`${n} शब्द/वाक्य मिले। जाँचकर सहेजें।`, `${n} items found. Check them, then save.`)} <span class="tiny">${esc(r.note || "")}</span>`;
+    } catch (err) { $("#page-status", sh).textContent = t("फ़ोटो नहीं पढ़ी जा सकी: ", "Couldn't read the photo: ") + err.message; }
+  };
   $("#save-lesson", sh).onclick = async () => {
     const items = {}, focus = [];
     sh.querySelectorAll("[data-items]").forEach((i) => { items[i.dataset.items] = i.value.split(/[,،\n]/).map((x) => x.trim()).filter(Boolean); });
@@ -933,6 +998,63 @@ async function renderPrivacy() {
       await clearCached(); toast(t("कक्षा मिटा दी गई", "Class deleted")); pageBack();
     } catch (e) { toast(e.message); }
   });
+}
+
+// ---------- starting levels (ASER-style check) ----------
+function openBaseline() {
+  const mathLevels = areaOf("maths").levels.map((l, i) => [i, l.label_hi, l.label_en]);
+  const opt = (list, cur) => list.map(([v, hi, en]) => `<option value="${v === null ? "" : v}" ${cur === v ? "selected" : ""}>${esc(t(hi, en))}</option>`).join("");
+  const sh = sheet(`
+    <h2>${t("शुरुआती स्तर", "Starting levels")}</h2>
+    <p class="small muted">${t("अगर आपने हर बच्चे से ASER जैसा 1–2 मिनट का पढ़वाना किया है (अक्षर → शब्द → अनुच्छेद → कहानी), तो उसका स्तर भरें। SUNO वहीं से शुरू करेगा, और आपके रोज़ के नोट से आगे की प्रगति दिखाएगा। जो नहीं जाँचा, उसे “—” छोड़ दें।", "If you have done an ASER-style check with each child (1–2 minutes: letter → word → paragraph → story), enter the level. SUNO starts from there and tracks progress from your daily notes. Leave “—” for children you haven't checked.")}</p>
+    <div class="grid-wrap"><table class="grid"><thead><tr><th class="n">${t("बच्चा", "Child")}</th><th>${t("हिंदी पढ़ना", "Hindi reading")}</th><th>${t("गणित", "Maths")}</th></tr></thead><tbody>
+    ${S.me.roster.map((c) => { const b = c.baseline || {};
+      return `<tr><td class="n">${esc(nameOf(c.child_id))}</td>
+        <td><select data-bl-h="${c.child_id}" style="padding:6px">${opt(ASER_READING, b.hindi ?? null)}</select></td>
+        <td><select data-bl-m="${c.child_id}" style="padding:6px"><option value="">—</option>${opt(mathLevels, b.maths ?? null)}</select></td></tr>`; }).join("")}
+    </tbody></table></div>
+    <button class="btn block" id="save-bl" style="margin-top:12px">${t("सहेजें", "Save")}</button>
+    <p class="tiny">${t("शुरुआती स्तर दो बातों जितना गिना जाता है और छह हफ़्ते में धीरे-धीरे हल्का होता है, ताकि बच्चे की प्रगति दिखे।", "A starting level counts like two observations and fades over about six weeks, so the child's progress shows.")}</p>`);
+  $("#save-bl", sh).onclick = async () => {
+    const levels = {};
+    S.me.roster.forEach((c) => {
+      const h = sh.querySelector(`[data-bl-h="${c.child_id}"]`).value, m = sh.querySelector(`[data-bl-m="${c.child_id}"]`).value;
+      levels[c.child_id] = { hindi: h === "" ? null : +h, maths: m === "" ? null : +m };
+    });
+    try {
+      const r = await api("/api/baseline", { method: "PUT", json: { levels } });
+      S.me = await api("/api/me"); localStorage.setItem("suno_me", JSON.stringify(S.me));
+      closeSheet(); toast(t(`${r.children_with_baseline} बच्चों के स्तर सहेजे`, `Starting levels saved for ${r.children_with_baseline} children`)); S.today = null; go(S.tab);
+    } catch (e) { toast(e.message); }
+  };
+}
+
+// ---------- daily reminder: a repeating event in the phone's own calendar (no extra app, works offline) ----------
+function openReminder() {
+  const saved = localStorage.getItem("suno_remind_at") || "13:00";
+  const sh = sheet(`
+    <h2>${t("रोज़ याद दिलाएँ", "Daily reminder")}</h2>
+    <p class="small muted">${t("पढ़ाई (FLN) का पीरियड कब ख़त्म होता है? उस समय फ़ोन याद दिलाएगा: “SUNO: आज का 1 मिनट का नोट”। सोमवार से शनिवार।", "When does your reading (FLN) period end? Your phone will remind you then: “SUNO: today's 1-minute note”. Monday to Saturday.")}</p>
+    <input id="rem-time" type="time" value="${saved}" style="font-size:22px;padding:10px;width:100%;border:1px solid var(--line);border-radius:12px">
+    <button class="btn warn block" id="rem-add" style="margin-top:12px">📅 ${t("फ़ोन के कैलेंडर में जोड़ें", "Add to my phone's calendar")}</button>
+    <p class="tiny">${t("फ़ाइल खुलने पर “जोड़ें” दबाइए। कोई नया ऐप नहीं; रिमाइंडर फ़ोन का कैलेंडर देता है।", "Open the file and tap “Add”. No new app: your phone's calendar does the reminding.")}</p>`);
+  $("#rem-add", sh).onclick = () => {
+    const [hh, mm] = $("#rem-time", sh).value.split(":").map(Number);
+    localStorage.setItem("suno_remind_at", $("#rem-time", sh).value);
+    const d = new Date(); d.setHours(hh, mm, 0, 0); if (d < new Date()) d.setDate(d.getDate() + 1);
+    const pad = (n) => String(n).padStart(2, "0");
+    const local = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}T${pad(x.getHours())}${pad(x.getMinutes())}00`;
+    const end = new Date(d.getTime() + 5 * 60000);
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//SUNO//reminder//EN", "BEGIN:VEVENT",
+      `UID:suno-note-${Date.now()}@suno`, `DTSTAMP:${local(new Date())}`, `DTSTART:${local(d)}`, `DTEND:${local(end)}`,
+      "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA", "SUMMARY:SUNO: आज का 1 मिनट का नोट / today's 1-minute note",
+      `DESCRIPTION:${location.origin}`, `URL:${location.origin}`,
+      "BEGIN:VALARM", "ACTION:DISPLAY", "TRIGGER:PT0M", "DESCRIPTION:SUNO", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    a.download = "suno-reminder.ics"; document.body.appendChild(a); a.click(); a.remove();
+    toast(t("कैलेंडर फ़ाइल बन गई", "Calendar file ready"));
+  };
 }
 
 route();

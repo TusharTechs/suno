@@ -13,10 +13,10 @@ import os
 
 from .claude_client import Usage, call_structured, load_prompt, load_schema
 from .config import SKILLS
-from .guardrails import check_mentions, has_banned_words
+from .guardrails import check_class_observations, check_mentions, has_banned_words
 
-PROMPT = "observations.v2.md"
-SCHEMA = "observations.v1.json"
+PROMPT = "observations.v3.md"
+SCHEMA = "observations.v2.json"
 EFFORT = os.environ.get("SUNO_NOTE_EFFORT", "high")
 
 
@@ -42,12 +42,15 @@ def extract(sentences: list[dict], roster: list[dict], lesson: dict, listening: 
             usage: Usage | None = None) -> dict:
     """Returns {"raw": Claude's output, "records", "questions", "follow_ups", "problems"}."""
     if not sentences:
-        return {"raw": {"mentions": [], "follow_ups": []}, "records": [], "questions": [],
+        return {"raw": {"mentions": [], "class_observations": [], "follow_ups": []}, "records": [], "questions": [],
                 "follow_ups": [], "problems": []}
     raw = call_structured(prompt=load_prompt(PROMPT), schema=load_schema(SCHEMA),
                           stable_context=_stable_context(roster, lesson),
                           request=_request(sentences, listening, roster), effort=EFFORT, usage=usage)
     records, questions, problems = check_mentions(raw["mentions"], sentences, roster, lesson)
+    class_records, class_problems = check_class_observations(raw.get("class_observations", []), sentences)
+    records += class_records
+    problems += class_problems
     follow_ups = []
     for f in raw["follow_ups"][:2]:
         if has_banned_words(f["question_hi"]):

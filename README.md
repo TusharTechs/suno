@@ -25,7 +25,15 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 4. **कक्षा (Class):** the child × skill grid. A cell changes only after 3+ checked observations on 2+ days. Tap a child for their evidence.
 5. **Today → "अगली सुबह / next morning":** moves the demo class one school day forward and builds that morning's brief live, including your note (about 30 s).
 
-**Use it for a real class:** on the login page, choose *create your own class*. Photograph your attendance register (Claude reads first names only; you check the list, and the photo is not stored), set this week's words, and send your first note after class. Your class code (like `K7Q2-M9XD`) opens your class on any phone. Data is kept in a free Render Postgres database.
+**Use it for a real class:** on the login page, choose *create your own class*. Then:
+
+1. **Children:** photograph your attendance register. Claude reads first names only; you check the list, and the photo is not stored.
+2. **This week's words:** photograph this week's textbook page, and Claude proposes the words, sentences and questions by skill. You can also type them.
+3. **Starting levels (optional):** if you have done an ASER-style check, enter each child's level (letter, word, paragraph, story). SUNO starts from there and shows progress week by week.
+4. **Reminder:** set a daily reminder for when the reading period ends. It goes into your phone's own calendar; no new app.
+5. **Every day:** send **one** 60-second note after the reading period. Talk about the whole class ("most children got stuck on vowel signs") and about individual children. After each note, SUNO lists the children from today's list you didn't mention, with a 10-second add-on.
+
+Your class code (like `K7Q2-M9XD`) opens your class on any phone. Data is kept in a free Render Postgres database.
 
 ## How it works
 

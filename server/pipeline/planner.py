@@ -47,15 +47,39 @@ def _usable(r: dict) -> bool:
     return r.get("feedback") != "down"
 
 
-def ladders(records: list[dict], today: date):
+def baselines(roster: list[dict] | None) -> dict:
+    """Starting levels the teacher entered from an ASER-style check: {(child_id, area): (level, day)}."""
+    out = {}
+    for c in roster or []:
+        b = c.get("baseline") or {}
+        day = b.get("day")
+        for area in ("hindi", "maths"):
+            if isinstance(b.get(area), int) and day:
+                out[(c["child_id"], area)] = (b[area], date.fromisoformat(day))
+    return out
+
+
+def ladders(records: list[dict], today: date, roster: list[dict] | None = None):
     obs = [ladder.Obs(r["child_id"], r["skill_code"], r["outcome"], r["confidence"], _day(r), r.get("error_type") or "none")
            for r in records if r["status"] == "evidence" and _usable(r) and _day(r) <= today]
-    return ladder.track(obs, today)
+    return ladder.track(obs, today, baselines(roster))
 
 
-def tracker_state(records: list[dict], today: date):
+def tracker_state(records: list[dict], today: date, roster: list[dict] | None = None):
     """Per child and skill: probability of having it, observations, days, status (from the ladder)."""
-    return ladder.skill_views(ladders(records, today))
+    return ladder.skill_views(ladders(records, today, roster))
+
+
+def progress(records: list[dict], today: date, roster_child: dict, weeks: int = 6) -> list[dict]:
+    """A child's level at the end of each of the last few weeks: how she moved up the ladder."""
+    out = []
+    for k in range(weeks - 1, -1, -1):
+        d = today - timedelta(days=7 * k)
+        lads = ladders([r for r in records if r["child_id"] == roster_child["child_id"]], d, [roster_child])
+        out.append({"day": d.isoformat(), **{area: (lads[(roster_child["child_id"], area)].level
+                                                      if (roster_child["child_id"], area) in lads else None)
+                                              for area in ("hindi", "maths")}})
+    return out
 
 
 def grid(roster: list[dict], state) -> dict:
@@ -202,10 +226,57 @@ def language_flags(records: list[dict], today: date) -> list[dict]:
     return list(flags.values())
 
 
+def lesson_ceiling(lesson: dict) -> dict[str, int]:
+    """Per area, the highest ladder level this week's lesson works on. A child whose next step is above
+    it is not "needing support": that rung hasn't been taught yet (a Grade 2 child reading words with
+    vowel signs is fine even though joined letters come next)."""
+    focus = lesson.get("focus_skills") or [s for s in lesson.get("items", {}) if lesson["items"].get(s)]
+    ceil: dict[str, int] = {}
+    for s in focus:
+        if s in ladder.NEED:
+            area, need = ladder.NEED[s]
+            ceil[area] = max(ceil.get(area, 0), need)
+    return ceil
+
+
+MAX_RETEACH, MAX_MOVE_ON = 2, 1
+
+
+def class_view(records: list[dict], state, roster: list[dict], today: date, lesson: dict | None = None) -> list[dict]:
+    """Class-level "reteach or move on", per skill, decided in code from two signals:
+    the teacher's remarks about the whole class in the last 5 school days, and the share of
+    children with a known status who need support on that skill."""
+    since = school_days_before(today, WINDOW_DAYS)[0]
+    remarks: dict[str, list[dict]] = {}
+    for r in records:
+        if r["status"] == "class" and r["skill_code"] and since <= _day(r) <= today:
+            remarks.setdefault(r["skill_code"], []).append(r)
+    focus = set((lesson or {}).get("focus_skills") or [])
+    out = []
+    for skill in set(remarks) | {s for (_, s) in state if not focus or s in focus}:
+        rs = sorted(remarks.get(skill, []), key=lambda r: r["day"])
+        known = [state[(c["child_id"], skill)] for c in roster if (c["child_id"], skill) in state
+                 and state[(c["child_id"], skill)].status != "not enough evidence"]
+        ns = sum(1 for v in known if v.status == "needs support")
+        decision, why = None, ""
+        if rs and rs[-1]["share"] in ("most", "many"):
+            decision = "reteach" if rs[-1]["outcome"] == "incorrect" else "move_on"
+            why = "teacher_remark"
+        elif len(known) >= 4 and ns / len(known) >= 0.4:
+            decision, why = "reteach", "children"
+        if decision:
+            out.append({"skill_code": skill, "decision": decision, "why": why,
+                        "remarks": len(rs), "children_known": len(known), "children_need_support": ns,
+                        "latest": {"day": rs[-1]["day"], "share": rs[-1]["share"], "quote": rs[-1]["teacher_quote"]} if rs else None})
+    out.sort(key=lambda x: (x["decision"] != "reteach", x["why"] != "teacher_remark", -(x["remarks"]), x["skill_code"]))
+    # A teacher can act on two whole-class moves a day, not six: her own remarks first.
+    return [x for x in out if x["decision"] == "reteach"][:MAX_RETEACH] + [x for x in out if x["decision"] == "move_on"][:MAX_MOVE_ON]
+
+
 def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
             yesterday_list: set[str] | None = None) -> dict:
     """Everything code knows about the class on `today` (morning: today's notes not in yet)."""
-    lads = ladders(records, today)
+    lads = ladders(records, today, roster)
     state = ladder.skill_views(lads)
     silent = silent_children(roster, records, today)
     g = grid(roster, state)
@@ -214,8 +285,10 @@ def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
                          and _day(r) in window and _usable(r)})
     # "Needs support" = each child's next step on each ladder: the lowest skill they need help with
     # (Teaching at the Right Level groups), not every skill above it.
+    ceiling = lesson_ceiling(lesson)
     needs = [{"child_id": c["child_id"], "skill_code": s, **g[c["child_id"]][s]}
-             for c in roster for s in ladder.next_steps(state, c["child_id"]).values()]
+             for c in roster for area, s in ladder.next_steps(state, c["child_id"]).items()
+             if ladder.NEED[s][1] <= ceiling.get(area, 99)]
     levels = {}
     for (cid, area), st in lads.items():
         levels.setdefault(cid, {})[area] = {"level": st.level, "moments": st.moments, "days": len(st.days),
@@ -230,6 +303,7 @@ def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
         "silent": silent,
         "heard_this_week": heard_week,
         "levels": levels,
+        "class_view": class_view(records, state, roster, today, lesson),
         "listen_today": listen_today(roster, lesson, records, state, today, yesterday_list or set(), silent, lads),
         "language_flags": language_flags(records, today),
     }

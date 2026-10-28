@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS records (
   mention_id TEXT, name_said TEXT, child_id TEXT, kind TEXT, skill_code TEXT, item TEXT, outcome TEXT,
   error_type TEXT, when_ TEXT, home_language TEXT, teacher_quote TEXT, rationale TEXT,
   attribution TEXT, candidates_json TEXT, signals_json TEXT, confidence REAL, status TEXT,
-  feedback TEXT
+  feedback TEXT, share TEXT
 );
 CREATE TABLE IF NOT EXISTS questions (
   q_id SERIALID, note_id TEXT NOT NULL, class_id TEXT NOT NULL,
@@ -81,16 +81,18 @@ def _connect():
         for stmt in [x.strip() for x in ddl.split(";") if x.strip()]:
             conn.execute(stmt)
         conn.execute("ALTER TABLE classes ADD COLUMN IF NOT EXISTS code TEXT")
+        conn.execute("ALTER TABLE records ADD COLUMN IF NOT EXISTS share TEXT")
         return conn
     VAR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH, check_same_thread=False, isolation_level=None)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA.replace("SERIALID", "INTEGER PRIMARY KEY AUTOINCREMENT").replace("BLOBTYPE", "BLOB"))
-    try:
-        conn.execute("ALTER TABLE classes ADD COLUMN code TEXT")  # databases made before class codes
-    except sqlite3.OperationalError:
-        pass
+    for ddl in ("ALTER TABLE classes ADD COLUMN code TEXT", "ALTER TABLE records ADD COLUMN share TEXT"):
+        try:
+            conn.execute(ddl)  # databases made before these columns
+        except sqlite3.OperationalError:
+            pass
     return conn
 
 
@@ -243,17 +245,18 @@ def list_notes(class_id: str) -> list[dict]:
 
 RECORD_FIELDS = ["mention_id", "name_said", "child_id", "kind", "skill_code", "item", "outcome", "error_type",
                  "when", "home_language", "teacher_quote", "rationale", "attribution", "candidates", "signals",
-                 "confidence", "status"]
+                 "confidence", "status", "share"]
 
 
 def add_records(note_id: str, class_id: str, day: str, records: list[dict]) -> None:
     for r in records:
         x("INSERT INTO records (note_id, class_id, day, mention_id, name_said, child_id, kind, skill_code, item, "
           "outcome, error_type, when_, home_language, teacher_quote, rationale, attribution, candidates_json, "
-          "signals_json, confidence, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "signals_json, confidence, status, share) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
           (note_id, class_id, day, r["mention_id"], r["name_said"], r["child_id"], r["kind"], r["skill_code"],
            r["item"], r["outcome"], r["error_type"], r["when"], r["home_language"], r["teacher_quote"],
-           r["rationale"], r["attribution"], j(r["candidates"]), j(r["signals"]), r["confidence"], r["status"]))
+           r["rationale"], r["attribution"], j(r["candidates"]), j(r["signals"]), r["confidence"], r["status"],
+           r.get("share")))
 
 
 def _record(row: dict) -> dict:

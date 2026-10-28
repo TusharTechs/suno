@@ -224,6 +224,9 @@ The biggest change is that **the phone moves from the desk to the teacher**, and
 | 23 | Speech-to-text keyterms off; "X को X पढ़ा" can't be "correct" | Speech-to-text erased quoted misreadings in our sample notes | 27 Oct | Decided |
 | 24 | Web app (PWA, offline queue) instead of native Android; SQLite instead of Postgres | 4 days left; judges test a hosted link | 27 Oct | Decided |
 | 25 | Maths and English words join the skill ladder; the language-or-concept flag returns | Cheap once the input is the teacher's speech | 27 Oct | Decided |
+| 26–31 | Simulation-driven: ladder levels (Bayesian), two-item listening, one-tap name suggestions, register photo, classroom-ready app | Stage A/B simulation, 27 Oct | 27 Oct | Decided |
+| 32–33 | Evidence needs a specific word; spoken roll numbers; unclear absences get a question | Real-speech test, 27 Oct | 27 Oct | Decided |
+| 34–39 | One note a day + calendar reminder; whole-class remarks → reteach / move on; ASER starting levels + progress over time; nudge for skipped children; textbook-page photo; language per class on the roadmap | Education mentor (Rebecca Swittens), 28 Oct | 28 Oct | Decided (38: roadmap) |
 
 ## Architecture and build spec
 

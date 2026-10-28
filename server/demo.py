@@ -30,8 +30,9 @@ def clone_demo() -> str:
         return cid
     c = store.get_class(cid)
     today = jobs.class_today(c)
-    back = planner.school_days_before(today, max(n["back"] for n in fx["notes"]))
+    back = planner.school_days_before(today, max([n["back"] for n in fx["notes"]] + [9]))
     day_of = {k: back[-k].isoformat() for k in range(1, len(back) + 1)}
+    store.update_roster(cid, rebase_baselines(base["roster"], day_of))
     for n in fx["notes"]:
         day = day_of[n["back"]]
         nid = store.create_note(cid, day, "sample-text", n["listening"], synthetic=True)
@@ -53,6 +54,18 @@ def clone_demo() -> str:
                         audio_file=f"{cid}_{today.isoformat()}.mp3" if has_audio else None,
                         audio=src.read_bytes() if has_audio else None)
     return cid
+
+
+def rebase_baselines(roster: list[dict], day_of: dict[int, str]) -> list[dict]:
+    """Synthetic starting levels are stored as "school days before today"; give them real dates."""
+    out = []
+    for c in roster:
+        c = dict(c)
+        b = c.get("baseline")
+        if b and "back" in b:
+            c["baseline"] = {k: v for k, v in b.items() if k != "back"} | {"day": day_of[b["back"]]}
+        out.append(c)
+    return out
 
 
 def _apply_answer(class_id: str, q_id: int, answer: str) -> None:

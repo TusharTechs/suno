@@ -282,3 +282,27 @@ def settle_attribution(r: dict, child_id: str) -> dict:
         r["confidence"] = round(note_confidence("teacher_confirmed", r["signals"]), 3)
     r["status"] = record_status(r)
     return r
+
+
+def check_class_observations(obs: list[dict], sentences: list[dict]):
+    """Remarks about the whole class ("most children struggled with matras"): same grounding as for
+    a child (cited sentences exist, quote and item in her words, labels masked). Returns (records, problems)."""
+    sent = {s["sent_id"]: s["text"] for s in sentences}
+    records, problems = [], []
+    for i, o in enumerate(obs, 1):
+        mid = f"k{i}"
+        if not o["sent_ids"] or any(x not in sent for x in o["sent_ids"]) or not o["skill_code"]:
+            problems.append((mid, "dropped", "class remark without real sentences or a skill"))
+            continue
+        cited = " ".join(sent[x] for x in o["sent_ids"])
+        quote = o["teacher_quote"] if o["teacher_quote"] and _in_text(o["teacher_quote"], cited) else ""
+        item = o["item"] if o["item"] and _item_found(o["item"], cited) else ""
+        records.append({
+            "mention_id": mid, "name_said": "", "child_id": None, "kind": "class", "skill_code": o["skill_code"],
+            "item": item, "outcome": "incorrect" if o["outcome"] == "struggled" else "correct",
+            "error_type": "not_stated", "when": "today", "home_language": "none",
+            "teacher_quote": mask_banned(quote), "rationale": "" if has_banned_words(o["rationale"]) else o["rationale"],
+            "attribution": "class", "candidates": [], "signals": None, "confidence": None, "status": "class",
+            "share": o["share"],
+        })
+    return records, problems

@@ -1,55 +1,379 @@
 {
-  "label": "SYNTHETIC. A fictional Grade 2 class written by Team Sunvai for the demo. Not real children.",
-  "class": {"class_id": "demo", "name": "कक्षा 2 (डेमो)", "grade": 2, "school": "डेमो प्राथमिक विद्यालय (synthetic)"},
+  "label": "SYNTHETIC. A fictional Grade 2 class written by Team Sunvai for the demo. Not real children. Starting levels for 12 children are SYNTHETIC too (as if from an ASER-style check in week 1).",
+  "class": {
+    "class_id": "demo",
+    "name": "कक्षा 2 (डेमो)",
+    "grade": 2,
+    "school": "डेमो प्राथमिक विद्यालय (synthetic)"
+  },
   "roster": [
-    {"child_id": "c01", "first_name": "आरव", "roll_no": 1, "aliases": ["Aarav"]},
-    {"child_id": "c02", "first_name": "सिमरन", "roll_no": 2, "aliases": ["Simran"]},
-    {"child_id": "c03", "first_name": "रवि", "roll_no": 3, "aliases": ["Ravi"]},
-    {"child_id": "c04", "first_name": "पिंकी", "roll_no": 4, "aliases": ["Pinki"]},
-    {"child_id": "c05", "first_name": "अंजलि", "roll_no": 5, "aliases": ["Anjali", "गुड्डू", "Guddu"]},
-    {"child_id": "c06", "first_name": "अमन", "roll_no": 6, "aliases": ["Aman"]},
-    {"child_id": "c07", "first_name": "सुरेश", "roll_no": 7, "aliases": ["Suresh"]},
-    {"child_id": "c08", "first_name": "सोनू", "roll_no": 8, "aliases": ["Sonu"]},
-    {"child_id": "c09", "first_name": "अर्जुन", "roll_no": 9, "aliases": ["Arjun"]},
-    {"child_id": "c10", "first_name": "रीना", "roll_no": 10, "aliases": ["Reena"]},
-    {"child_id": "c11", "first_name": "फ़ातिमा", "roll_no": 11, "aliases": ["Fatima"]},
-    {"child_id": "c12", "first_name": "प्रिया", "roll_no": 12, "aliases": ["Priya"]},
-    {"child_id": "c13", "first_name": "करण", "roll_no": 13, "aliases": ["Karan"]},
-    {"child_id": "c14", "first_name": "मोहन", "roll_no": 14, "aliases": ["Mohan"]},
-    {"child_id": "c15", "first_name": "काजल", "roll_no": 15, "aliases": ["Kajal"]},
-    {"child_id": "c16", "first_name": "नेहा", "roll_no": 16, "aliases": ["Neha"]},
-    {"child_id": "c17", "first_name": "विकास", "roll_no": 17, "aliases": ["Vikas"]},
-    {"child_id": "c18", "first_name": "पूजा", "roll_no": 18, "aliases": ["Pooja"]},
-    {"child_id": "c19", "first_name": "दीपक", "roll_no": 19, "aliases": ["Deepak"]},
-    {"child_id": "c20", "first_name": "गीता", "roll_no": 20, "aliases": ["Geeta"]},
-    {"child_id": "c21", "first_name": "राहुल", "roll_no": 21, "aliases": ["Rahul"]},
-    {"child_id": "c22", "first_name": "सलमा", "roll_no": 22, "aliases": ["Salma"]},
-    {"child_id": "c23", "first_name": "आशा", "roll_no": 23, "aliases": ["Asha"]},
-    {"child_id": "c24", "first_name": "मनीष", "roll_no": 24, "aliases": ["Manish"]},
-    {"child_id": "c25", "first_name": "इमरान", "roll_no": 25, "aliases": ["Imran"]},
-    {"child_id": "c26", "first_name": "रानी", "roll_no": 26, "aliases": ["Rani"]},
-    {"child_id": "c27", "first_name": "प्रिया", "roll_no": 27, "aliases": ["Priya"]},
-    {"child_id": "c28", "first_name": "गोलू", "roll_no": 28, "aliases": ["Golu"]},
-    {"child_id": "c29", "first_name": "सीमा", "roll_no": 29, "aliases": ["Seema"]},
-    {"child_id": "c30", "first_name": "अजय", "roll_no": 30, "aliases": ["Ajay"]}
+    {
+      "child_id": "c01",
+      "first_name": "आरव",
+      "roll_no": 1,
+      "aliases": [
+        "Aarav"
+      ]
+    },
+    {
+      "child_id": "c02",
+      "first_name": "सिमरन",
+      "roll_no": 2,
+      "aliases": [
+        "Simran"
+      ],
+      "baseline": {
+        "hindi": 3,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c03",
+      "first_name": "रवि",
+      "roll_no": 3,
+      "aliases": [
+        "Ravi"
+      ],
+      "baseline": {
+        "hindi": 3,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c04",
+      "first_name": "पिंकी",
+      "roll_no": 4,
+      "aliases": [
+        "Pinki"
+      ],
+      "baseline": {
+        "hindi": 1,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c05",
+      "first_name": "अंजलि",
+      "roll_no": 5,
+      "aliases": [
+        "Anjali",
+        "गुड्डू",
+        "Guddu"
+      ],
+      "baseline": {
+        "hindi": 1,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c06",
+      "first_name": "अमन",
+      "roll_no": 6,
+      "aliases": [
+        "Aman"
+      ],
+      "baseline": {
+        "hindi": 3,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c07",
+      "first_name": "सुरेश",
+      "roll_no": 7,
+      "aliases": [
+        "Suresh"
+      ]
+    },
+    {
+      "child_id": "c08",
+      "first_name": "सोनू",
+      "roll_no": 8,
+      "aliases": [
+        "Sonu"
+      ]
+    },
+    {
+      "child_id": "c09",
+      "first_name": "अर्जुन",
+      "roll_no": 9,
+      "aliases": [
+        "Arjun"
+      ],
+      "baseline": {
+        "hindi": 3,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c10",
+      "first_name": "रीना",
+      "roll_no": 10,
+      "aliases": [
+        "Reena"
+      ],
+      "baseline": {
+        "hindi": 1,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c11",
+      "first_name": "फ़ातिमा",
+      "roll_no": 11,
+      "aliases": [
+        "Fatima"
+      ],
+      "baseline": {
+        "hindi": 4,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c12",
+      "first_name": "प्रिया",
+      "roll_no": 12,
+      "aliases": [
+        "Priya"
+      ]
+    },
+    {
+      "child_id": "c13",
+      "first_name": "करण",
+      "roll_no": 13,
+      "aliases": [
+        "Karan"
+      ]
+    },
+    {
+      "child_id": "c14",
+      "first_name": "मोहन",
+      "roll_no": 14,
+      "aliases": [
+        "Mohan"
+      ]
+    },
+    {
+      "child_id": "c15",
+      "first_name": "काजल",
+      "roll_no": 15,
+      "aliases": [
+        "Kajal"
+      ],
+      "baseline": {
+        "hindi": 3,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c16",
+      "first_name": "नेहा",
+      "roll_no": 16,
+      "aliases": [
+        "Neha"
+      ],
+      "baseline": {
+        "hindi": 4,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c17",
+      "first_name": "विकास",
+      "roll_no": 17,
+      "aliases": [
+        "Vikas"
+      ]
+    },
+    {
+      "child_id": "c18",
+      "first_name": "पूजा",
+      "roll_no": 18,
+      "aliases": [
+        "Pooja"
+      ]
+    },
+    {
+      "child_id": "c19",
+      "first_name": "दीपक",
+      "roll_no": 19,
+      "aliases": [
+        "Deepak"
+      ]
+    },
+    {
+      "child_id": "c20",
+      "first_name": "गीता",
+      "roll_no": 20,
+      "aliases": [
+        "Geeta"
+      ]
+    },
+    {
+      "child_id": "c21",
+      "first_name": "राहुल",
+      "roll_no": 21,
+      "aliases": [
+        "Rahul"
+      ]
+    },
+    {
+      "child_id": "c22",
+      "first_name": "सलमा",
+      "roll_no": 22,
+      "aliases": [
+        "Salma"
+      ]
+    },
+    {
+      "child_id": "c23",
+      "first_name": "आशा",
+      "roll_no": 23,
+      "aliases": [
+        "Asha"
+      ],
+      "baseline": {
+        "hindi": 4,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c24",
+      "first_name": "मनीष",
+      "roll_no": 24,
+      "aliases": [
+        "Manish"
+      ]
+    },
+    {
+      "child_id": "c25",
+      "first_name": "इमरान",
+      "roll_no": 25,
+      "aliases": [
+        "Imran"
+      ]
+    },
+    {
+      "child_id": "c26",
+      "first_name": "रानी",
+      "roll_no": 26,
+      "aliases": [
+        "Rani"
+      ]
+    },
+    {
+      "child_id": "c27",
+      "first_name": "प्रिया",
+      "roll_no": 27,
+      "aliases": [
+        "Priya"
+      ]
+    },
+    {
+      "child_id": "c28",
+      "first_name": "गोलू",
+      "roll_no": 28,
+      "aliases": [
+        "Golu"
+      ],
+      "baseline": {
+        "maths": 0,
+        "back": 9
+      }
+    },
+    {
+      "child_id": "c29",
+      "first_name": "सीमा",
+      "roll_no": 29,
+      "aliases": [
+        "Seema"
+      ]
+    },
+    {
+      "child_id": "c30",
+      "first_name": "अजय",
+      "roll_no": 30,
+      "aliases": [
+        "Ajay"
+      ]
+    }
   ],
   "lesson": {
     "lesson_id": "demo-week",
     "title": "पाठ 12: कमल का फूल",
-    "focus_skills": ["hi.blend_no_matra", "hi.words_with_matras", "hi.matras", "math.number_recognition", "math.place_value"],
+    "focus_skills": [
+      "hi.blend_no_matra",
+      "hi.words_with_matras",
+      "hi.matras",
+      "math.number_recognition",
+      "math.place_value"
+    ],
     "items": {
-      "hi.letters": ["क", "म", "ल", "ग", "ब", "व"],
-      "hi.matras": ["का", "कि", "की", "कु", "कू"],
-      "hi.blend_no_matra": ["कमल", "घर", "नमक", "बतख", "मटर"],
-      "hi.words_with_matras": ["पानी", "किताब", "मछली", "फूल", "नाव"],
-      "hi.conjuncts": ["प्यार", "क्या"],
-      "hi.sentence": ["कमल का फूल सुंदर है।", "मछली पानी में रहती है।"],
-      "hi.comprehension": ["कमल कहाँ खिलता है?"],
-      "math.number_recognition": ["32", "23", "47", "74", "90"],
-      "math.place_value": ["32 में कितनी दहाई?", "47 में कितनी इकाई?"],
-      "math.addition": ["23 + 5", "14 + 3"],
-      "math.subtraction": ["15 - 6", "20 - 4"],
-      "en.words": ["cat", "sun", "tree", "fish"]
+      "hi.letters": [
+        "क",
+        "म",
+        "ल",
+        "ग",
+        "ब",
+        "व"
+      ],
+      "hi.matras": [
+        "का",
+        "कि",
+        "की",
+        "कु",
+        "कू"
+      ],
+      "hi.blend_no_matra": [
+        "कमल",
+        "घर",
+        "नमक",
+        "बतख",
+        "मटर"
+      ],
+      "hi.words_with_matras": [
+        "पानी",
+        "किताब",
+        "मछली",
+        "फूल",
+        "नाव"
+      ],
+      "hi.conjuncts": [
+        "प्यार",
+        "क्या"
+      ],
+      "hi.sentence": [
+        "कमल का फूल सुंदर है।",
+        "मछली पानी में रहती है।"
+      ],
+      "hi.comprehension": [
+        "कमल कहाँ खिलता है?"
+      ],
+      "math.number_recognition": [
+        "32",
+        "23",
+        "47",
+        "74",
+        "90"
+      ],
+      "math.place_value": [
+        "32 में कितनी दहाई?",
+        "47 में कितनी इकाई?"
+      ],
+      "math.addition": [
+        "23 + 5",
+        "14 + 3"
+      ],
+      "math.subtraction": [
+        "15 - 6",
+        "20 - 4"
+      ],
+      "en.words": [
+        "cat",
+        "sun",
+        "tree",
+        "fish"
+      ]
     }
   }
 }

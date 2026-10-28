@@ -18,8 +18,8 @@ from .claude_client import ClaudeOutputError, Usage, call_structured, load_promp
 from .config import ACTIVITIES, SKILL_BY_CODE, SKILLS
 from .guardrails import has_banned_words
 
-PROMPT = "brief.v3.md"
-SCHEMA = "brief.v2.json"
+PROMPT = "brief.v4.md"
+SCHEMA = "brief.v3.json"
 MAX_CHARS_HI = 1800
 MAX_CHARS_EN = 900
 EFFORT = os.environ.get("SUNO_BRIEF_EFFORT", "medium")
@@ -51,6 +51,10 @@ def facts_for_brief(roster: list[dict], pic: dict, recent_evidence: list[dict]) 
                           for x in pic["needs_support"]],
         "on_track_by_skill": {SKILL_BY_CODE[s]["label_hi"]: n for s, n in on_track.items()},
         "levels": _levels(pic, who),
+        "class_view": [{"skill_code": x["skill_code"], "skill": SKILL_BY_CODE[x["skill_code"]]["label_hi"],
+                        "decision": x["decision"], "teacher_said": (x["latest"] or {}).get("quote", ""),
+                        "children_need_support": x["children_need_support"], "children_known": x["children_known"]}
+                       for x in pic.get("class_view", [])],
         "listen_today": [who(x["child_id"]) | {"item": x["item"], "reason": x["reason"],
                                                "skill": SKILL_BY_CODE[x["skill_code"]]["label_hi"]}
                          | ({"also": x["also"]["item"]} if x.get("also") else {})
@@ -97,6 +101,13 @@ def check_brief(b: dict, roster_ids: set[str], pic: dict) -> list[str]:
         off = [c for c in g["child_ids"] if not any((c, s) in needs for s in a["skills"])]
         if off:
             problems.append(f"group {g['group']!r}: {off} do not need support with what {g['activity_id']} practises")
+    decided = {(x["skill_code"], x["decision"]) for x in pic.get("class_view", [])}
+    for cp in b.get("class_plan", []):
+        if (cp["skill_code"], cp["decision"]) not in decided:
+            problems.append(f"class_plan {cp['skill_code']}/{cp['decision']} is not a decision code made")
+        a = acts.get(cp["activity_id"]) if cp.get("activity_id") else None
+        if cp.get("activity_id") and (a is None or cp["skill_code"] not in a["skills"]):
+            problems.append(f"class_plan activity {cp['activity_id']} does not practise {cp['skill_code']}")
     want = [(x["child_id"], x["item"]) for x in pic["listen_today"]]
     if [(x["child_id"], x["item"]) for x in b["listen_today"]] != want:
         problems.append("listen_today must be exactly the planner's list, same order and items")

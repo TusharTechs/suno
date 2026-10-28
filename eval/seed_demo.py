@@ -41,11 +41,13 @@ NOTES = [
         "अमन ने किताब सही पढ़ी। पिंकी ने घर को घ र पढ़ा, फिर से कोशिश की तो थोड़ा जोड़ा।"),
     (3, "रानी ने बतख सही पढ़ा। गोलू ने संतालीस को चौहत्तर पढ़ा। सीमा ने का कि की कु कू सब सही पढ़े। "
         "अजय ने बीस में से चार घटाकर सोलह बताया। फ़ातिमा को मछली कहाँ रहती है समझ नहीं आया, भोजपुरी में समझाया तो बता दिया। "
+        "आज ज़्यादातर बच्चे कि और की में गड़बड़ कर रहे थे। "
         "पीछे वाला लड़का नाव नहीं पढ़ पाया।"),
     (2, "पिंकी ने मटर को म ट र पढ़ा, जोड़ नहीं पाई। सोनू ने मछली को मछल पढ़ा। काजल अक्सर मात्रा में गलती करती है। "
-        "सुरेश आया था, उसने कमल सही पढ़ा। करण ने चौदह और तीन जोड़कर सत्रह बताया।"),
+        "सुरेश आया था, उसने कमल सही पढ़ा। करण ने चौदह और तीन जोड़कर सत्रह बताया। आधी कक्षा ने बत्तीस को तेईस पढ़ा।"),
     (1, "अमन ने मछली सही पढ़ी, बिना रुके। गोलू ने नब्बे सही पढ़ा पर बत्तीस को फिर तेईस पढ़ा। "
-        "मोहन ने आज कुछ शब्द गलत पढ़े। प्रिया ने फूल को फल पढ़ा। गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा।"),
+        "मोहन ने आज कुछ शब्द गलत पढ़े। प्रिया ने फूल को फल पढ़ा। गीता ने कमल का फूल सुंदर है अटक अटक कर पढ़ा। "
+        "वाक्य वाला हिस्सा आज लगभग सभी ने अच्छे से पढ़ लिया।"),
 ]
 # Name mix-ups the "teacher" settles with one tap during seeding (the last day's stays open for the judges).
 ANSWERS = {6: {"प्रिया": "c12"}}
@@ -57,7 +59,10 @@ def main() -> None:
                              synthetic=True)
     c = store.get_class(cid)
     today = jobs.class_today(c)
-    back = planner.school_days_before(today, len(NOTES))
+    back = planner.school_days_before(today, max(len(NOTES), 9))
+    from server.demo import rebase_baselines
+    store.update_roster(cid, rebase_baselines(base["roster"], {k: back[-k].isoformat() for k in range(1, len(back) + 1)}))
+    c = store.get_class(cid)
     from server.api import settle_question
     out_notes = []
     for k, text in NOTES:

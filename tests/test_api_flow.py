@@ -152,3 +152,28 @@ def test_exports(client):
     assert "पिंकी" not in str(s)  # aggregate: no names
     csv_text = client.get("/api/export/class.csv").text
     assert csv_text.splitlines()[0].lstrip("﻿").startswith("roll_no,first_name") and "पिंकी" in csv_text
+
+
+def test_baseline_endpoint_seeds_levels(client):
+    client.post("/api/login", json={"code": "SUNO-DEMO"})
+    r = client.put("/api/baseline", json={"levels": {"c01": {"hindi": 3, "maths": 1}, "c02": {"hindi": 99}}})
+    assert r.status_code == 200
+    me = client.get("/api/me").json()
+    assert next(c for c in me["roster"] if c["child_id"] == "c01")["baseline"]["hindi"] == 3
+    assert not next(c for c in me["roster"] if c["child_id"] == "c02").get("baseline")  # out of range: ignored
+    # editing the roster keeps the baseline
+    client.put("/api/roster", json={"children": me["roster"]})
+    me = client.get("/api/me").json()
+    assert next(c for c in me["roster"] if c["child_id"] == "c01")["baseline"]["maths"] == 1
+    assert client.get("/api/children/c01").json()["progress"]
+
+
+def test_lesson_photo_keeps_known_skills_and_short_items(client, monkeypatch):
+    from server.pipeline import lesson_photo
+    monkeypatch.setattr(lesson_photo, "call_structured", lambda **kw: {
+        "title": "पाठ 7", "note": "", "items": [
+            {"skill_code": "hi.words_with_matras", "item": "पानी"}, {"skill_code": "hi.words_with_matras", "item": "पानी"},
+            {"skill_code": "hi.sentence", "item": "क" * 200}, {"skill_code": "hi.blend_no_matra", "item": " जल "}]})
+    client.post("/api/classes", json={"name": "x"})
+    r = client.post("/api/lesson/photo", files={"photo": ("p.jpg", b"\xff\xd8x", "image/jpeg")}).json()
+    assert r["items"] == {"hi.words_with_matras": ["पानी"], "hi.blend_no_matra": ["जल"]}

@@ -22,6 +22,7 @@ from pydantic import BaseModel
 
 from . import demo, jobs, store
 from .pipeline import claude_observations, planner
+from .pipeline import lesson_photo as lesson_photo_mod
 from .pipeline import roster_photo as roster_photo_mod
 from .pipeline.claude_client import ClaudeOutputError
 from .pipeline.roster_photo import first_name_only
@@ -185,7 +186,10 @@ def _clean_roster(entries: list[dict], old: list[dict]) -> list[dict]:
             roll = max(rolls | {0}) + 1
         rolls.add(roll)
         aliases = [first_name_only(a) for a in (e.get("aliases") or [])][:3]
-        out.append({"child_id": cid, "first_name": name, "roll_no": roll, "aliases": [a for a in aliases if a]})
+        entry = {"child_id": cid, "first_name": name, "roll_no": roll, "aliases": [a for a in aliases if a]}
+        if cid in old_by_id and old_by_id[cid].get("baseline"):
+            entry["baseline"] = old_by_id[cid]["baseline"]
+        out.append(entry)
     return out
 
 
@@ -221,6 +225,47 @@ async def roster_photo(photo: UploadFile = File(...), c: dict = Depends(current_
         raise HTTPException(413, "photo too large")
     try:
         return roster_photo_mod.read_register(data, photo.content_type or "")
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    except ClaudeOutputError as e:
+        raise HTTPException(502, f"could not read the photo: {e}")
+
+
+class BaselineBody(BaseModel):
+    levels: dict[str, dict]   # {child_id: {"hindi": level | None, "maths": level | None}}
+
+
+@app.put("/api/baseline")
+def put_baseline(body: BaselineBody, c: dict = Depends(current_class)):
+    """Starting levels from an ASER-style check (letter, word, paragraph, story; numbers). They seed each
+    child's ladder and fade like any evidence; the teacher's notes then track progress from there."""
+    n = {a["area"]: len(a["levels"]) for a in SKILLS["areas"]}
+    day = jobs.class_today(c).isoformat()
+    roster = []
+    for ch in c["roster"]:
+        ch = dict(ch)
+        given = body.levels.get(ch["child_id"])
+        if given is not None:
+            b = {}
+            for area in ("hindi", "maths"):
+                v = given.get(area)
+                if isinstance(v, int) and 0 <= v < n[area]:
+                    b[area] = v
+            ch["baseline"] = dict(b, day=day) if b else None
+        roster.append(ch)
+    store.update_roster(c["class_id"], roster)
+    return {"ok": True, "children_with_baseline": sum(1 for ch in roster if ch.get("baseline"))}
+
+
+@app.post("/api/lesson/photo")
+async def lesson_photo(photo: UploadFile = File(...), c: dict = Depends(current_class)):
+    """Claude reads this week's textbook page into a draft lesson. Nothing is saved here: the teacher
+    reviews the items and saves them with PUT /api/lesson. The photo is not stored."""
+    data = await photo.read(MAX_UPLOAD + 1)
+    if len(data) > MAX_UPLOAD:
+        raise HTTPException(413, "photo too large")
+    try:
+        return lesson_photo_mod.read_page(data, photo.content_type or "")
     except ValueError as e:
         raise HTTPException(400, str(e))
     except ClaudeOutputError as e:
@@ -277,6 +322,7 @@ def today(c: dict = Depends(current_class)):
         "language_flags": pic["language_flags"],
         "heard_this_week": pic["heard_this_week"],
         "levels": pic.get("levels", {}),
+        "class_view": pic.get("class_view", []),
         "brief": None if not b else {
             "status": b["status"], "brief": b["brief"], "error": b["error"],
             "audio_url": f"/api/audio/{b['audio_file']}" if b.get("audio_file") else None,
@@ -358,7 +404,7 @@ def note(note_id: str, c: dict = Depends(current_class)):
     return {
         "note_id": n["note_id"], "day": n["day"], "status": n["status"], "error": n["error"],
         "source": n["source"], "transcript": n["transcript"], "seconds": n["seconds"],
-        "sentences": n["sentences"], "follow_ups": n["follow_ups"] or [],
+        "sentences": n["sentences"], "follow_ups": n["follow_ups"] or [], "listening": n["listening"] or [],
         "records": [_public_record(r) for r in store.records(c["class_id"], note_id)],
         "questions": store.questions(c["class_id"], note_id),
         "synthetic": bool(n["synthetic"]),
@@ -429,6 +475,7 @@ def class_picture(c: dict = Depends(current_class)):
         if r["child_id"] and r["status"] not in ("dismissed",):
             last[r["child_id"]] = r["day"]
     return {"today": t.isoformat(), "grid": pic["grid"], "silent": pic["silent"], "levels": pic["levels"],
+            "class_view": pic["class_view"],
             "next_steps": pic["needs_support"], "language_flags": pic["language_flags"], "last_described": last}
 
 
@@ -438,7 +485,7 @@ def child(child_id: str, c: dict = Depends(current_class)):
         raise HTTPException(404)
     t = jobs.class_today(c)
     recs = store.records(c["class_id"])
-    lads = planner.ladders(recs, t)
+    lads = planner.ladders(recs, t, c["roster"])
     state = planner.ladder.skill_views(lads)
     row = planner.grid([_names(c)[child_id]], state)[child_id]
     levels = {area: {"level": st.level, "moments": st.moments, "days": len(st.days),
@@ -446,6 +493,7 @@ def child(child_id: str, c: dict = Depends(current_class)):
     nxt = planner.ladder.next_steps(state, child_id)
     mine = [_public_record(r) for r in recs if r["child_id"] == child_id and r["status"] != "dismissed"]
     return {"child": _names(c)[child_id], "grid": row, "records": list(reversed(mine)), "levels": levels,
+            "progress": planner.progress(recs, t, _names(c)[child_id]),
             "next_steps": nxt,
             "language_flag": next((f for f in planner.language_flags(recs, t) if f["child_id"] == child_id), None)}
 
@@ -462,7 +510,7 @@ def export_summary(c: dict = Depends(current_class)):
     """Aggregate levels for a block or state dashboard (for example a Vidya Samiksha Kendra):
     counts only, no names, no teacher field. Only children whose level SUNO is sure of are counted."""
     t = jobs.class_today(c)
-    lads = planner.ladders(store.records(c["class_id"]), t)
+    lads = planner.ladders(store.records(c["class_id"]), t, c["roster"])
     counts = {"hindi_reading": {}, "maths": {}}
     for (cid, area), st in lads.items():
         if st.level is None:
@@ -485,7 +533,7 @@ def export_class_csv(c: dict = Depends(current_class)):
     import io
     t = jobs.class_today(c)
     recs = store.records(c["class_id"])
-    lads = planner.ladders(recs, t)
+    lads = planner.ladders(recs, t, c["roster"])
     views = planner.ladder.skill_views(lads)
     buf = io.StringIO()
     w = csv.writer(buf)

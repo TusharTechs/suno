@@ -80,7 +80,7 @@ def pic_with_pinki():
 
 
 def good_brief(pic):
-    return {"needs_support": [{"child_id": "c04", "skill_code": "hi.blend_no_matra"}],
+    return {"class_plan": [], "needs_support": [{"child_id": "c04", "skill_code": "hi.blend_no_matra"}],
             "stuck_where": [{"skill_code": "hi.blend_no_matra", "child_ids": ["c04"], "what_hi": "क-म-ल जोड़ नहीं पाती"}],
             "today": [{"group": "A", "child_ids": ["c04"], "activity_id": "act-blend-slide", "minutes": 10}],
             "listen_today": [{"child_id": x["child_id"], "item": x["item"]} for x in pic["listen_today"]],
@@ -123,3 +123,60 @@ def test_brief_banned_words_rejected():
     b = good_brief(pic)
     b["text_hi"] = "पिंकी पढ़ने में कमज़ोर है।"
     assert any("banned" in p for p in check_brief(b, IDS, pic))
+
+
+def test_class_remark_drives_reteach_or_move_on():
+    recs = [rec(None, DAYS[-1], skill="hi.matras", outcome="incorrect", status="class", kind="class", conf=None, share="most")]
+    view = planner.picture(ROSTER, LESSON, recs, TODAY)["class_view"]
+    assert view and view[0]["skill_code"] == "hi.matras" and view[0]["decision"] == "reteach"
+    recs.append(rec(None, DAYS[-1], skill="hi.sentence", outcome="correct", status="class", kind="class", conf=None, share="some"))
+    view = planner.picture(ROSTER, LESSON, recs, TODAY)["class_view"]
+    assert "hi.sentence" not in {v["skill_code"] for v in view}  # "some" managed is not enough to move on
+
+
+def test_brief_class_plan_must_be_codes_decision():
+    recs = [rec(None, DAYS[-1], skill="hi.matras", outcome="incorrect", status="class", kind="class", conf=None, share="most")]
+    pic = planner.picture(ROSTER, LESSON, recs, TODAY)
+    b = good_brief(pic) | {"needs_support": [], "stuck_where": [], "today": []}
+    b["class_plan"] = [{"skill_code": "hi.matras", "decision": "reteach", "activity_id": "act-matra-ladder"}]
+    assert check_brief(b, IDS, pic) == []
+    b["class_plan"] = [{"skill_code": "hi.matras", "decision": "move_on", "activity_id": None}]
+    assert any("not a decision code made" in p for p in check_brief(b, IDS, pic))
+
+
+def test_baseline_seeds_the_ladder_and_fades():
+    roster = [dict(ROSTER[3], baseline={"hindi": 1, "day": DAYS[-1].isoformat()})] + ROSTER[4:6]
+    pic = planner.picture(roster, LESSON, [], TODAY)
+    assert pic["levels"]["c04"]["hindi"]["moments"] == 2
+    # one note on another day makes the level decided: baseline (2) + 1 observation over 2 days
+    recs = [rec("c04", TODAY, skill="hi.blend_no_matra", outcome="incorrect", error_type="segments_without_blending")]
+    pic = planner.picture(roster, LESSON, recs, TODAY)
+    assert pic["levels"]["c04"]["hindi"]["level"] == 1
+    assert ("c04", "hi.blend_no_matra") in {(x["child_id"], x["skill_code"]) for x in pic["needs_support"]}
+
+
+def test_progress_over_time():
+    from datetime import timedelta
+    ch = ROSTER[3]
+    early = [rec("c04", TODAY - timedelta(days=d), skill="hi.blend_no_matra", outcome="incorrect", error_type="segments_without_blending") for d in (36, 35, 34)]
+    late = [rec("c04", TODAY - timedelta(days=d), skill="hi.sentence", outcome="correct") for d in (6, 5, 4, 3, 2)]
+    prog = planner.progress(early + late, TODAY, ch)
+    levels = [p["hindi"] for p in prog if p["hindi"] is not None]
+    assert levels and levels[0] < levels[-1]  # moved up the ladder
+
+
+def test_next_step_above_this_weeks_lesson_is_not_needs_support():
+    # Baseline at "words with vowel signs" (3): next rung is joined letters (4), above this week's focus (max 3).
+    roster = [dict(ROSTER[5], baseline={"hindi": 3, "day": DAYS[-2].isoformat()})]
+    recs = [rec("c06", DAYS[-1], skill="hi.words_with_matras", outcome="correct"),
+            rec("c06", TODAY, skill="hi.words_with_matras", outcome="correct")]
+    pic = planner.picture(roster, LESSON, recs, TODAY)
+    assert pic["levels"]["c06"]["hindi"]["level"] is not None
+    assert pic["needs_support"] == []
+
+
+def test_class_view_is_capped_and_teacher_remarks_first():
+    recs = [rec(None, DAYS[-1], skill=s, outcome="incorrect", status="class", kind="class", conf=None, share="most")
+            for s in ("hi.matras", "hi.blend_no_matra", "hi.words_with_matras")]
+    view = planner.picture(ROSTER, LESSON, recs, TODAY)["class_view"]
+    assert len([v for v in view if v["decision"] == "reteach"]) == planner.MAX_RETEACH

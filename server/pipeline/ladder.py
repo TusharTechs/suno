@@ -29,9 +29,9 @@ from .config import SKILLS
 MIN_MOMENTS = int(os.environ.get("NAMING_MIN_MOMENTS", "3"))
 MIN_DAYS = int(os.environ.get("NAMING_MIN_DAYS", "2"))
 NEEDS_SUPPORT_AT, ON_TRACK_AT = 0.2, 0.8     # probability the child has the skill
-LEVEL_SURE_AT = 0.6                          # posterior mass needed to state a child's level
+LEVEL_HAS_AT, LEVEL_NEXT_AT = 0.8, 0.5          # state a level: has this rung >= 80%, next rung <= 50%
 HALF_LIFE_DAYS = 42                          # an observation counts half after six weeks (levels move slowly)
-IMPLIED_WEIGHT = 0.6
+IMPLIED_WEIGHT = 0.8                          # sounding out क-म-ल demonstrates the letters
 
 LEVELS = {a["area"]: len(a["levels"]) for a in SKILLS["areas"]}
 NEED = {s["code"]: (s["area"], s["level"]) for s in SKILLS["skills"]}
@@ -86,11 +86,14 @@ class LadderState:
 
     @property
     def level(self) -> int | None:
-        """The child's level (TaRL group) once SUNO is sure enough, else None."""
+        """The child's level (TaRL group): the highest rung she very probably has (>= 80%), provided she
+        is probably not on the next one (<= 50%). "Reads at least sentences" is stated even when the
+        next rung (understanding) is unknown; a spread-out belief states nothing. None until decided."""
         if not self.decided:
             return None
-        best = max(range(len(self.post)), key=lambda i: self.post[i])
-        return best if self.post[best] >= LEVEL_SURE_AT else None
+        top = max(lvl for lvl in range(len(self.post)) if self.p_has(lvl) >= LEVEL_HAS_AT)
+        nxt = self.p_has(top + 1) if top + 1 < len(self.post) else 0.0
+        return top if nxt <= LEVEL_NEXT_AT else None
 
 
 @dataclass
@@ -123,8 +126,26 @@ def _update(st: LadderState, need: int, outcome: str, weight: float) -> None:
     st.post = [p / z for p in post]
 
 
-def track(observations: list[Obs], today: date) -> dict[tuple[str, str], LadderState]:
+BASELINE_MASS = 0.75     # how strongly a starting level from an ASER-style check is believed on its day
+BASELINE_MOMENTS = 2     # it counts as two observations toward the naming rule (one day)
+
+
+def _baseline_prior(n: int, level: int, age_days: int) -> list[float]:
+    w = 0.5 ** (age_days / HALF_LIFE_DAYS)
+    peaked = [BASELINE_MASS if i == level else (1 - BASELINE_MASS) / (n - 1) for i in range(n)]
+    prior = [w * p + (1 - w) / n for p in peaked]
+    z = sum(prior)
+    return [p / z for p in prior]
+
+
+def track(observations: list[Obs], today: date,
+          baselines: dict[tuple[str, str], tuple[int, date]] | None = None) -> dict[tuple[str, str], LadderState]:
+    """baselines: {(child_id, area): (level, day)} from a starting check (ASER-style); a prior that fades."""
     ladders: dict[tuple[str, str], LadderState] = {}
+    for (cid, area), (level, day) in (baselines or {}).items():
+        if area in LEVELS and 0 <= level < LEVELS[area] and day <= today:
+            ladders[(cid, area)] = LadderState(area, _baseline_prior(LEVELS[area], level, (today - day).days),
+                                               moments=BASELINE_MOMENTS, days={day})
     for o in sorted(observations, key=lambda o: o.day):
         if o.skill not in NEED or o.outcome not in ("correct", "partial", "incorrect"):
             continue

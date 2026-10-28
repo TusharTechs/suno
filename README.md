@@ -76,16 +76,17 @@ Teacher's voice note (phone, offline-capable)
 **SIMULATED**, not real children or teachers. Every number comes from a script; the assumptions are written in `eval/sim/`.
 
 - **The pipeline on simulated classrooms** (`eval/results/sim_pipeline.md`): 32 voice notes from simulated teachers in 4 styles (precise, brief, impressionistic, Hinglish), including shared names, unknown nicknames, labels and opinions. Each was voiced by Sarvam text-to-speech and transcribed by Sarvam speech-to-text. Results:
-  - **0 of 110** evidence records were about the wrong child;
-  - **110 of 110** had the right right/wrong direction;
-  - **0 of 35** opinions, labels or vague remarks became evidence;
+  - **0 of 101** evidence records were about the wrong child;
+  - **101 of 101** had the right right/wrong direction;
+  - **0 of 42** opinions, labels or vague remarks became evidence;
   - labels were never repeated;
-  - **16 of 18** unclear names were resolved with one tap (the other two were skipped, never misassigned).
+  - **17 of 19** unclear names were resolved with one tap (none misassigned);
+  - **89%** of clear, specific observations became evidence after speech-to-text (96% on clean text). The rest were held back as "check tomorrow", never wrong: mostly habit remarks and the impressionistic teacher.
 - **A 12-week term, 200 times over** (`eval/results/sim_term.md`), with SUNO's real tracker and planner and the error rates above (floored at 3/n). Compared with a *perfect diary* of what the teacher naturally notices, SUNO's listening list (followed 80% of the time):
-  - hears the quietest third of the class far sooner: **95% vs 42%** by week 2;
-  - finds **54% vs 28%** of the children who need support in Hindi reading by week 8;
-  - finds **42% vs 4%** of the quiet children's gaps;
-  - keeps precision at 98–99%.
+  - hears the quietest third of the class far sooner: **93% vs 41%** by week 2;
+  - finds **50% vs 26%** of the children who need support in Hindi reading by week 8;
+  - finds **36% vs 4%** of the quiet children's gaps;
+  - keeps precision at about 98%.
 - **The simulation changed the design.** The first planner made detection *worse*: it spread a teacher's few observations too thin. That led to the ladder model and the two-item mini-ladder (`docs/decisions.md`).
 - **Honest limits:**
   - At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.

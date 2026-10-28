@@ -94,7 +94,7 @@ flowchart TB
   classDef claude fill:#FFF5F0,stroke:#D97757,stroke-width:2px,color:#121833;
   classDef sarvam fill:#F2F4FF,stroke:#5B6CFF,stroke-width:2px,color:#121833;
   classDef code fill:#F1FBF5,stroke:#2BB673,stroke-width:2px,color:#121833;
-  classDef phone fill:#121833,stroke:#FFB020,stroke-width:2px,color:#ffffff;
+  classDef phone fill:#FFF3D6,stroke:#FFB020,stroke-width:2px,color:#121833;
   class V,C1,C2 claude
   class STT,TTS sarvam
   class R,G,L,BC,DB code

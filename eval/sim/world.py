@@ -16,12 +16,22 @@ ASSUMPTIONS (change them and re-run):
   further below, 8%.
 - Teacher attention: who she notices on her own is weighted by how visible a child is
   (front bench, talkative): weight = visibility ** 1.5, visibility ~ lognormal(0, 0.6).
+
+ASER-CALIBRATED classes (make_class(..., reading_dist=aser_reading_dist(state), absence=...)):
+- Reading levels come from ASER 2024's published Std II table for that state (eval/sim/aser2024.json).
+  ASER has one "word" level; we split it half "simple words", half "words with vowel signs"
+  (ASSUMPTION). ASER's paragraph level is our "sentences"; its story level is our "story".
+  The table covers all children, government and private; government-school children read lower.
+- Absence: each child has her own absence rate, Beta-distributed around the state's published
+  absence (1 - attendance) with concentration 4 (ASSUMPTION), so some children are absent often.
 """
 
 from __future__ import annotations
 
+import json
 import random
 from dataclasses import dataclass, field
+from pathlib import Path
 
 READING_LEVELS = ["beginner", "letters", "simple words", "matra words", "sentences", "story"]
 READING_DIST = [0.10, 0.30, 0.25, 0.15, 0.12, 0.08]
@@ -38,6 +48,18 @@ SKILL_REQ = {
 }
 P_ENGLISH_WORDS = 0.35   # share of children who can read simple English words (ASSUMPTION)
 P_AT, P_ONE_BELOW, P_FAR_BELOW = 0.90, 0.35, 0.08
+ASER = json.loads((Path(__file__).parent / "aser2024.json").read_text())
+ABSENCE_CONCENTRATION = 4      # ASSUMPTION: how unevenly absence is spread across children
+
+
+def aser_reading_dist(state: str) -> list[float]:
+    """ASER 2024 Std II levels (beginner, letter, word, paragraph, story) -> our six reading levels."""
+    b, l, w, para, story = ASER["reading_std2"][state]
+    return [b, l, w / 2, w / 2, para, story]
+
+
+def aser_absence(state: str) -> float:
+    return 1 - ASER["attendance_primary"][state] / 100
 
 NAME_POOL = [
     ("आरव", "Aarav"), ("सिमरन", "Simran"), ("रवि", "Ravi"), ("पिंकी", "Pinki"), ("अंजलि", "Anjali"),
@@ -67,6 +89,7 @@ class Child:
     home_language_gap: bool        # understands better in the home language
     roster_nickname: str | None    # nickname written in the roster
     spoken_nickname: str | None    # nickname the teacher uses that the roster does NOT know
+    p_absent: float | None = None  # her own absence rate (ASER-calibrated classes); None = class default
 
     def p_correct(self, skill: str) -> float:
         area, need = SKILL_REQ[skill]
@@ -92,7 +115,8 @@ class Klass:
                  "aliases": [c.latin] + ([c.roster_nickname] if c.roster_nickname else [])} for c in self.children]
 
 
-def make_class(name: str, size: int, style: str, lesson: dict, rng: random.Random) -> Klass:
+def make_class(name: str, size: int, style: str, lesson: dict, rng: random.Random,
+               reading_dist: list[float] | None = None, absence: float | None = None) -> Klass:
     pool = rng.sample(NAME_POOL, size - 2)
     # Two shared first names, as in most real classes of 30+.
     dup = rng.sample(pool, 2)
@@ -103,10 +127,11 @@ def make_class(name: str, size: int, style: str, lesson: dict, rng: random.Rando
     for i, (deva, latin) in enumerate(names, 1):
         children.append(Child(
             child_id=f"c{i:02d}", first_name=deva, latin=latin, roll_no=i,
-            reading=rng.choices(range(6), READING_DIST)[0], maths=rng.choices(range(4), MATHS_DIST)[0],
+            reading=rng.choices(range(6), reading_dist or READING_DIST)[0], maths=rng.choices(range(4), MATHS_DIST)[0],
             english=int(rng.random() < P_ENGLISH_WORDS),
             visibility=rng.lognormvariate(0, 0.6), reversal=rng.random() < 0.25,
-            home_language_gap=rng.random() < 0.15, roster_nickname=None, spoken_nickname=None))
+            home_language_gap=rng.random() < 0.15, roster_nickname=None, spoken_nickname=None,
+            p_absent=None if absence is None else rng.betavariate(absence * ABSENCE_CONCENTRATION, (1 - absence) * ABSENCE_CONCENTRATION)))
     # One child has a nickname in the roster; one is called by a nickname the roster lacks.
     a, b = rng.sample(children, 2)
     a.roster_nickname = nick_pool[0][0]

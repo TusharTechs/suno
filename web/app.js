@@ -799,6 +799,7 @@ function openRoster(draft) {
     <p class="small muted">${t("सिर्फ़ पहला नाम। उपनाम (जैसे गुड्डू) दूसरे खाने में।", "First names only. A nickname (like Guddu) goes in the second box.")}</p>
     <label class="btn warn block" style="margin:8px 0">📷 ${t("रजिस्टर की फ़ोटो से भरें", "Fill from a photo of the attendance register")}
       <input type="file" id="reg-photo" accept="image/*" capture="environment" style="display:none"></label>
+    <button class="linkbtn tiny" id="reg-sample">${t("रजिस्टर नहीं है? नमूना फ़ोटो से आज़माएँ (काल्पनिक)", "No register to hand? Try a sample photo (synthetic)")}</button>
     <div id="reg-status" class="small"></div>
     <div id="rows">${rows.map(rosterRow).join("")}</div>
     <button class="btn alt block" id="add-row" style="margin-top:6px">+ ${t("बच्चा जोड़ें", "Add a child")}</button>
@@ -807,17 +808,29 @@ function openRoster(draft) {
   const wire = () => sh.querySelectorAll("button[data-del]").forEach((b) => (b.onclick = () => b.closest(".roster-row").remove()));
   wire();
   $("#add-row", sh).onclick = () => { $("#rows", sh).insertAdjacentHTML("beforeend", rosterRow({})); wire(); };
-  $("#reg-photo", sh).onchange = async (e) => {
-    const f = e.target.files[0]; if (!f) return;
+  const readReg = async (f) => {
     $("#reg-status", sh).innerHTML = `<span class="spin"></span> ${t("फ़ोटो पढ़ रहे हैं…", "Reading the photo (Claude)…")}`;
     const fd = new FormData(); fd.append("photo", await shrink(f), "register.jpg");
     try {
       const r = await api("/api/roster/photo", { method: "POST", body: fd });
       const have = [...sh.querySelectorAll(".roster-row")].map(readRow).filter((x) => x.first_name);
-      $("#rows", sh).innerHTML = [...have, ...r.children.map((c) => ({ first_name: c.first_name, roll_no: c.roll_no }))].map(rosterRow).join(""); wire();
+      // Merge by roll number: a name read from the photo replaces that roll number's row (an unchanged
+      // name keeps the row and its nickname); new roll numbers are added. No duplicates on a re-read.
+      const hasRoll = (x) => x.roll_no != null && x.roll_no !== "";
+      const byRoll = new Map(have.filter(hasRoll).map((x) => [String(x.roll_no), x]));
+      const extra = [];
+      for (const c of r.children) {
+        const old = hasRoll(c) && byRoll.get(String(c.roll_no));
+        if (old) { if (old.first_name !== c.first_name) byRoll.set(String(c.roll_no), { first_name: c.first_name, roll_no: c.roll_no }); }
+        else extra.push({ first_name: c.first_name, roll_no: c.roll_no });
+      }
+      const merged = [...have.map((x) => (hasRoll(x) && byRoll.get(String(x.roll_no))) || x), ...extra];
+      $("#rows", sh).innerHTML = merged.map(rosterRow).join(""); wire();
       $("#reg-status", sh).innerHTML = `✓ ${t(`${r.children.length} नाम मिले${r.unreadable ? `, ${r.unreadable} पढ़े नहीं जा सके` : ""}। जाँचकर सहेजें।`, `${r.children.length} names found${r.unreadable ? `, ${r.unreadable} unreadable` : ""}. Check them, then save.`)} <span class="tiny deva">${esc(r.note || "")}</span>`;
     } catch (err) { $("#reg-status", sh).textContent = t("फ़ोटो नहीं पढ़ी जा सकी: ", "Couldn't read the photo: ") + err.message; }
   };
+  $("#reg-photo", sh).onchange = (e) => e.target.files[0] && readReg(e.target.files[0]);
+  $("#reg-sample", sh).onclick = async () => readReg(await (await fetch("/samples/images/register.jpg")).blob());
   $("#save-roster", sh).onclick = async () => {
     const children = [...sh.querySelectorAll(".roster-row")].map(readRow).filter((x) => x.first_name);
     if (!children.length) return toast(t("कम से कम एक नाम लिखें", "Add at least one name"));
@@ -862,14 +875,14 @@ function openLesson() {
     <p class="small muted">${t("इस हफ़्ते की किताब के शब्द और सवाल। SUNO इन्हीं से बताएगा कि किस बच्चे से क्या पढ़वाएँ। ✓ = इस हफ़्ते का मुख्य हिस्सा।", "Words and sums from this week's pages. SUNO picks today's listening items from these. ✓ = this week's focus.")}</p>
     <label class="btn warn block" style="margin:8px 0">📷 ${t("किताब के पन्ने की फ़ोटो से भरें", "Fill from a photo of the textbook page")}
       <input type="file" id="page-photo" accept="image/*" capture="environment" style="display:none"></label>
+    <button class="linkbtn tiny" id="page-sample">${t("किताब पास नहीं? नमूना पन्ना आज़माएँ (काल्पनिक)", "No textbook to hand? Try a sample page (synthetic)")}</button>
     <div id="page-status" class="small"></div>
     <input id="l-title" class="deva" type="text" value="${esc(L.title || "")}" placeholder="${t("पाठ का नाम, जैसे: पाठ 12, कमल का फूल", "Lesson name, e.g. Lesson 12")}">
     ${S.me.skills.areas.map((a) => `<h3 style="margin-top:16px">${esc(t(a.label_hi, a.label_en))}</h3>` + S.me.skills.skills.filter((sk) => sk.area === a.area).map((sk) => `
       <div class="lesson-skill"><label><input type="checkbox" data-focus="${sk.code}" ${(L.focus_skills || []).includes(sk.code) ? "checked" : ""}> ${esc(skillName(sk.code))}</label>
       <input type="text" class="deva" data-items="${sk.code}" value="${esc((L.items[sk.code] || []).join(", "))}" placeholder="${esc(sk.example)}"></div>`).join("")).join("")}
     <button class="btn block" id="save-lesson" style="margin-top:14px">${t("सहेजें", "Save")}</button>`);
-  $("#page-photo", sh).onchange = async (e) => {
-    const f = e.target.files[0]; if (!f) return;
+  const readPage = async (f) => {
     $("#page-status", sh).innerHTML = `<span class="spin"></span> ${t("पन्ना पढ़ रहे हैं…", "Reading the page (Claude)…")}`;
     const fd = new FormData(); fd.append("photo", await shrink(f), "page.jpg");
     try {
@@ -883,6 +896,8 @@ function openLesson() {
       $("#page-status", sh).innerHTML = `✓ ${t(`${n} शब्द/वाक्य मिले। जाँचकर सहेजें।`, `${n} items found. Check them, then save.`)} <span class="tiny">${esc(r.note || "")}</span>`;
     } catch (err) { $("#page-status", sh).textContent = t("फ़ोटो नहीं पढ़ी जा सकी: ", "Couldn't read the photo: ") + err.message; }
   };
+  $("#page-photo", sh).onchange = (e) => e.target.files[0] && readPage(e.target.files[0]);
+  $("#page-sample", sh).onclick = async () => readPage(await (await fetch("/samples/images/textbook.jpg")).blob());
   $("#save-lesson", sh).onclick = async () => {
     const items = {}, focus = [];
     sh.querySelectorAll("[data-items]").forEach((i) => { items[i.dataset.items] = i.value.split(/[,،\n]/).map((x) => x.trim()).filter(Boolean); });

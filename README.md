@@ -11,6 +11,26 @@ Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: 
 - **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Classes are kept in a free Postgres database.
 - **Code:** `SUNO-DEMO`. Each login gets its own fresh copy of a **synthetic** Grade 2 class: 30 fictional children, eight school days of teacher notes already run through the pipeline, and this morning's brief.
 
+### Test credentials (every role)
+
+SUNO has **one role: the teacher**. There is no admin, student or parent login, and no teacher score anywhere.
+
+| What to test | How to sign in |
+|---|---|
+| A class already in use (recommended) | Code **`SUNO-DEMO`**. Every sign-in gets its own fresh copy of a synthetic Grade 2 class, so reviewers can't disturb each other. |
+| Setting up a new class from scratch | On the sign-in page choose **create your own class**. SUNO gives you a class code (like `K7Q2-M9XD`) that opens the class on any phone. |
+
+### Sample inputs (all synthetic)
+
+| # | Input | Where | What it shows |
+|---|---|---|---|
+| 1 | **"An ordinary day"**: a Hindi voice note | बोलिए / Note → *sample notes* | Per-child observations from her own words: a misreading (कमल as क-म-ल), a correct read, an absence |
+| 2 | **"Hard cases"**: a Hindi voice note | same | Two children named Priya (one-tap question), a label (कमज़ोर, masked and never evidence), a name not on the roster, and an opinion that becomes "check tomorrow" |
+| 3 | **"Maths, and home language"**: a voice note | same | Reading two-digit numbers, adding, place value (tens in 32), and a child who understood a question only in Bhojpuri, her home language |
+| 4 | **"Hinglish"**: code-mixed Hindi and English | same | Names in Latin script (Neha, Geeta) resolved to the roster, an English word misread (sun as son), blending, an absence |
+| 5 | **Attendance register photo** ([`register.jpg`](samples/synthetic/images/register.jpg)) | ☰ → Children → *try a sample photo* | Claude reads first names only; surnames, fathers' names and attendance marks are dropped, and nothing is stored |
+| 6 | **Textbook page photo** ([`textbook.jpg`](samples/synthetic/images/textbook.jpg)) | ☰ → This week's lesson → *try a sample page* | This week's words, matras, sentences and questions, sorted by skill |
+
 **For reviewers:** the landing page links to **How we tested SUNO** (`/#evidence`): where each model call happens, how wrong AI output is handled, the simulation results with their limits, and running cost. **Privacy** (`/#privacy`) lists what is never stored, and lets a teacher delete her class.
 
 **Suggested path, about 5 minutes:**
@@ -87,6 +107,11 @@ Teacher's voice note (phone, offline-capable)
   - finds **50% vs 26%** of the children who need support in Hindi reading by week 8;
   - finds **36% vs 4%** of the quiet children's gaps;
   - keeps precision at about 98%.
+- **The same term in classrooms built from published data** (`eval/results/sim_aser.md`, 200 runs per state). Each class's reading levels follow ASER 2024's Std II table for India, Uttar Pradesh, Bihar, Madhya Pradesh or Rajasthan. Absence follows each state's attendance in government primary schools (59–76% present), and some children are absent far more than others. The children are still simulated. Against the same perfect diary, SUNO's list (followed 80%):
+  - hears the quietest third by week 2 in **72–87% vs 39–41%** of cases. It is lowest in Madhya Pradesh and Bihar, where about 40% of children are absent on a given day;
+  - finds **51–59% vs 31–37%** of the children who need support by week 8;
+  - keeps precision of "needs support" at about **99%** in every state.
+  - Two assumptions are stated in `eval/sim/aser2024.json` and `world.py`: ASER's single "word" level is split in two, and the table covers government and private schools together.
 - **The simulation changed the design.** The first planner made detection *worse*: it spread a teacher's few observations too thin. That led to the ladder model and the two-item mini-ladder (`docs/decisions.md`).
 - **Honest limits:**
   - At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.
@@ -96,6 +121,7 @@ Teacher's voice note (phone, offline-capable)
 ```bash
 uv run python eval/sim/run_pipeline_sim.py --days 8    # Stage A, about $3 of Claude credit
 uv run python eval/sim/run_term_sim.py --runs 200      # Stage B, no API calls
+uv run python eval/sim/run_aser_sim.py --runs 200      # Stage B in ASER 2024-calibrated classes, no API calls
 ```
 
 ### Running cost
@@ -146,9 +172,15 @@ Docker: `docker build -t suno . && docker run -p 8000:8000 --env-file .env suno`
 
 Deploy: `render.yaml` is a Render Blueprint (free plan, Singapore, Docker); you enter the two API keys in the Render dashboard.
 
-**External AI services**, with keys in `.env` (never committed):
-- **Anthropic Claude:** `ANTHROPIC_API_KEY`, model `claude-opus-5-5`.
-- **Sarvam AI:** speech-to-text `saaras:v4` and text-to-speech `bulbul:v3`, key `SARVAM_API_KEY`.
+**External AI services.** These are every model the app calls. Keys go in `.env` locally, or in Render's environment settings when hosted; they are never committed.
+
+| Service | Model | What it does | Key |
+|---|---|---|---|
+| Anthropic Claude | `claude-opus-5-5` | ① reads the teacher's note into per-child observations; ② words the morning brief; reads the register photo and the textbook page photo (vision) | `ANTHROPIC_API_KEY` |
+| Sarvam AI | `saaras:v4` | Speech-to-text for the teacher's note (Hindi, code-mixed) | `SARVAM_API_KEY` |
+| Sarvam AI | `bulbul:v3` | Text-to-speech for the Hindi morning brief | `SARVAM_API_KEY` |
+
+The tests and the term simulations need no keys.
 
 **Regenerate the synthetic demo data** (costs about $0.40 of Claude credit):
 
@@ -162,13 +194,13 @@ uv run python eval/make_samples.py
 | Path | What |
 | --- | --- |
 | `server/api.py`, `jobs.py`, `store.py`, `demo.py` | Web API, background jobs, storage (SQLite locally, Postgres hosted), per-login demo sandboxes |
-| `server/pipeline/` | One module per stage: `asr`, `claude_observations`, `names`, `guardrails`, `confidence`, `tracker`, `planner`, `brief`, `tts` |
+| `server/pipeline/` | One module per stage: `asr`, `claude_observations`, `names`, `guardrails`, `confidence`, `ladder`, `planner`, `brief`, `tts`, `roster_photo`, `lesson_photo` |
 | `prompts/`, `schemas/` | Versioned prompts and JSON schemas for every Claude call |
 | `config/` | Skill ladder (Hindi reading, maths, English words) and activity bank (placeholder, not NCERT text) |
-| `web/` | Teacher web app (installable PWA, Hindi first, English sub-labels for reviewers) |
-| `samples/synthetic/` | **Synthetic** demo class, demo history, sample notes and audio |
+| `web/` | Teacher web app (installable PWA, offline queue; Hindi or English, one language at a time: हिं / EN switch) |
+| `samples/synthetic/` | **Synthetic** demo class, demo history, sample notes and audio, sample register and textbook photos |
 | `tests/` | Guardrail and adversarial tests, planner, brief checks, API flow |
-| `eval/` | Simulation (`eval/sim/`), feasibility tests (F1 voice matching), demo seeding |
+| `eval/` | Simulations (`eval/sim/`, including ASER 2024-calibrated classes), real-speech scorer (`eval/real_notes/`), cost (`cost.py`), feasibility tests, demo seeding; results in `eval/results/` |
 | `docs/` | Handoff, design-change log, feasibility and strategy notes |
 
 **Retired v0 pipeline:** `claude_moments.py`, `claude_evidence.py`, `claude_brief.py` and `prompts/*.v1.md` (moments, evidence, brief) belong to the first design, which recorded the whole lesson. The F1 test (`docs/feasibility.md`) showed that voice matching cannot tell which child answered. Classroom constraints did the rest: distance from the back bench, phone heat, starting and stopping per period, and children's-voice consent. We kept those files as the record of what we tried.

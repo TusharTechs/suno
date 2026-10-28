@@ -1,5 +1,67 @@
 # How each juror is likely to score SUNO, and what gets it to full marks
 
+## Update, 28 Oct 2026: the pre-submission estimate
+
+What changed since the 27 Oct estimate below:
+- **Mentor input built in** (Rebecca Swittens, Madhi Foundation, 28 Oct; `docs/decisions.md` 33–39):
+  - one note a day with a reminder;
+  - class-level notes with a reteach or move-on call;
+  - an optional ASER-style starting check, plus progress since then;
+  - a nudge for children who keep getting skipped;
+  - this week's words from a photo of the textbook page.
+- **Real speech, one speaker, 15 recordings in quiet, noisy and fan settings** (`eval/results/real_notes.md`):
+  - 0 of 56 evidence records about the wrong child;
+  - 0 of 21 opinions became evidence;
+  - 15 of 15 unclear names resolved by one tap.
+  - It is still one team member, not a teacher.
+- **Roadmap with integration and a pre-registered validation design** (`docs/roadmap.md`):
+  - phase 1: a pilot and an ASER check;
+  - phase 2: WhatsApp, a block dashboard from `/api/export/summary.json`, and state-owned speech;
+  - phase 3: a module inside NIPUN Lakshya or DIKSHA;
+  - cost per child per year, and who pays.
+- **The term simulation re-run in classrooms built from published ASER 2024 data** (`eval/results/sim_aser.md`):
+  - the Std II reading-level tables and government-school attendance for five states;
+  - the listening list still finds about 1.6× as many children who need support by week 8;
+  - precision is 99% in every state.
+  - The children are still simulated, which matters for Stern and Banerji. It answers "would this hold in a Bihar or MP classroom where 40% are absent?"
+- **Exports:** an aggregate summary with no names, and a class CSV.
+- **A pre-submission audit:** 14 findings, all fixed.
+- **The 3-minute demo video:**
+  - a school scenario;
+  - the app running;
+  - why the design adds no work for the teacher;
+  - the evidence and its limits;
+  - the vision.
+
+| Juror | Efficacy 35% | AI 30% | Innovation 25% | Roadmap 10% | What still holds the score down |
+|---|---|---|---|---|---|
+| Rukmini Banerji | 7.5 | 7.5 | 8 | 7.5 | No real teacher yet; ASER agreement is a plan, not a result |
+| Jonathan Stern | 6.5 | 8 | 7 | 7.5 | Teacher-reported observations are still not a validated measure |
+| Ishmeet Singh | 8 | 7.5 | 8 | 7.5 | Wants proof the next-morning action changes teaching |
+| Rahul Kulkarni | 7.5 | 8.5 | 7 | 7.5 | Wants the schemas and export open (an open-source decision for the team) |
+| Mekin Maheshwari | 7 | 7.5 | 8 | 7.5 | No evidence yet that teachers keep the habit |
+| Raahil Rai | 7.5 | 9 | 8 | 7 | — |
+| Shridhar Sethuram | 7 | 7.5 | 7.5 | 7.5 | — |
+| Piyush Prasad | 7.5 | 8 | 8 | 7 | No usability session with a teacher |
+| **Average** | **7.3** | **7.9** | **7.7** | **7.4** | **Weighted: 7.6 / 10** (was 7.3) |
+
+**Fit to the problem statement (Challenge 2, learning-level visibility):**
+- Each child's level is visible on the ASER/TaRL ladder, with "not enough evidence yet" when that is the honest answer.
+- It shows where the child is stuck (a specific letter, matra or number), not just a score.
+- It is visible the next morning, as an action: groups, an activity, and whom to listen to.
+- It adds no test, records no child's voice, and costs about a minute of teacher time a day.
+
+**The points still open, and the only ones that move the score much:**
+1. **A real teacher using it** (efficacy, all jurors). Even one teacher sending two days of notes, with what she said unprompted, moves efficacy by about a point.
+2. **Open source** (Kulkarni, roadmap). Licensing the schemas and the export as a public good costs nothing. It is the team's decision.
+3. **The ASER agreement result** (Banerji, Stern). It is for the finale (18 Nov), not the Build submission.
+
+All scores are our estimate, not a prediction.
+
+---
+
+## The 27 Oct estimate
+
 27 Oct 2026. Based on public statements by each juror (research with sources, summarised below) and on SUNO as it stands today: hosted app, simulations in `eval/results/sim_*.md`, no real-teacher testing yet. Scores are our honest estimate out of 10 per criterion, **before** the work in "What we do next". They are a planning tool, not a prediction.
 
 **Rubric weights:**

@@ -63,9 +63,10 @@ def measured_rates() -> dict:
     return rates
 
 
-def run_once(arm: str, seed: int, rates: dict) -> dict:
+def run_once(arm: str, seed: int, rates: dict, world: dict | None = None) -> dict:
+    """world (optional): {"reading_dist": [...6], "absence": mean} for ASER-calibrated classes."""
     rng = random.Random(seed)            # same class and same children for every arm
-    k = make_class("term", SIZE, "brief", LESSON, rng)
+    k = make_class("term", SIZE, "brief", LESSON, rng, **(world or {}))
     rng = random.Random(seed * 7919 + list(ARMS).index(arm))
     detail_mix = STYLES["brief"]["detail"]
     adherence = ARMS[arm]
@@ -79,7 +80,7 @@ def run_once(arm: str, seed: int, rates: dict) -> dict:
     first_flag: dict[tuple[str, str], int] = {}
     total_days = WEEKS * 6
     while n_day < total_days:
-        present = [c for c in k.children if rng.random() > P_ABSENT]
+        present = [c for c in k.children if rng.random() > (P_ABSENT if c.p_absent is None else c.p_absent)]
         listening = []
         if adherence:
             pic = planner.picture(k.roster, k.lesson, records, day, yesterday)

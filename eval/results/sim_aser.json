@@ -1,0 +1,532 @@
+{
+ "label": "SIMULATED children, ASER 2024 published distributions",
+ "runs": 200,
+ "rates": {
+  "p_evidence": 0.9210526315789473,
+  "p_wrong_child": 0.024390243902439025,
+  "p_direction_wrong": 0.024390243902439025,
+  "source": "eval/results/sim_pipeline.json (Stage A, after one-tap answers; error rates floored at 3/123)"
+ },
+ "results": {
+  "India": {
+   "no_list": {
+    "weeks": {
+     "2": {
+      "children_found": 0.05273774091878816,
+      "children_flag_precision": 0.9523809523809523,
+      "quiet_with_evidence": 0.39590909090909093,
+      "quiet_struggling_found": 0.0018860306360306358,
+      "level_within_one": 0.9568965517241379
+     },
+     "4": {
+      "children_found": 0.16755941452612436,
+      "children_flag_precision": 0.9816582914572864,
+      "quiet_with_evidence": 0.5995454545454545,
+      "quiet_struggling_found": 0.013961011242005987,
+      "level_within_one": 0.970108695652174
+     },
+     "8": {
+      "children_found": 0.33058820325103466,
+      "children_flag_precision": 0.9915891053391053,
+      "quiet_with_evidence": 0.8077272727272728,
+      "quiet_struggling_found": 0.056671323172468833,
+      "level_within_one": 0.9628551587301587
+     },
+     "12": {
+      "children_found": 0.4159824914444076,
+      "children_flag_precision": 0.9890710123210122,
+      "quiet_with_evidence": 0.9077272727272727,
+      "quiet_struggling_found": 0.08969539898000503,
+      "level_within_one": 0.9737797619047619
+     }
+    },
+    "flags_per_class_w12": 25.605,
+    "flag_precision_w12": 0.9906268306971294
+   },
+   "list_50": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07397545080783571,
+      "children_flag_precision": 0.9734375,
+      "quiet_with_evidence": 0.7486363636363635,
+      "quiet_struggling_found": 0.010238129905058582,
+      "level_within_one": 0.9527777777777777
+     },
+     "4": {
+      "children_found": 0.20910299544273495,
+      "children_flag_precision": 0.9748690476190477,
+      "quiet_with_evidence": 0.9331818181818181,
+      "quiet_struggling_found": 0.05375952115380197,
+      "level_within_one": 0.947644927536232
+     },
+     "8": {
+      "children_found": 0.4759269931556107,
+      "children_flag_precision": 0.992176171051171,
+      "quiet_with_evidence": 0.9963636363636365,
+      "quiet_struggling_found": 0.2550668379853091,
+      "level_within_one": 0.9729781746031746
+     },
+     "12": {
+      "children_found": 0.5736810806328474,
+      "children_flag_precision": 0.9922996517371517,
+      "quiet_with_evidence": 0.9986363636363635,
+      "quiet_struggling_found": 0.3234049730694791,
+      "level_within_one": 0.9753495115995117
+     }
+    },
+    "flags_per_class_w12": 33.58,
+    "flag_precision_w12": 0.9892793329362716
+   },
+   "list_80": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07709062600171598,
+      "children_flag_precision": 0.9858823529411764,
+      "quiet_with_evidence": 0.870909090909091,
+      "quiet_struggling_found": 0.009421600229638075,
+      "level_within_one": 0.916095890410959
+     },
+     "4": {
+      "children_found": 0.24700041924381338,
+      "children_flag_precision": 0.9843720768343883,
+      "quiet_with_evidence": 0.9827272727272727,
+      "quiet_struggling_found": 0.10510862733426882,
+      "level_within_one": 0.9455729166666668
+     },
+     "8": {
+      "children_found": 0.5519114449298004,
+      "children_flag_precision": 0.9889752400377401,
+      "quiet_with_evidence": 0.999090909090909,
+      "quiet_struggling_found": 0.3319467198519741,
+      "level_within_one": 0.9785156926406927
+     },
+     "12": {
+      "children_found": 0.6432731698663704,
+      "children_flag_precision": 0.9922017635142635,
+      "quiet_with_evidence": 0.9995454545454545,
+      "quiet_struggling_found": 0.39382459095771133,
+      "level_within_one": 0.9859312750158338
+     }
+    },
+    "flags_per_class_w12": 37.29,
+    "flag_precision_w12": 0.9895414320193081
+   }
+  },
+  "Uttar Pradesh": {
+   "no_list": {
+    "weeks": {
+     "2": {
+      "children_found": 0.05584299777898176,
+      "children_flag_precision": 0.9898648648648649,
+      "quiet_with_evidence": 0.4031818181818182,
+      "quiet_struggling_found": 0.0019477971494561883,
+      "level_within_one": 0.8968253968253969
+     },
+     "4": {
+      "children_found": 0.16317162692492143,
+      "children_flag_precision": 0.9911167512690355,
+      "quiet_with_evidence": 0.615909090909091,
+      "quiet_struggling_found": 0.010790350263894638,
+      "level_within_one": 0.925561797752809
+     },
+     "8": {
+      "children_found": 0.31271150692198274,
+      "children_flag_precision": 0.9894980158730159,
+      "quiet_with_evidence": 0.8263636363636364,
+      "quiet_struggling_found": 0.04692586846418473,
+      "level_within_one": 0.9620902129696098
+     },
+     "12": {
+      "children_found": 0.4008662828009325,
+      "children_flag_precision": 0.9932895021645021,
+      "quiet_with_evidence": 0.9027272727272727,
+      "quiet_struggling_found": 0.09122975130421583,
+      "level_within_one": 0.9647104570471404
+     }
+    },
+    "flags_per_class_w12": 23.205,
+    "flag_precision_w12": 0.9926739926739927
+   },
+   "list_50": {
+    "weeks": {
+     "2": {
+      "children_found": 0.08030183949420555,
+      "children_flag_precision": 0.991869918699187,
+      "quiet_with_evidence": 0.7168181818181819,
+      "quiet_struggling_found": 0.01178560262178153,
+      "level_within_one": 0.9444444444444444
+     },
+     "4": {
+      "children_found": 0.21902902604361582,
+      "children_flag_precision": 0.9791038525963149,
+      "quiet_with_evidence": 0.9245454545454546,
+      "quiet_struggling_found": 0.06082381525635044,
+      "level_within_one": 0.9085252049537764
+     },
+     "8": {
+      "children_found": 0.4654268386059357,
+      "children_flag_precision": 0.9899516594516595,
+      "quiet_with_evidence": 0.9927272727272727,
+      "quiet_struggling_found": 0.25264935957439844,
+      "level_within_one": 0.9530190635718273
+     },
+     "12": {
+      "children_found": 0.5504326692578746,
+      "children_flag_precision": 0.991795072982573,
+      "quiet_with_evidence": 0.9995454545454545,
+      "quiet_struggling_found": 0.30828261441118837,
+      "level_within_one": 0.9698841991341992
+     }
+    },
+    "flags_per_class_w12": 30.065,
+    "flag_precision_w12": 0.9868617994345584
+   },
+   "list_80": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07916477586796775,
+      "children_flag_precision": 0.9776041666666666,
+      "quiet_with_evidence": 0.8618181818181818,
+      "quiet_struggling_found": 0.010474393469917985,
+      "level_within_one": 0.9488017429193899
+     },
+     "4": {
+      "children_found": 0.23895424907087648,
+      "children_flag_precision": 0.9794880952380953,
+      "quiet_with_evidence": 0.979090909090909,
+      "quiet_struggling_found": 0.09084420441435757,
+      "level_within_one": 0.9425141242937852
+     },
+     "8": {
+      "children_found": 0.5310191907995162,
+      "children_flag_precision": 0.9899722915972916,
+      "quiet_with_evidence": 0.999090909090909,
+      "quiet_struggling_found": 0.31821718606243576,
+      "level_within_one": 0.9510277222777223
+     },
+     "12": {
+      "children_found": 0.6127332677901883,
+      "children_flag_precision": 0.9944615592740592,
+      "quiet_with_evidence": 0.9995454545454545,
+      "quiet_struggling_found": 0.374155692047153,
+      "level_within_one": 0.9753025822216999
+     }
+    },
+    "flags_per_class_w12": 33.84,
+    "flag_precision_w12": 0.9895094562647754
+   }
+  },
+  "Bihar": {
+   "no_list": {
+    "weeks": {
+     "2": {
+      "children_found": 0.0665888779655848,
+      "children_flag_precision": 0.9879518072289156,
+      "quiet_with_evidence": 0.4022727272727273,
+      "quiet_struggling_found": 0.0019022474937646383,
+      "level_within_one": 0.9416666666666667
+     },
+     "4": {
+      "children_found": 0.179644781604537,
+      "children_flag_precision": 0.9875568317779373,
+      "quiet_with_evidence": 0.6186363636363637,
+      "quiet_struggling_found": 0.010757422172675382,
+      "level_within_one": 0.9691580756013747
+     },
+     "8": {
+      "children_found": 0.3523473137831975,
+      "children_flag_precision": 0.9933766233766234,
+      "quiet_with_evidence": 0.8090909090909091,
+      "quiet_struggling_found": 0.0484954323409043,
+      "level_within_one": 0.9732503607503608
+     },
+     "12": {
+      "children_found": 0.4414506434277879,
+      "children_flag_precision": 0.9976944444444444,
+      "quiet_with_evidence": 0.9022727272727273,
+      "quiet_struggling_found": 0.10326730017155128,
+      "level_within_one": 0.9873968253968254
+     }
+    },
+    "flags_per_class_w12": 30.605,
+    "flag_precision_w12": 0.9950988400588139
+   },
+   "list_50": {
+    "weeks": {
+     "2": {
+      "children_found": 0.08736371721614607,
+      "children_flag_precision": 0.9815543071161049,
+      "quiet_with_evidence": 0.6431818181818181,
+      "quiet_struggling_found": 0.012846984080549562,
+      "level_within_one": 0.9405520169851379
+     },
+     "4": {
+      "children_found": 0.2223195392551305,
+      "children_flag_precision": 0.9900515873015873,
+      "quiet_with_evidence": 0.8468181818181819,
+      "quiet_struggling_found": 0.05582353613444229,
+      "level_within_one": 0.9658581614463967
+     },
+     "8": {
+      "children_found": 0.4700766334041002,
+      "children_flag_precision": 0.9965063825063826,
+      "quiet_with_evidence": 0.9781818181818182,
+      "quiet_struggling_found": 0.20293920985358618,
+      "level_within_one": 0.9676086259419593
+     },
+     "12": {
+      "children_found": 0.5578821091604158,
+      "children_flag_precision": 0.9947351632285844,
+      "quiet_with_evidence": 0.9918181818181818,
+      "quiet_struggling_found": 0.2743637956345241,
+      "level_within_one": 0.9728647186147187
+     }
+    },
+    "flags_per_class_w12": 36.675,
+    "flag_precision_w12": 0.9907293796864349
+   },
+   "list_80": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07996055348645474,
+      "children_flag_precision": 0.9795580110497238,
+      "quiet_with_evidence": 0.745,
+      "quiet_struggling_found": 0.01188780845111719,
+      "level_within_one": 0.9372146118721462
+     },
+     "4": {
+      "children_found": 0.244012361736896,
+      "children_flag_precision": 0.9945955433455435,
+      "quiet_with_evidence": 0.9163636363636364,
+      "quiet_struggling_found": 0.08547013868816204,
+      "level_within_one": 0.9478031418753068
+     },
+     "8": {
+      "children_found": 0.5297332994377002,
+      "children_flag_precision": 0.9944073010323011,
+      "quiet_with_evidence": 0.995909090909091,
+      "quiet_struggling_found": 0.2928919911766089,
+      "level_within_one": 0.9646467698967699
+     },
+     "12": {
+      "children_found": 0.6407349467339634,
+      "children_flag_precision": 0.9952039056789443,
+      "quiet_with_evidence": 0.9995454545454545,
+      "quiet_struggling_found": 0.37311160988491543,
+      "level_within_one": 0.9833339091464092
+     }
+    },
+    "flags_per_class_w12": 41.895,
+    "flag_precision_w12": 0.9942713927676333
+   }
+  },
+  "Madhya Pradesh": {
+   "no_list": {
+    "weeks": {
+     "2": {
+      "children_found": 0.06495680365725252,
+      "children_flag_precision": 0.9859550561797753,
+      "quiet_with_evidence": 0.40590909090909094,
+      "quiet_struggling_found": 0.0021003986743316013,
+      "level_within_one": 0.9905437352245863
+     },
+     "4": {
+      "children_found": 0.1856712974121399,
+      "children_flag_precision": 0.9934283309283309,
+      "quiet_with_evidence": 0.6195454545454545,
+      "quiet_struggling_found": 0.01768015411805853,
+      "level_within_one": 0.978859649122807
+     },
+     "8": {
+      "children_found": 0.3525602789454947,
+      "children_flag_precision": 0.9961062756687756,
+      "quiet_with_evidence": 0.8154545454545454,
+      "quiet_struggling_found": 0.06686855250728391,
+      "level_within_one": 0.9811646825396825
+     },
+     "12": {
+      "children_found": 0.4337738973846155,
+      "children_flag_precision": 0.9953384185259185,
+      "quiet_with_evidence": 0.8927272727272727,
+      "quiet_struggling_found": 0.10607360038478869,
+      "level_within_one": 0.9855634920634921
+     }
+    },
+    "flags_per_class_w12": 33.21,
+    "flag_precision_w12": 0.9953327311050888
+   },
+   "list_50": {
+    "weeks": {
+     "2": {
+      "children_found": 0.08983600439083494,
+      "children_flag_precision": 0.9919786096256684,
+      "quiet_with_evidence": 0.6086363636363636,
+      "quiet_struggling_found": 0.01398673402336214,
+      "level_within_one": 0.9607905982905982
+     },
+     "4": {
+      "children_found": 0.21423969627839778,
+      "children_flag_precision": 0.9987437185929648,
+      "quiet_with_evidence": 0.8159090909090909,
+      "quiet_struggling_found": 0.04777278659734868,
+      "level_within_one": 0.9583333333333334
+     },
+     "8": {
+      "children_found": 0.4499258227104043,
+      "children_flag_precision": 0.9971431623931624,
+      "quiet_with_evidence": 0.9631818181818181,
+      "quiet_struggling_found": 0.2080093997428711,
+      "level_within_one": 0.9726428571428571
+     },
+     "12": {
+      "children_found": 0.5384008846629307,
+      "children_flag_precision": 0.9980823854508065,
+      "quiet_with_evidence": 0.99,
+      "quiet_struggling_found": 0.2798518942953049,
+      "level_within_one": 0.9840685425685426
+     }
+    },
+    "flags_per_class_w12": 39.835,
+    "flag_precision_w12": 0.9937241119618426
+   },
+   "list_80": {
+    "weeks": {
+     "2": {
+      "children_found": 0.08664649243166588,
+      "children_flag_precision": 0.983058608058608,
+      "quiet_with_evidence": 0.7172727272727273,
+      "quiet_struggling_found": 0.018439387644383902,
+      "level_within_one": 0.9736842105263158
+     },
+     "4": {
+      "children_found": 0.23836658908962347,
+      "children_flag_precision": 0.9937738095238094,
+      "quiet_with_evidence": 0.8972727272727273,
+      "quiet_struggling_found": 0.08540740436796185,
+      "level_within_one": 0.9702442635085122
+     },
+     "8": {
+      "children_found": 0.5133210246877831,
+      "children_flag_precision": 0.9943967663313639,
+      "quiet_with_evidence": 0.9886363636363636,
+      "quiet_struggling_found": 0.2782240977173621,
+      "level_within_one": 0.9786246392496392
+     },
+     "12": {
+      "children_found": 0.6125281289885213,
+      "children_flag_precision": 0.995685061369659,
+      "quiet_with_evidence": 0.9977272727272727,
+      "quiet_struggling_found": 0.3375543963830705,
+      "level_within_one": 0.9848640158860746
+     }
+    },
+    "flags_per_class_w12": 43.73,
+    "flag_precision_w12": 0.9925680310999314
+   }
+  },
+  "Rajasthan": {
+   "no_list": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07185171146797176,
+      "children_flag_precision": 0.9911764705882353,
+      "quiet_with_evidence": 0.38909090909090904,
+      "quiet_struggling_found": 0.002376772348724436,
+      "level_within_one": 0.9761904761904763
+     },
+     "4": {
+      "children_found": 0.18818999982037968,
+      "children_flag_precision": 0.9916606843742521,
+      "quiet_with_evidence": 0.6172727272727273,
+      "quiet_struggling_found": 0.015845320332157093,
+      "level_within_one": 0.9671848013816925
+     },
+     "8": {
+      "children_found": 0.36836790857099694,
+      "children_flag_precision": 0.9960353535353534,
+      "quiet_with_evidence": 0.8213636363636364,
+      "quiet_struggling_found": 0.05534403366374527,
+      "level_within_one": 0.9793650793650793
+     },
+     "12": {
+      "children_found": 0.45230164860718075,
+      "children_flag_precision": 0.9974219718190307,
+      "quiet_with_evidence": 0.9059090909090909,
+      "quiet_struggling_found": 0.09859013192859739,
+      "level_within_one": 0.988484126984127
+     }
+    },
+    "flags_per_class_w12": 34.38,
+    "flag_precision_w12": 0.9946189645142525
+   },
+   "list_50": {
+    "weeks": {
+     "2": {
+      "children_found": 0.0840352981777222,
+      "children_flag_precision": 0.9865384615384616,
+      "quiet_with_evidence": 0.6863636363636364,
+      "quiet_struggling_found": 0.014616707713049938,
+      "level_within_one": 0.952457264957265
+     },
+     "4": {
+      "children_found": 0.22041505563413927,
+      "children_flag_precision": 0.9921547619047619,
+      "quiet_with_evidence": 0.8827272727272727,
+      "quiet_struggling_found": 0.05599474777747884,
+      "level_within_one": 0.9505208333333334
+     },
+     "8": {
+      "children_found": 0.5140068782095651,
+      "children_flag_precision": 0.9970929119899707,
+      "quiet_with_evidence": 0.990909090909091,
+      "quiet_struggling_found": 0.25894003757169054,
+      "level_within_one": 0.9866110556110556
+     },
+     "12": {
+      "children_found": 0.6168952757933822,
+      "children_flag_precision": 0.9959117768271423,
+      "quiet_with_evidence": 0.999090909090909,
+      "quiet_struggling_found": 0.3275354456700748,
+      "level_within_one": 0.9839011682761682
+     }
+    },
+    "flags_per_class_w12": 43.22,
+    "flag_precision_w12": 0.9929430819065248
+   },
+   "list_80": {
+    "weeks": {
+     "2": {
+      "children_found": 0.07984544019078668,
+      "children_flag_precision": 0.9863387978142076,
+      "quiet_with_evidence": 0.8022727272727274,
+      "quiet_struggling_found": 0.01697618731978933,
+      "level_within_one": 0.9812500000000001
+     },
+     "4": {
+      "children_found": 0.2518042384030185,
+      "children_flag_precision": 0.9917916666666666,
+      "quiet_with_evidence": 0.9445454545454546,
+      "quiet_struggling_found": 0.11212812016898716,
+      "level_within_one": 0.9630391423585142
+     },
+     "8": {
+      "children_found": 0.5870920299690296,
+      "children_flag_precision": 0.9946697708036717,
+      "quiet_with_evidence": 0.999090909090909,
+      "quiet_struggling_found": 0.34000273141767123,
+      "level_within_one": 0.9779763847263847
+     },
+     "12": {
+      "children_found": 0.7022754162540398,
+      "children_flag_precision": 0.9948616713813325,
+      "quiet_with_evidence": 0.999090909090909,
+      "quiet_struggling_found": 0.440034938348382,
+      "level_within_one": 0.9881576458672047
+     }
+    },
+    "flags_per_class_w12": 49.77,
+    "flag_precision_w12": 0.9907574844283705
+   }
+  }
+ }
+}

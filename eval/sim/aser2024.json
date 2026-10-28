@@ -1,0 +1,25 @@
+{
+  "label": "PUBLISHED DATA, not ours. ASER 2024 (Rural), Pratham / ASER Centre, state report cards. Numbers copied by hand from the PDFs; check them against the source before quoting.",
+  "source": "https://asercentre.org/aser-2024/ (state PDFs under https://asercentre.org/wp-content/uploads/2022/12/: India.pdf, Uttar-Pradesh-1.pdf, Bihar-2.pdf, Madhya-Pradesh-1.pdf, Rajasthan-2.pdf)",
+  "reading_std2": {
+    "what": "Table 4: % children in Std II by reading level, ALL children (government and private together). Levels: not even letter, letter, word, Std I level text (paragraph), Std II level text (story).",
+    "levels": ["beginner", "letter", "word", "paragraph", "story"],
+    "India": [15.1, 32.7, 23.2, 14.9, 14.1],
+    "Uttar Pradesh": [12.5, 31.3, 20.6, 16.2, 19.5],
+    "Bihar": [23.3, 36.0, 16.1, 10.0, 14.6],
+    "Madhya Pradesh": [20.6, 47.3, 16.0, 8.6, 7.5],
+    "Rajasthan": [23.1, 43.8, 15.0, 10.8, 7.3]
+  },
+  "attendance_primary": {
+    "what": "% of enrolled children present on the day of the visit, government primary schools, 2024 (Table 'Student and teacher attendance on the day of visit').",
+    "India": 75.9,
+    "Uttar Pradesh": 71.4,
+    "Bihar": 60.9,
+    "Madhya Pradesh": 59.0,
+    "Rajasthan": 74.9
+  },
+  "govt_std3_story": {
+    "what": "% of Std III children in GOVERNMENT schools who can read a Std II level text. Shows that government-school children read below the all-children table above (India: 23.4 vs 27.0 for all children).",
+    "India": 23.4, "Uttar Pradesh": 27.9, "Bihar": 20.1, "Madhya Pradesh": 14.8, "Rajasthan": 12.1
+  }
+}

@@ -617,6 +617,15 @@ def sample_audio(name: str):
     return FileResponse(f)
 
 
+@app.get("/samples/images/{name}")
+def sample_image(name: str):
+    """SYNTHETIC sample photos (a register page and a textbook page) so reviewers can try the photo setup."""
+    f = ROOT / "samples" / "synthetic" / "images" / name
+    if "/" in name or ".." in name or not name.endswith(".jpg") or not f.exists():
+        raise HTTPException(404)
+    return FileResponse(f, media_type="image/jpeg")
+
+
 @app.get("/api/evidence")
 def evidence():
     """Public: the numbers on the Evidence page, read from the files the evaluation scripts write

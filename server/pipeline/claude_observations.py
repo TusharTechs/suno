@@ -2,8 +2,8 @@
 
 Input: the roster, skill ladder and this week's lesson (a cached, stable prefix), then
 today's listening list and the note as numbered sentences.
-Output: mentions (schemas/observations.v1.json), then verified and scored in code by
-guardrails.check_mentions. Claude never decides the child on its own, and never sets confidence.
+Output: mentions and whole-class remarks (schemas/observations.v2.json), then verified and scored
+in code by guardrails.check_mentions and check_class_observations. Claude never decides the child on its own, and never sets confidence.
 """
 
 from __future__ import annotations

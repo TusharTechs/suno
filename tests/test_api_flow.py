@@ -30,8 +30,13 @@ def client(tmp_path, monkeypatch):
              "rationale": "dropped ी"}],
             "follow_ups": []}
 
-    from server.pipeline import claude_observations
+    from server.pipeline import brief as brief_mod, claude_observations
+    from server.pipeline.claude_client import ClaudeOutputError
     monkeypatch.setattr(claude_observations, "call_structured", fake_claude)
+
+    def no_brief(**kw):  # tests never call the real API: the brief fails closed to code-built facts
+        raise ClaudeOutputError("stubbed in tests")
+    monkeypatch.setattr(brief_mod, "call_structured", no_brief)
     monkeypatch.setattr(api, "_run", lambda fn, *a: fn(*a))  # run jobs inline
     return TestClient(api.app)
 
@@ -177,3 +182,40 @@ def test_lesson_photo_keeps_known_skills_and_short_items(client, monkeypatch):
     client.post("/api/classes", json={"name": "x"})
     r = client.post("/api/lesson/photo", files={"photo": ("p.jpg", b"\xff\xd8x", "image/jpeg")}).json()
     assert r["items"] == {"hi.words_with_matras": ["पानी"], "hi.blend_no_matra": ["जल"]}
+
+
+def test_removing_a_child_does_not_break_the_class(client):
+    client.post("/api/login", json={"code": "SUNO-DEMO"})
+    me = client.get("/api/me").json()
+    # Mohan (c14) has a "check tomorrow" record in the demo history; Pinki (c04) has evidence.
+    kept = [c for c in me["roster"] if c["child_id"] not in ("c14", "c04")]
+    assert client.put("/api/roster", json={"children": kept}).status_code == 200
+    t = client.get("/api/today")
+    assert t.status_code == 200
+    c = client.get("/api/class")
+    assert c.status_code == 200 and "c14" not in c.json()["grid"]
+    assert client.post("/api/next-day").status_code == 200
+    b = client.get("/api/today").json()["brief"]
+    assert b is None or b["status"] in ("done", "fallback", "queued", "thinking", "speaking")
+
+
+def test_quota_counter_survives_deletes_and_masking(client, monkeypatch):
+    from server import api, store
+    monkeypatch.setattr(api, "NOTES_PER_DAY", 2)
+    client.post("/api/login", json={"code": "SUNO-DEMO"})
+    text = "पिंकी ने कमल को क म ल पढ़ा। प्रिया ने मछली को मछल पढ़ा। सोनू कमज़ोर है।"
+    n1 = client.post("/api/notes", data={"text": text}).json()["note_id"]
+    note = client.get(f"/api/notes/{n1}").json()
+    assert "कमज़ोर" not in note["transcript"] and "•••" in note["transcript"]
+    assert client.delete(f"/api/notes/{n1}").status_code == 200
+    client.post("/api/notes", data={"text": text})
+    assert client.post("/api/notes", data={"text": text}).status_code == 429   # deleting didn't refund the quota
+
+
+def test_cannot_delete_a_note_while_it_is_processing(client):
+    from server import store
+    client.post("/api/login", json={"code": "SUNO-DEMO"})
+    cid = client.get("/api/me").json()["class_id"]
+    nid = store.create_note(cid, "2026-10-28", "text", [])
+    store.update_note(nid, status="thinking")
+    assert client.delete(f"/api/notes/{nid}").status_code == 409

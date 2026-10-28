@@ -40,7 +40,7 @@ Your class code (like `K7Q2-M9XD`) opens your class on any phone. Data is kept i
 ```
 Teacher's voice note (phone, offline-capable)
   → Sarvam saaras:v4 speech-to-text → numbered sentences s1, s2, …
-  → Claude ①  observations: per child, skill, item, outcome, mistake type   [prompts/observations.v2.md, schemas/observations.v1.json]
+  → Claude ①  observations: per child, skill, item, outcome, mistake type   [prompts/observations.v3.md, schemas/observations.v2.json]
   → code checks: cited sentences exist; quote and item really are in her words; the child is resolved
     from the roster by code (phonetic names, roll numbers) and must agree with Claude; labels masked;
     "किताब को किताब पढ़ा" (speech-to-text erasing the misreading) can't be "correct"
@@ -53,7 +53,7 @@ Teacher's voice note (phone, offline-capable)
   → listening plan (code): the 5 children and items that would tell SUNO the most, confirm-first,
     quiet children included; two items each (one at the likely level, one a rung away)
   → Silence Ledger (code)
-  → Claude ②  words the brief from code-decided facts                    [prompts/brief.v2.md, schemas/brief.v2.json]
+  → Claude ②  words the brief from code-decided facts                    [prompts/brief.v4.md, schemas/brief.v3.json]
   → code checks: no unbacked "needs support", exact listening list and ledger, activity fits the skill, banned words
        fail twice → the app shows the code facts without prose (fail closed)
   → Sarvam bulbul:v3 Hindi voice
@@ -100,11 +100,11 @@ uv run python eval/sim/run_term_sim.py --runs 200      # Stage B, no API calls
 
 ### Running cost
 
-About **₹15.5 per teacher per school day** (Claude and Sarvam), about **₹103 per child per year**, computed by `eval/cost.py` from logged API usage and Sarvam's published prices (`eval/results/cost.md`). A leaner configuration of the same design is estimated at about half that.
+About **₹17.6 per teacher per school day** (Claude and Sarvam), about **₹117 per child per year**, computed by `eval/cost.py` from logged API usage and Sarvam's published prices (`eval/results/cost.md`). A leaner configuration of the same design is estimated at about half that.
 
 ### Real-speech test
 
-One real speaker read 5 scripted notes (a fictional class) into an ordinary phone, each in three settings: a quiet room, a fan on full, and classroom noise playing. That's 15 recordings, run through Sarvam speech-to-text and SUNO's real pipeline (`eval/results/real_notes.md`). At a 15–23% speech-to-text word error rate:
+One real speaker read 5 scripted notes (a fictional class) into an ordinary phone, each in three settings: a quiet room, a fan on full, and classroom noise playing. That's 15 recordings, run through Sarvam speech-to-text and SUNO's real pipeline (`eval/results/real_notes.md`). At a 15–22% speech-to-text word error rate:
 
 - **0 of 56** evidence records were about the wrong child, and **56 of 56** had the right right/wrong direction;
 - **0 of 21** opinions or vague remarks became evidence;

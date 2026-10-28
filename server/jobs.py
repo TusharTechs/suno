@@ -75,11 +75,13 @@ def process_note(note_id: str, audio: bytes | None = None, text: str | None = No
         sentences = asr.sentences(transcript)
         store.update_note(note_id, status="thinking", transcript=transcript, seconds=seconds,
                           sentences_json=sentences)
-        if not sentences:
-            raise asr.ASRError("no speech was recognised in the note")
+        if not sentences or not any(ch.isalpha() for ch in transcript):
+            raise asr.ASRError("no words were recognised in the note")
         t = time.time()
         out = claude_observations.extract(sentences, c["roster"], c["lesson"], note["listening"] or [], usage=usage)
         timings["claude_s"] = round(time.time() - t, 1)
+        if store.get_note(note_id) is None:   # the teacher deleted the note while it was processing
+            return
         store.add_records(note_id, c["class_id"], note["day"], out["records"])
         store.add_questions(note_id, c["class_id"], out["questions"])
         store.update_note(note_id, status="done", claude_json=out["raw"], problems_json=out["problems"],
@@ -98,11 +100,16 @@ def make_brief(class_id: str, day: str) -> None:
     c = store.get_class(class_id)
     today = date.fromisoformat(day)
     usage = Usage()
-    pic = morning_picture(c, today)
-    store.put_brief(class_id, day, status="thinking", picture_json=pic)
-    since = planner.school_days_before(today, planner.WINDOW_DAYS)[0].isoformat()
-    recent = [r for r in store.records(class_id) if r["status"] == "evidence" and r.get("feedback") != "down"
-              and since <= r["day"] < day]
+    try:
+        pic = morning_picture(c, today)
+        store.put_brief(class_id, day, status="thinking", picture_json=pic)
+        since = planner.school_days_before(today, planner.WINDOW_DAYS)[0].isoformat()
+        recent = [r for r in planner.on_roster(store.records(class_id), c["roster"])
+                  if r["status"] == "evidence" and r.get("feedback") != "down" and since <= r["day"] < day]
+    except Exception as e:
+        log.exception("brief facts %s %s failed", class_id, day)
+        store.put_brief(class_id, day, status="fallback", error=f"unexpected error: {type(e).__name__}")
+        return
     try:
         b, fixed = brief_mod.write_brief(c["roster"], pic, recent, usage=usage)
     except ClaudeOutputError as e:

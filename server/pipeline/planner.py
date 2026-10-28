@@ -59,7 +59,17 @@ def baselines(roster: list[dict] | None) -> dict:
     return out
 
 
+def on_roster(records: list[dict], roster: list[dict] | None) -> list[dict]:
+    """Records about children still on the roster, plus whole-class remarks. A child removed from the
+    roster keeps her history in storage but no longer appears anywhere."""
+    if roster is None:
+        return records
+    ids = {c["child_id"] for c in roster}
+    return [r for r in records if r["child_id"] is None or r["child_id"] in ids]
+
+
 def ladders(records: list[dict], today: date, roster: list[dict] | None = None):
+    records = on_roster(records, roster)
     obs = [ladder.Obs(r["child_id"], r["skill_code"], r["outcome"], r["confidence"], _day(r), r.get("error_type") or "none")
            for r in records if r["status"] == "evidence" and _usable(r) and _day(r) <= today]
     return ladder.track(obs, today, baselines(roster))
@@ -259,9 +269,10 @@ def class_view(records: list[dict], state, roster: list[dict], today: date, less
                  and state[(c["child_id"], skill)].status != "not enough evidence"]
         ns = sum(1 for v in known if v.status == "needs support")
         decision, why = None, ""
+        many_need = len(known) >= 4 and ns / len(known) >= 0.4
         if rs and rs[-1]["share"] in ("most", "many"):
-            decision = "reteach" if rs[-1]["outcome"] == "incorrect" else "move_on"
-            why = "teacher_remark"
+            decision = "reteach" if rs[-1]["outcome"] == "incorrect" else ("reteach" if many_need else "move_on")
+            why = "teacher_remark" if decision == "reteach" or not many_need else "children"
         elif len(known) >= 4 and ns / len(known) >= 0.4:
             decision, why = "reteach", "children"
         if decision:
@@ -276,6 +287,7 @@ def class_view(records: list[dict], state, roster: list[dict], today: date, less
 def picture(roster: list[dict], lesson: dict, records: list[dict], today: date,
             yesterday_list: set[str] | None = None) -> dict:
     """Everything code knows about the class on `today` (morning: today's notes not in yet)."""
+    records = on_roster(records, roster)
     lads = ladders(records, today, roster)
     state = ladder.skill_views(lads)
     silent = silent_children(roster, records, today)

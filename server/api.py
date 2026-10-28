@@ -15,12 +15,13 @@ from contextlib import asynccontextmanager
 from datetime import date
 from pathlib import Path
 
-from fastapi import Cookie, Depends, FastAPI, File, Form, HTTPException, Response, UploadFile
+from fastapi import Cookie, Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from . import demo, jobs, store
+from .pipeline import brief as brief_mod
 from .pipeline import claude_observations, planner
 from .pipeline import lesson_photo as lesson_photo_mod
 from .pipeline import roster_photo as roster_photo_mod
@@ -109,15 +110,29 @@ def _run(fn, *args) -> None:
     threading.Thread(target=fn, args=args, daemon=True).start()
 
 
+def _brief_running(b: dict | None) -> bool:
+    return bool(b) and b["status"] in ("queued", "thinking", "speaking") and not store.is_stale(b["created_at"], BRIEF_STALE_S)
+
+
 def _start_brief(c: dict, day: str, force: bool = False) -> None:
     b = store.get_brief(c["class_id"], day)
-    if b and not force and b["status"] in ("queued", "thinking", "speaking", "done"):
+    if _brief_running(b):
+        return                      # never two jobs for the same brief (and no way round the quota)
+    if b and not force and b["status"] == "done":
         return
     if store.count_today("briefs", c["class_id"]) >= BRIEFS_PER_DAY:
         raise HTTPException(429, "brief limit for today reached for this class")
+    store.count_use("briefs", c["class_id"])
     store.delete_brief(c["class_id"], day)
     store.put_brief(c["class_id"], day, status="queued")
     _run(jobs.make_brief, c["class_id"], day)
+
+
+def _note_view_status(n: dict) -> tuple[str, str | None]:
+    """A note still 'processing' long after it started was interrupted: show it as failed, with a reason."""
+    if n["status"] in ("queued", "transcribing", "thinking") and store.is_stale(n["created_at"], NOTE_STALE_S):
+        return "failed", "processing was interrupted (the server restarted); please send the note again"
+    return n["status"], n["error"]
 
 
 def settle_question(class_id: str, q_id: int, answer: str) -> None:
@@ -146,10 +161,29 @@ class Login(BaseModel):
     code: str
 
 
+DEMO_PER_HOUR = int(os.environ.get("SUNO_DEMO_PER_HOUR", "30"))
+_demo_logins: dict[str, list[float]] = {}
+NOTE_STALE_S, BRIEF_STALE_S = 300, 240   # a job this old and unfinished was interrupted (restart, deploy)
+
+
+def _demo_allowed(ip: str) -> bool:
+    """Each demo login makes a sandbox with its own quotas: cap them per address."""
+    import time
+    now = time.time()
+    hits = [h for h in _demo_logins.get(ip, []) if now - h < 3600]
+    if len(hits) >= DEMO_PER_HOUR:
+        _demo_logins[ip] = hits
+        return False
+    _demo_logins[ip] = hits + [now]
+    return True
+
+
 @app.post("/api/login")
-def login(body: Login, response: Response):
+def login(body: Login, response: Response, request: Request):
     code = body.code.strip()
     if code.upper() == DEMO_CODE:
+        if not _demo_allowed(request.client.host if request.client else "?"):
+            raise HTTPException(429, "too many demo sessions from this address; try again in an hour")
         cid = demo.clone_demo()
     elif store.class_by_code(code):
         cid = store.class_by_code(code)
@@ -324,11 +358,14 @@ def today(c: dict = Depends(current_class)):
         "levels": pic.get("levels", {}),
         "class_view": pic.get("class_view", []),
         "brief": None if not b else {
-            "status": b["status"], "brief": b["brief"], "error": b["error"],
-            "audio_url": f"/api/audio/{b['audio_file']}" if b.get("audio_file") else None,
+            "status": b["status"] if (b["status"] == "done" or b["status"] == "fallback" or _brief_running(b)) else "fallback",
+            "brief": b["brief"],
+            "error": b["error"] if (b["status"] in ("done", "fallback") or _brief_running(b)) else "interrupted: the server restarted while building it",
+            # the version in the URL makes a rebuilt brief's new voice bypass any cached copy
+            "audio_url": f"/api/audio/{b['audio_file']}?v={(b.get('created_at') or '').replace(':', '')}" if b.get("audio_file") else None,
             "problems_fixed": b.get("problems") or [], "usage": b.get("usage")},
         "open_questions": len(open_q),
-        "notes_today": [n for n in store.list_notes(c["class_id"]) if n["day"] == day],
+        "notes_today": [n for n in store.list_notes(c["class_id"]) if n["day"] == day and _note_view_status(n)[0] != "failed"],
     }
 
 
@@ -377,6 +414,7 @@ async def add_note(audio: UploadFile | None = File(default=None), text: str | No
             raise HTTPException(400, "notes older than two weeks are not accepted")
     if store.count_today("notes", c["class_id"]) >= NOTES_PER_DAY:
         raise HTTPException(429, "note limit for today reached for this class")
+    store.count_use("notes", c["class_id"])
     data = await audio.read(MAX_UPLOAD + 1) if audio else None
     if data is not None and len(data) > MAX_UPLOAD:
         raise HTTPException(413, "recording too large")
@@ -393,7 +431,11 @@ async def add_note(audio: UploadFile | None = File(default=None), text: str | No
 
 @app.get("/api/notes")
 def notes(c: dict = Depends(current_class)):
-    return store.list_notes(c["class_id"])
+    out = []
+    for n in store.list_notes(c["class_id"]):
+        st, err = _note_view_status(n)
+        out.append(dict(n, status=st, error=err, transcript=mask_banned(n["transcript"] or "")))
+    return out
 
 
 @app.get("/api/notes/{note_id}")
@@ -401,10 +443,11 @@ def note(note_id: str, c: dict = Depends(current_class)):
     n = store.get_note(note_id)
     if not n or n["class_id"] != c["class_id"]:
         raise HTTPException(404)
+    st, err = _note_view_status(n)
     return {
-        "note_id": n["note_id"], "day": n["day"], "status": n["status"], "error": n["error"],
-        "source": n["source"], "transcript": n["transcript"], "seconds": n["seconds"],
-        "sentences": n["sentences"], "follow_ups": n["follow_ups"] or [], "listening": n["listening"] or [],
+        "note_id": n["note_id"], "day": n["day"], "status": st, "error": err,
+        "source": n["source"], "transcript": mask_banned(n["transcript"] or ""), "seconds": n["seconds"],
+        "sentences": _masked(n["sentences"]), "follow_ups": n["follow_ups"] or [], "listening": n["listening"] or [],
         "records": [_public_record(r) for r in store.records(c["class_id"], note_id)],
         "questions": store.questions(c["class_id"], note_id),
         "synthetic": bool(n["synthetic"]),
@@ -418,8 +461,8 @@ def trace(note_id: str, c: dict = Depends(current_class)):
     if not n or n["class_id"] != c["class_id"]:
         raise HTTPException(404)
     return {
-        "note_id": note_id, "day": n["day"], "status": n["status"], "transcript": n["transcript"],
-        "sentences": n["sentences"], "listening": n["listening"], "claude_output": n["claude"],
+        "note_id": note_id, "day": n["day"], "status": n["status"], "transcript": mask_banned(n["transcript"] or ""),
+        "sentences": _masked(n["sentences"]), "listening": n["listening"], "claude_output": n["claude"],
         "code_checks": n["problems"] or [], "records": [_public_record(r) for r in store.records(c["class_id"], note_id)],
         "questions": store.questions(c["class_id"], note_id), "usage": n["usage"], "timings": n["timings"],
         "prompt_file": "prompts/" + (n["usage"] or {}).get("prompt", claude_observations.PROMPT),
@@ -433,8 +476,15 @@ def delete_note(note_id: str, c: dict = Depends(current_class)):
     n = store.get_note(note_id)
     if not n or n["class_id"] != c["class_id"]:
         raise HTTPException(404)
+    if _note_view_status(n)[0] in ("queued", "transcribing", "thinking"):
+        raise HTTPException(409, "this note is still being processed; delete it in a minute")
     store.delete_note(note_id)
     return {"ok": True}
+
+
+def _masked(sentences: list[dict] | None) -> list[dict]:
+    """Labels a teacher may say ("कमज़ोर") are never shown back, not even in her own transcript."""
+    return [dict(x, text=mask_banned(x["text"])) for x in (sentences or [])]
 
 
 class Answer(BaseModel):
@@ -574,7 +624,9 @@ def evidence():
     import json
     from collections import Counter
     res = ROOT / "eval" / "results"
-    out: dict = {"label": "SIMULATED: simulated classrooms and teachers, not real children. Scripts and assumptions in eval/sim/."}
+    out: dict = {"label": "SIMULATED: simulated classrooms and teachers, not real children. Scripts and assumptions in eval/sim/.",
+                 "files": {"observations": f"prompts/{claude_observations.PROMPT} · schemas/{claude_observations.SCHEMA}",
+                           "brief": f"prompts/{brief_mod.PROMPT} · schemas/{brief_mod.SCHEMA}"}}
     f = res / "sim_pipeline.json"
     if f.exists():
         d = json.loads(f.read_text())
@@ -631,7 +683,7 @@ def delete_class(body: DeleteClass, response: Response, c: dict = Depends(curren
     want = (c.get("code") or c["name"]).strip().upper()
     if body.confirm.strip().upper().replace(" ", "") != want.replace(" ", ""):
         raise HTTPException(400, "type the class code to confirm")
-    for table in ("records", "questions", "notes", "briefs", "classes"):
+    for table in ("records", "questions", "notes", "briefs", "usage", "classes"):
         store.x(f"DELETE FROM {table} WHERE class_id=?", (c["class_id"],))
     response.delete_cookie("suno")
     return {"ok": True}

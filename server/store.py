@@ -59,6 +59,10 @@ CREATE TABLE IF NOT EXISTS briefs (
   audio BLOBTYPE,
   PRIMARY KEY (class_id, day)
 );
+CREATE TABLE IF NOT EXISTS usage (
+  class_id TEXT NOT NULL, day TEXT NOT NULL, kind TEXT NOT NULL, n INTEGER NOT NULL,
+  PRIMARY KEY (class_id, day, kind)
+);
 CREATE INDEX IF NOT EXISTS records_class ON records(class_id, day);
 CREATE INDEX IF NOT EXISTS notes_class ON notes(class_id, day);
 """
@@ -135,10 +139,30 @@ def since_today_utc() -> str:
     return datetime.now(timezone.utc).date().isoformat()
 
 
-def count_today(table: str, class_id: str) -> int:
-    assert table in ("notes", "briefs")
-    return q(f"SELECT COUNT(*) AS n FROM {table} WHERE class_id=? AND created_at >= ?",
-             (class_id, since_today_utc()))[0]["n"]
+def count_today(kind: str, class_id: str) -> int:
+    """How many notes or briefs this class started today (deleting one doesn't lower it)."""
+    rows = q("SELECT n FROM usage WHERE class_id=? AND day=? AND kind=?", (class_id, since_today_utc(), kind))
+    return rows[0]["n"] if rows else 0
+
+
+def count_use(kind: str, class_id: str) -> None:
+    with _lock:
+        day = since_today_utc()
+        if q("SELECT 1 FROM usage WHERE class_id=? AND day=? AND kind=?", (class_id, day, kind)):
+            x("UPDATE usage SET n = n + 1 WHERE class_id=? AND day=? AND kind=?", (class_id, day, kind))
+        else:
+            x("INSERT INTO usage (class_id, day, kind, n) VALUES (?,?,?,1)", (class_id, day, kind))
+
+
+def is_stale(created_at: str | None, seconds: int) -> bool:
+    """A job started this long ago and still not finished was interrupted (restart, deploy, crash)."""
+    if not created_at:
+        return False
+    try:
+        t = datetime.fromisoformat(created_at)
+    except ValueError:
+        return False
+    return (datetime.now(timezone.utc) - t).total_seconds() > seconds
 
 
 def cleanup_demo() -> int:
@@ -146,7 +170,7 @@ def cleanup_demo() -> int:
     cutoff = (datetime.now(timezone.utc) - timedelta(hours=DEMO_KEEP_HOURS)).isoformat(timespec="seconds")
     old = [r["class_id"] for r in q("SELECT class_id FROM classes WHERE synthetic=1 AND created_at < ?", (cutoff,))]
     for cid in old:
-        for t in ("records", "questions", "notes", "briefs", "classes"):
+        for t in ("records", "questions", "notes", "briefs", "usage", "classes"):
             x(f"DELETE FROM {t} WHERE class_id=?", (cid,))
     return len(old)
 

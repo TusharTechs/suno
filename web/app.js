@@ -75,6 +75,10 @@ const skillName = (code) => { const s = skillOf(code); return s ? t(s.label_hi, 
 const areaOf = (a) => S.me.skills.areas.find((x) => x.area === a);
 const levelName = (area, i) => { const l = areaOf(area).levels[i]; return t(l.label_hi, l.label_en); };
 const initial = (id) => (kid(id)?.first_name || "?").slice(0, 1);
+function shortDay(iso) {
+  try { return new Date(iso + "T00:00:00").toLocaleDateString(S.lang === "hi" ? "hi-IN" : "en-IN", { weekday: "short", day: "numeric", month: "short" }); }
+  catch (_) { return iso; }
+}
 function fmtDay(iso) {
   try { return new Date(iso + "T00:00:00").toLocaleDateString(S.lang === "hi" ? "hi-IN" : "en-IN", { weekday: "long", day: "numeric", month: "long" }); }
   catch (_) { return iso; }
@@ -100,15 +104,22 @@ async function qDel(id) { const d = await idb(); return new Promise((res) => { c
 async function flushQueue() {
   if (!navigator.onLine || !S.me) return;
   for (const it of await qAll()) {
+    if (it.class_id && it.class_id !== S.me.class_id) continue;   // recorded for another class: wait for it
     try {
       const { note_id } = await postNote(it);
       await qDel(it.id);
       toast(t("फ़ोन में रखा नोट भेज दिया", "A note saved offline was sent"));
       pollNote(note_id);
-    } catch (e) { if (!e.status) break; if (e.status >= 400 && e.status < 500) await qDel(it.id); }
+    } catch (e) {
+      if (!e.status || e.status === 401 || e.status === 429 || e.status >= 500) break;   // keep it, try later
+      await qDel(it.id);   // the server refused this note for good (for example, older than two weeks)
+      toast(t("एक पुराना नोट भेजा नहीं जा सका", "An old saved note could not be sent") + ": " + e.message);
+    }
   }
   renderQueueBadge();
 }
+// The day a note belongs to: the phone's own date when it was recorded (a demo class runs on its own clock).
+const noteDay = () => (S.me && S.me.day_offset ? S.today?.today : new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10));
 async function renderQueueBadge() {
   const n = (await qAll()).length, el = $("#qcount");
   if (el) el.innerHTML = n ? `<div class="card flat small">📥 ${t(`${n} नोट फ़ोन में रखे हैं; नेटवर्क आने पर अपने आप जाएँगे।`, `${n} note(s) saved on this phone; they send when you are back online.`)}</div>` : "";
@@ -235,7 +246,7 @@ function shell() {
     <div class="brandmark" style="width:32px;height:32px;border-radius:9px">स</div>
     <div class="cls"><b class="deva">${esc(S.me.name)}</b><span id="hdate"></span></div>
     <div class="spacer"></div>
-    ${S.me.synthetic ? `<span class="chip-syn" title="${t("काल्पनिक डेमो डेटा", "Synthetic demo data: fictional children")}">${t("डेमो", "DEMO · SYNTHETIC")}</span>` : ""}
+    ${S.me.synthetic ? `<span class="chip-syn" title="${t("काल्पनिक डेमो डेटा", "Synthetic demo data: fictional children")}">${t("डेमो", "DEMO<span class=\"long\"> · SYNTHETIC</span>")}</span>` : ""}
     ${langSwitch()}
     <button class="iconbtn" id="menu" aria-label="menu">☰</button>
   </div></header>
@@ -334,7 +345,7 @@ async function renderToday() {
   if (!S.today) v.innerHTML = `<div class="loading"><span class="spin"></span></div>`;
   const d = await loadToday();
   if (S.tab !== "today" || !d) return;
-  $("#hdate").textContent = fmtDay(d.today);
+  $("#hdate").textContent = shortDay(d.today);
   const b = d.brief;
   if (!S.me.synthetic && !S.me.roster.length) {
     v.innerHTML = `<div class="narrow"><div class="card onboard" style="margin-top:16px"><h3>${t("नमस्ते! पहले बच्चों के नाम जोड़ें।", "Welcome! First, add your children.")}</h3>
@@ -395,7 +406,7 @@ function briefCard(b, d) {
   }
   if (b.status === "fallback" || !b.brief) {
     return `<div class="card brief">${head}
-      <p class="summary">${t("सार की भाषा जाँच में पास नहीं हुई, इसलिए सिर्फ़ पक्की बातें दिखा रहे हैं।", "The wording failed the checks twice, so SUNO shows only the code-checked facts (fail closed).")}</p>
+      <p class="summary">${/failed checks/.test(b.error || "") ? t("सार की भाषा जाँच में पास नहीं हुई, इसलिए सिर्फ़ पक्की बातें दिखा रहे हैं।", "The wording failed the checks twice, so SUNO shows only the code-checked facts (fail closed).") : t("सार अभी नहीं बन सका, इसलिए सिर्फ़ पक्की बातें दिखा रहे हैं। फिर से बनाइए।", "The brief couldn't be built just now, so SUNO shows the code-checked facts. Try again.")}</p>
       <ul class="needs">${d.needs_support.map((x) => `<li><b>${nm(x.child_id)}</b>: ${esc(skillName(x.skill_code))}</li>`).join("") || `<li>${t("अभी किसी के बारे में पक्का नहीं।", "Nothing certain yet.")}</li>`}</ul>
       <button class="btn warn" data-mkbrief style="margin-top:10px">${t("फिर से बनाइए", "Try again")}</button></div>`;
   }
@@ -473,7 +484,7 @@ async function renderSpeak() {
   $("#mic").onclick = toggleRec;
   $("#send-text").onclick = async () => {
     const text = $("#ntext").value.trim(); if (!text) return toast(t("नोट लिखें", "Type a note first"));
-    await sendNote({ text, day: d?.today }); $("#ntext").value = "";
+    await sendNote({ text, day: noteDay() }); $("#ntext").value = "";
   };
   $("#samples").ontoggle = loadSamples;
   renderQueueBadge();
@@ -496,8 +507,8 @@ async function loadSamples() {
       const n = s.notes[+btn.dataset.s];
       if (btn.dataset.mode === "audio") {
         const blob = await (await fetch(n.audio)).blob();
-        await sendNote({ blob, filename: n.audio.split("/").pop(), day: S.today?.today });
-      } else await sendNote({ text: n.text, day: S.today?.today });
+        await sendNote({ blob, filename: n.audio.split("/").pop(), day: noteDay() });
+      } else await sendNote({ text: n.text, day: noteDay() });
       $("#progress")?.scrollIntoView({ behavior: "smooth" });
     }));
   } catch (e) { el.textContent = t("नमूने नहीं मिले", "Samples unavailable"); }
@@ -523,7 +534,7 @@ async function toggleRec() {
     REC = null; $("#mic")?.classList.remove("on"); $("#rec-hint") && ($("#rec-hint").textContent = t("दबाइए और बोलिए", "Tap and speak"));
     if ((Date.now() - t0) / 1000 < 1.5) return toast(t("बहुत छोटा नोट", "That was too short"));
     const type = mr.mimeType || "audio/webm";
-    await sendNote({ blob: new Blob(chunks, { type }), filename: type.includes("mp4") ? "note.m4a" : type.includes("ogg") ? "note.ogg" : "note.webm", day: S.today?.today });
+    await sendNote({ blob: new Blob(chunks, { type }), filename: type.includes("mp4") ? "note.m4a" : type.includes("ogg") ? "note.ogg" : "note.webm", day: noteDay() });
   };
   mr.start(1000); REC = mr;
   $("#mic").classList.add("on"); $("#rec-hint").textContent = t("बोल रहे हैं… रोकने के लिए दबाइए", "Recording… tap to stop");
@@ -535,7 +546,7 @@ async function sendNote(it) {
     const { note_id } = await postNote(it);
     pollNote(note_id, prog);
   } catch (e) {
-    if (!e.status) { await qAdd({ ...it, created: Date.now() }); toast(t("नेटवर्क नहीं: नोट फ़ोन में रखा", "Offline: the note is saved on this phone")); renderQueueBadge(); }
+    if (!e.status) { await qAdd({ ...it, class_id: S.me.class_id, created: Date.now() }); toast(t("नेटवर्क नहीं: नोट फ़ोन में रखा", "Offline: the note is saved on this phone")); renderQueueBadge(); }
     else toast(e.message);
   }
 }
@@ -782,7 +793,7 @@ async function openChild(id) {
 // ---------- roster editor (typed, or from a photo of the attendance register) ----------
 function openRoster(draft) {
   const rows = draft || S.me.roster.map((c) => ({ child_id: c.child_id, first_name: c.first_name, roll_no: c.roll_no,
-    aliases: (c.aliases || []).filter((a) => !/^[A-Za-z]/.test(a)) }));
+    aliases: (c.aliases || []).filter((a) => !/^[A-Za-z]/.test(a)), allAliases: c.aliases || [] }));
   const sh = sheet(`
     <h2>${t("बच्चों की सूची", "Children")}</h2>
     <p class="small muted">${t("सिर्फ़ पहला नाम। उपनाम (जैसे गुड्डू) दूसरे खाने में।", "First names only. A nickname (like Guddu) goes in the second box.")}</p>
@@ -818,15 +829,19 @@ function openRoster(draft) {
   };
 }
 function rosterRow(c) {
-  return `<div class="roster-row" data-id="${esc(c.child_id || "")}">
+  return `<div class="roster-row" data-id="${esc(c.child_id || "")}" data-aliases="${esc(JSON.stringify(c.allAliases || c.aliases || []))}">
     <input class="roll" type="number" min="1" value="${esc(c.roll_no ?? "")}" placeholder="${t("रोल", "Roll")}">
     <input class="name" type="text" value="${esc(c.first_name || "")}" placeholder="${t("पहला नाम", "First name")}">
     <input class="nick" type="text" value="${esc((c.aliases || [])[0] || "")}" placeholder="${t("उपनाम", "Nickname")}">
     <button data-del aria-label="remove">✕</button></div>`;
 }
 function readRow(el) {
+  // The box shows one nickname; every other alias (Latin spellings, a second nickname) is kept as it was.
   const nick = $(".nick", el).value.trim();
-  return { child_id: el.dataset.id || null, first_name: $(".name", el).value.trim(), roll_no: parseInt($(".roll", el).value, 10) || null, aliases: nick ? [nick] : [] };
+  let all = []; try { all = JSON.parse(el.dataset.aliases || "[]"); } catch (_) {}
+  const shown = all.find((a) => !/^[A-Za-z]/.test(a));
+  const rest = all.filter((a) => a !== shown);
+  return { child_id: el.dataset.id || null, first_name: $(".name", el).value.trim(), roll_no: parseInt($(".roll", el).value, 10) || null, aliases: [...(nick ? [nick] : []), ...rest] };
 }
 async function shrink(file, max = 1600) {
   // Phone photos are large: send a smaller JPEG so it uploads on a weak connection.
@@ -907,10 +922,10 @@ async function renderEvidence() {
     <div class="card small"><ol style="margin:0;padding-left:20px;line-height:1.7">
       <li><b>${t("इनपुट", "Input")}</b>: ${t("शिक्षक का 60 सेकंड का वॉइस नोट (या लिखा नोट)। किसी बच्चे की आवाज़ नहीं।", "the teacher's 60-second voice note (or a typed note). No child's voice, no classroom recording.")}</li>
       <li><b>${t("बोली से लिखाई", "Speech to text")}</b>: Sarvam <code>saaras:v4</code> → ${t("गिने हुए वाक्य", "numbered sentences")}.</li>
-      <li><b>Claude ①</b> <code>claude-opus-5-5</code>: ${t("हर बच्चे की बात अलग: कौशल, शब्द, नतीजा, गलती का प्रकार, घर की भाषा।", "splits the note into per-child observations: skill, item, outcome, mistake type, home-language signal.")} <span class="tiny">prompts/observations.v2.md · schemas/observations.v1.json</span></li>
+      <li><b>Claude ①</b> <code>claude-opus-5-5</code>: ${t("हर बच्चे की बात अलग: कौशल, शब्द, नतीजा, गलती का प्रकार, घर की भाषा।", "splits the note into per-child observations: skill, item, outcome, mistake type, home-language signal.")} <span class="tiny">${esc((e.files || {}).observations || "prompts/observations.v3.md · schemas/observations.v2.json")}</span></li>
       <li><b>${t("कोड की जाँच", "Code guardrails")}</b>: ${t("नीचे देखें।", "see section 2.")}</li>
       <li><b>${t("कोड का फ़ैसला", "Code decides")}</b>: ${t("बच्चे का सीढ़ी पर स्तर (Bayes), चुप्पी की सूची, आज किसे सुनें।", "each child's level on the ladder (Bayesian), the Silence Ledger, and whom to listen to today.")}</li>
-      <li><b>Claude ②</b>: ${t("कोड के तय तथ्यों को सरल हिंदी सार में लिखता है; कोड फिर जाँचता है।", "words the morning brief from facts code decided; code checks it again.")} <span class="tiny">prompts/brief.v3.md · schemas/brief.v2.json</span></li>
+      <li><b>Claude ②</b>: ${t("कोड के तय तथ्यों को सरल हिंदी सार में लिखता है; कोड फिर जाँचता है।", "words the morning brief from facts code decided; code checks it again.")} <span class="tiny">${esc((e.files || {}).brief || "prompts/brief.v4.md · schemas/brief.v3.json")}</span></li>
       <li><b>${t("आउटपुट", "Output")}</b>: Sarvam <code>bulbul:v3</code> ${t("हिंदी आवाज़ में सार।", "speaks the brief in Hindi.")}</li>
       <li><b>${t("सेटअप", "Setup")}</b>: ${t("Claude ③ (vision) हाज़िरी रजिस्टर की फ़ोटो से सिर्फ़ पहले नाम पढ़ता है; शिक्षक जाँचती हैं।", "Claude ③ (vision) reads first names from a photo of the attendance register; the teacher checks the list.")}</li>
     </ol></div>

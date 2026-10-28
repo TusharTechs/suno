@@ -52,7 +52,7 @@ The two kinds of tool fit together:
 
 ## Cost and who pays
 
-- **Today:** about ₹15.5 per teacher per school day, about ₹103 per child per year (`eval/results/cost.md`, from logged usage).
+- **Today:** about ₹17.6 per teacher per school day, about ₹117 per child per year (`eval/results/cost.md`, from logged usage).
 - **Leaner configuration** (overnight batch processing, a lower-effort brief): estimated at about half that.
 - **Who pays:** the state, as part of the Samagra Shiksha FLN budget for teacher support and assessment. SUNO is the state's processor; the school or state owns the data (DPDP Act 2023 and Rules 2025).
 

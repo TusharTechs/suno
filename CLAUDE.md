@@ -61,7 +61,7 @@ Retired v0 (classroom recording): `claude_moments.py`, `claude_evidence.py`, `cl
 
 ## Environment
 - `.env`:
-  - `ANTHROPIC_API_KEY`: the hackathon key, $500 of credits. Running cost is about ₹15 a teacher-day (`eval/results/cost.md`); simulations cost a few dollars each. Track spend weekly.
+  - `ANTHROPIC_API_KEY`: the hackathon key, $500 of credits. Running cost is about ₹18 a teacher-day (`eval/results/cost.md`); simulations cost a few dollars each. Track spend weekly.
   - `SARVAM_API_KEY`: speech-to-text and text-to-speech.
   - `SUNO_DATABASE_URL` (optional): Postgres when set, else SQLite in `var/`. `.env.example` lists the rest.
 - Hosting: Render, **free plan only** (`render.yaml`: free web service + free Postgres, Singapore). Do not use paid plans or the Render account's credits.

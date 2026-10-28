@@ -25,7 +25,7 @@ Deadline: **1 Nov 2026, 11:59 pm IST.** Aim to submit by early afternoon. **No c
 ## 3. Demo video (3 minutes)
 
 - File: `assets/deck/video/demo/SUNO_demo.mp4` (2:57.8, 1080p). Subtitles: `SUNO_demo.srt`. Thumbnail: `SUNO_demo_thumb.jpg`.
-- Upload to YouTube as **Public**, so it is "publicly accessible". Add the SRT as English subtitles, and paste the link into the submission form and the README.
+- **YouTube: https://youtu.be/GG3v7lQ212M** (public; linked in the README and on the deck's closing slide). If not done yet, add `SUNO_demo.srt` as English subtitles.
 - It covers what the organisers list:
   - the challenge and how SUNO addresses it (the classroom, the ASER figure, what we tried first and why we changed);
   - the UI walkthrough (recording, what SUNO understood, the brief, the class picture, a child's page);

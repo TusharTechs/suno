@@ -31,6 +31,8 @@ SUNO has **one role: the teacher**. There is no admin, student or parent login, 
 | 5 | **Attendance register photo** ([`register.jpg`](samples/synthetic/images/register.jpg)) | ☰ → Children → *try a sample photo* | Claude reads first names only; surnames, fathers' names and attendance marks are dropped, and nothing is stored |
 | 6 | **Textbook page photo** ([`textbook.jpg`](samples/synthetic/images/textbook.jpg)) | ☰ → This week's lesson → *try a sample page* | This week's words, matras, sentences and questions, sorted by skill |
 
+**Demo video (3 min):** https://youtu.be/GG3v7lQ212M
+
 **Build deck:** https://suno-8qoh.onrender.com/deck (PDF in the browser) · [PowerPoint](https://suno-8qoh.onrender.com/deck.pptx)
 
 **For reviewers:** the landing page links to **How we tested SUNO** (`/#evidence`): where each model call happens, how wrong AI output is handled, the simulation results with their limits, and running cost. **Privacy** (`/#privacy`) lists what is never stored, and lets a teacher delete her class.

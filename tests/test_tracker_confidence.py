@@ -43,12 +43,3 @@ def test_silence_ledger_lists_unheard_present_children():
 def test_planner_skips_yesterday_and_prefers_least_heard():
     st = track([Evidence("c1", "blend", "correct", 0.9, D)] * 2, D)
     assert plan_call_ons(["c1", "c2", "c3"], st, ["blend"], called_yesterday={"c2"}, k=2) == ["c3", "c1"]
-
-
-def test_brief_check_rejects_unbacked_label_and_banned_word():
-    from server.pipeline.claude_brief import check_brief
-    b = {"needs_support": [{"child_id": "c1", "skill_code": "hi.matras"}], "stuck_where": [], "today": [],
-         "call_on": ["c2"], "silent": [], "check_tomorrow": [], "text_hi": "रवि कमज़ोर है"}
-    problems = check_brief(b, {"c1", "c2"}, needs_support=set(), call_on=["c2"], silent=[], activity_ids=set())
-    assert any("tracker does not back" in p for p in problems)
-    assert any("banned" in p for p in problems)

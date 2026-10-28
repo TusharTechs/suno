@@ -1,13 +1,15 @@
 # Does SUNO work? Feasibility tests after the 20 Oct mentor call
 
+> **Historical record.** This test is why SUNO changed design. Voice matching could not name the child, so SUNO stopped recording the classroom and now listens to the teacher's own after-class note (decision 20 in [decisions.md](decisions.md)). The "what stays" section below describes the design as it was on 20 Oct.
+
 The technical mentor's challenge was that SUNO rests on one untested belief: that a phone can tell **which child** answered. If that fails, nothing else matters. So we split SUNO into the questions it must answer and test each on its own, before building any app.
 
 | # | Question | Test | Data | Status |
 |---|---|---|---|---|
 | F1 | Can a voice sample tell us which child answered? | Voice matching against a one-time voice sample per child | Real child voices (Pratham ASER), simulated classroom | **Done: no** (below) |
-| F1-real | Same, on a real recording | The mentor's home test ([home-test.md](home-test.md)) | Our recordings | Ready: needs a session |
-| F2 | Can it tell a right reading from a wrong one? | Sarvam speech-to-text vs the expected word, against the ASER surveyor's label | Real child voices (ASER) | Ready: needs `SARVAM_API_KEY` |
-| F3 | Given a transcript, does Claude + code name a child only when it is certain? | Claude call 1 plus code checks on the mentor's hard cases | Synthetic transcripts | Ready: needs `ANTHROPIC_API_KEY` |
+| F1-real | Same, on a real recording | The mentor's home test | Our recordings | Superseded: no classroom recording (decision 20) |
+| F2 | Can it tell a right reading from a wrong one? | Sarvam speech-to-text vs the expected word, against the ASER surveyor's label | Real child voices (ASER) | Superseded: no child speech is transcribed (decision 20) |
+| F3 | Given a transcript, does Claude + code name a child only when it is certain? | Claude call 1 plus code checks on the mentor's hard cases | Synthetic transcripts | Became the pipeline simulation and the real-speech test (`eval/results/sim_pipeline.md`, `real_notes.md`) |
 
 Every number here comes from a script in `eval/`. Results files are in `eval/results/`.
 
@@ -90,7 +92,6 @@ Voice can't carry attribution, so the design stops asking it to. Everything else
 - Claude rebuilds the evidence, and code refuses anything it can't verify;
 - the Silence Ledger makes sure quiet children are not missed.
 
-## Next
-1. **Tomorrow, 21 Oct:** add the keys to `.env`, then run F2 and F3. Run the home test with family ([home-test.md](home-test.md)) to check F1 on a real room.
-2. **Teacher round 1, 24 Oct:** test the tap screen with a paper or phone mock-up. Would teachers tap? How many taps can they bear?
-3. If F2 shows right vs wrong is unreliable even close to the phone, the teacher's reaction becomes the main signal and the child's audio only supports it.
+## What happened next
+- **Decision 20 (27 Oct):** SUNO listens to the teacher, not the classroom. After the reading period she speaks a 60-second note; no child's voice is recorded.
+- The questions F2 and F3 asked became the pipeline simulation (`eval/results/sim_pipeline.md`) and the real-speech test (`eval/results/real_notes.md`): does a claim land on the right child, in the right direction, and does an opinion ever become evidence?

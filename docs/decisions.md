@@ -22,7 +22,7 @@ This file is the evidence for the Build deck's **"User inputs and testing"** sli
 | ~16 Oct 2026 | Organisers (Top 30 WhatsApp group) | Proxy testing with 4–5 children of the same age is acceptable, but real users and real settings score higher. For niche users (CRP/BEO/DEO), show mentor input and how it changed the design. | Added 3 proxy sessions with children and 2 teacher test rounds to the plan; started this log | Build plan; testing slide |
 
 ## Internal design decisions
-Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's status when a mentor or a test confirms or kills it.
+Each row's status changes when a mentor or a test confirms or kills it.
 
 | # | Decision | Why | Date | Status |
 | --- | --- | --- | --- | --- |
@@ -46,7 +46,7 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 18 | Name calls are one signal, never the only one; the roster carries roll numbers so same-name children stay distinct | Teachers point instead of naming; duplicate names are common (technical mentor) | 20 Oct | Decided |
 | 19 | Claude model: `claude-opus-5-5` (Opus 5.5) instead of `claude-opus-5` | Newer, and 20% cheaper ($4 / $20 per million tokens vs $5 / $25); same structured outputs | 20 Oct | Decided |
 | 20 | **SUNO listens to the teacher, not the classroom.** After the reading period she speaks a ~60-second voice note in her own words; Claude turns it into per-child observations; code checks and scores them; the morning brief and a 5-child listening list follow. No classroom recording, no child's voice. | The teacher already hears every stumble; what is lost is memory (Ideate deck, problem slide). Classroom audio failed on five counts: F1 (voice can't tell which child answered), distance (back benches beyond ~1 m), phone heat and battery over a whole period, start/stop per period and per teacher, and consent for recording children (DPDP §9; UP and Rajasthan rules on recording in schools) | 27 Oct | Decided (Tushar) |
-| 21 | Observations count, opinions don't. Code scores how checkable each statement is (who × specific item × concrete mistake × seen today); "रवि अच्छा है" or a label can never pass the gate and becomes "listen to Ravi read X tomorrow" | Teachers' own picture of weakest readers is often wrong (~40% in Wadmare et al. 2022, `docs/strategy-review.md`); the planner and the confirm list turn impressions into checks | 27 Oct | Decided |
+| 21 | Observations count, opinions don't. Code scores how checkable each statement is (who × specific item × concrete mistake × seen today); "रवि अच्छा है" or a label can never pass the gate and becomes "listen to Ravi read X tomorrow" | Teachers' own picture of weakest readers is often wrong (~40% in Wadmare et al. 2022); the planner and the confirm list turn impressions into checks | 27 Oct | Decided |
 | 22 | The child is resolved by code from the roster (phonetic matching across Devanagari and Latin spellings, roll numbers in digits or Hindi words) and must agree with Claude; a mismatch or a shared name becomes a one-tap question to the teacher | A wrong child is the worst failure; Claude proposes, code verifies | 27 Oct | Decided |
 | 23 | Speech-to-text `keyterms` off by default, and a code check: "X को X पढ़ा" (same word on both sides) can't be "correct", it becomes "check tomorrow" | Sarvam returned "किताब को किताब" and "पानी को पानी" when the note said "कताब" / "पनी": it erased the child's misreading, and keyterms made it worse (synthetic sample notes, 27 Oct) | 27 Oct | Decided |
 | 24 | Web app (installable PWA, offline recording queue) instead of a native Android app; SQLite instead of Postgres | 4 days left; judges test a hosted link; a PWA records offline and installs on a ₹8k Android phone | 27 Oct | Decided |
@@ -66,17 +66,12 @@ Mirrors HANDOFF.md, "Design decisions since the Ideate deck". Update a row's sta
 | 38 | Language per class (Tamil, Marathi…) on the roadmap, not in this build | Mentor asked; a native reviewer is needed for the ladder and banned words | 28 Oct | Roadmap |
 | 39 | Textbook page photo → this week's items by skill (Claude vision), checked by the teacher | Mentor: not aligned to the textbook | 28 Oct | Decided |
 
-## Evidence for the Build deck
-- [x] Technical mentor call (20 Oct): inputs, and what changed (6 rows above; F1 feasibility test, `docs/feasibility.md`)
-- [x] F1: voice matching on real child voices, simulated classroom (`eval/results/f1_voice_id.md`, chart `f1_voice_id.png`): it cannot name the child
-- [x] Simulation Stage A: SUNO's pipeline on 32 simulated voice notes, 4 teacher styles, real speech-to-text (`eval/results/sim_pipeline.md`), SIMULATED
-- [x] Simulation Stage B: 200 simulated terms, listening list vs perfect diary (`eval/results/sim_term.md`), SIMULATED; it changed the design (decisions 28–29)
-- [ ] F2: right vs wrong on real child readings (superseded by decision 20: no child speech is transcribed)
-- [ ] F3: attribution on the mentor's hard cases, synthetic (`eval/results/f3_claude_attribution.md`), needs the Anthropic key
-- [x] Real-speech test: 15 recordings, one real speaker, three settings (`eval/results/real_notes.md`); it changed the design (decisions 32–33)
-- [ ] Home distance test: superseded by decision 20 (no classroom recording)
-- [ ] ASER dataset: answer-checker accuracy on real child speech
-- [ ] Proxy sessions 1–3: attribution and answer accuracy by distance, and the teacher's reaction to her own brief
-- [ ] Teacher tests, round 1 and round 2: problems found, fixes made, before and after
-- [ ] Parents: questions and concerns raised during consent
-- [x] Education mentor call (28 Oct, Rebecca Swittens, Madhi Foundation): workload per class, class-level vs child-level input, baseline diagnostic, nudges, language, textbook alignment (7 rows above; decisions 34–39)
+## Evidence in this repo
+- Technical mentor call (20 Oct): inputs and what changed (the rows above); F1 feasibility test (`docs/feasibility.md`)
+- F1: voice matching on real child voices in a simulated classroom (`eval/results/f1_voice_id.md`, chart `f1_voice_id.png`): it cannot name the child
+- Pipeline simulation: 32 simulated voice notes, 4 teacher styles, real speech-to-text (`eval/results/sim_pipeline.md`), SIMULATED
+- Term simulation: 200 simulated terms, listening list vs a perfect diary (`eval/results/sim_term.md`), SIMULATED; it changed the design (decisions 28–29)
+- The same term in classrooms built from ASER 2024's published state tables (`eval/results/sim_aser.md`), SIMULATED children
+- Real-speech test: 15 recordings, one real speaker, three settings (`eval/results/real_notes.md`); it changed the design (decisions 32–33)
+- Education mentor call (28 Oct, Rebecca Swittens, Madhi Foundation): workload, class-level input, baseline, nudges, language, textbook (the rows above; decisions 34–39)
+- **Not yet:** a real teacher using SUNO in her own class; that is the November pilot (`docs/roadmap.md`)

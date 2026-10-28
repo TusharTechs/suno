@@ -32,3 +32,15 @@ node_modules/
 
 # runtime state (SQLite, brief audio)
 var/
+
+# Internal working notes: kept locally, not published
+CLAUDE.md
+AGENTS.md
+docs/HANDOFF.md
+docs/SUBMISSION.md
+docs/judging.md
+docs/mentor-calls.md
+docs/outreach.md
+docs/strategy-review.md
+docs/home-test.md
+docs/img/src/

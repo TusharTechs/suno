@@ -1,214 +1,290 @@
-# SUNO सुनो
+<p align="center"><img src="docs/img/banner.png" alt="SUNO सुनो: listens to the teacher, not the classroom" width="100%"></p>
 
-**SUNO listens to the teacher, not the classroom.** After the reading period, a Grade 1–3 government-school teacher speaks a 60-second voice note in her own words: who read what, who got stuck where, who was absent. Next morning she hears a 2-minute Hindi brief telling her who needs support with what, today's small-group activity, and which five children to listen to today, each with one word or sum from this week's lesson.
+<p align="center">
+<b>Team Sunvai</b> · AI for Foundational Learning Hackathon (Hack2Skill × ShikshaNext × Central Square Foundation × Anthropic) · <b>Challenge 2: Learning-Level Visibility</b>
+</p>
 
-No child's voice is recorded. Nothing records the classroom. There are no tests and no data entry.
+**SUNO** (सुनो, "listen") gives Grade 1–3 government-school teachers a clear, per-child picture of reading levels **without a single test and without recording any child**. After the reading period the teacher speaks a 60-second voice note in her own words. Next morning she hears a 2-minute Hindi brief: who needs support with what, a 10-minute small-group activity, and which five children to listen to today, so quiet children are never missed.
 
-Team Sunvai's entry in the AI for Foundational Learning Hackathon (Challenge 2: Learning-Level Visibility).
+## Quick links for judges
 
-## Try it
+| What | Link |
+|---|---|
+| ▶️ **Live app** (no install; phone or laptop) | **https://suno-8qoh.onrender.com** · sign in with code **`SUNO-DEMO`** |
+| 🎬 **Demo video** (3 min) | https://youtu.be/GG3v7lQ212M |
+| 📊 **Build deck** | [PDF in the browser](https://suno-8qoh.onrender.com/deck) · [PowerPoint](https://suno-8qoh.onrender.com/deck.pptx) |
+| 📦 **Judges' pack** (video, deck, sample inputs, evaluation results) | [GitHub release: build-submission](https://github.com/TusharTechs/suno/releases/tag/build-submission) |
+| 🧪 **How we tested SUNO** (in the app) | https://suno-8qoh.onrender.com/#evidence |
+| 🔒 **Privacy** (in the app) | https://suno-8qoh.onrender.com/#privacy |
+| 🧭 **User inputs and what we changed** | [docs/decisions.md](docs/decisions.md) |
+| 📈 **Evaluation results** (every number from a script) | [eval/results/](eval/results/) |
+| 🛣️ **Roadmap and integration** | [docs/roadmap.md](docs/roadmap.md) |
+| 🤖 **Prompts and JSON schemas** (versioned) | [prompts/](prompts/) · [schemas/](schemas/) |
+| 🛡️ **Guardrail code** and its tests | [server/pipeline/guardrails.py](server/pipeline/guardrails.py) · [tests/](tests/) |
+| 🏗️ **Architecture** | [below](#architecture) |
+| 💻 **Run it locally** (macOS, Linux, Windows, Docker) | [below](#run-locally) |
 
-- **Hosted:** https://suno-8qoh.onrender.com. It runs on Render's free plan: after 15 idle minutes the server sleeps, and the first visit takes about a minute to wake it. Classes are kept in a free Postgres database.
-- **Code:** `SUNO-DEMO`. Each login gets its own fresh copy of a **synthetic** Grade 2 class: 30 fictional children, eight school days of teacher notes already run through the pipeline, and this morning's brief.
+> Hosting is Render's free plan: after 15 idle minutes the first visit takes about a minute to wake the server.
 
-### Test credentials (every role)
+## Try it in 5 minutes
 
-SUNO has **one role: the teacher**. There is no admin, student or parent login, and no teacher score anywhere.
+**Test credentials.** SUNO has **one role: the teacher**. There is no admin, student or parent login, and no teacher score anywhere, by design.
 
 | What to test | How to sign in |
 |---|---|
-| A class already in use (recommended) | Code **`SUNO-DEMO`**. Every sign-in gets its own fresh copy of a synthetic Grade 2 class, so reviewers can't disturb each other. |
-| Setting up a new class from scratch | On the sign-in page choose **create your own class**. SUNO gives you a class code (like `K7Q2-M9XD`) that opens the class on any phone. |
+| A class already in use (recommended) | Code **`SUNO-DEMO`**. Each sign-in gets its own fresh copy of a synthetic Grade 2 class (30 fictional children, eight school days of notes already processed, this morning's brief), so reviewers can't disturb each other. |
+| Setting up a new class | On the sign-in page choose **create your own class**. SUNO gives a class code (like `K7Q2-M9XD`) that opens it on any phone. |
 
-### Sample inputs (all synthetic)
+**Suggested path:**
+1. **आज / Today:** play the morning brief. It names who needs support with what, today's activity, and the five children to listen to.
+2. **बोलिए / Note:** record a note, type one, or open *sample notes* and send one. Try **"Hard cases"**: two children named Priya, a label (कमज़ोर), a name not on the roster, and an opinion.
+3. **See what SUNO understood:** green = evidence, amber = "listen again tomorrow", red = a one-tap question ("which Priya?"). Open **"How SUNO decided"** for Claude's raw output, every code check and the confidence arithmetic.
+4. **कक्षा / Class:** each child's level on the ASER/TaRL ladder, groups, and progress week by week. A level appears only after 3 checked observations on 2 days.
+5. **Today → "next morning":** moves the demo one school day forward and builds that morning's brief live, including your note (about 30 s).
+6. **Offline:** turn the network off, record a note, turn it back on. It sends itself.
+
+**Sample inputs (all synthetic):**
 
 | # | Input | Where | What it shows |
 |---|---|---|---|
-| 1 | **"An ordinary day"**: a Hindi voice note | बोलिए / Note → *sample notes* | Per-child observations from her own words: a misreading (कमल as क-म-ल), a correct read, an absence |
-| 2 | **"Hard cases"**: a Hindi voice note | same | Two children named Priya (one-tap question), a label (कमज़ोर, masked and never evidence), a name not on the roster, and an opinion that becomes "check tomorrow" |
-| 3 | **"Maths, and home language"**: a voice note | same | Reading two-digit numbers, adding, place value (tens in 32), and a child who understood a question only in Bhojpuri, her home language |
-| 4 | **"Hinglish"**: code-mixed Hindi and English | same | Names in Latin script (Neha, Geeta) resolved to the roster, an English word misread (sun as son), blending, an absence |
-| 5 | **Attendance register photo** ([`register.jpg`](samples/synthetic/images/register.jpg)) | ☰ → Children → *try a sample photo* | Claude reads first names only; surnames, fathers' names and attendance marks are dropped, and nothing is stored |
-| 6 | **Textbook page photo** ([`textbook.jpg`](samples/synthetic/images/textbook.jpg)) | ☰ → This week's lesson → *try a sample page* | This week's words, matras, sentences and questions, sorted by skill |
+| 1 | "An ordinary day" (Hindi voice note) | Note → *sample notes* | Per-child observations from her own words: a misreading (कमल as क-म-ल), a correct read, an absence |
+| 2 | "Hard cases" (Hindi voice note) | same | Two Priyas (one tap), a label (masked, never evidence), a name not on the roster, an opinion that becomes "check tomorrow" |
+| 3 | "Maths and home language" (voice note) | same | Two-digit numbers, adding, place value, and a child who understood a question only in Bhojpuri |
+| 4 | "Hinglish" (code-mixed voice note) | same | Names in Latin script resolved to the roster, an English misreading (sun as son), blending, an absence |
+| 5 | Attendance register photo ([register.jpg](samples/synthetic/images/register.jpg)) | ☰ → Children → *try a sample photo* | First names only: surnames, fathers' names and marks dropped; the photo is not stored |
+| 6 | Textbook page photo ([textbook.jpg](samples/synthetic/images/textbook.jpg)) | ☰ → This week's lesson → *try a sample page* | This week's words, matras, sentences and questions, by skill |
 
-**Demo video (3 min):** https://youtu.be/GG3v7lQ212M
+## The problem, and why it is technically hard
 
-**Build deck:** https://suno-8qoh.onrender.com/deck (PDF in the browser) · [PowerPoint](https://suno-8qoh.onrender.com/deck.pptx)
+76.6% of Class 3 children in government schools can't read a Class 2 text (ASER 2024). A teacher with 35 children hears exactly where each one gets stuck, but by the next day it's gone, and exams twice a year come too late. Assessment apps add a test event, one child at a time. **SUNO adds no test: it keeps what the teacher already notices, checks it, and turns it into tomorrow's plan.**
 
-**For reviewers:** the landing page links to **How we tested SUNO** (`/#evidence`): where each model call happens, how wrong AI output is handled, the simulation results with their limits, and running cost. **Privacy** (`/#privacy`) lists what is never stored, and lets a teacher delete her class.
+Doing that well is hard:
+- **You can't listen to the classroom.** We tried first. Our feasibility test on real child voices ([docs/feasibility.md](docs/feasibility.md)) showed voice matching cannot tell which child answered. Back benches are too far, phones overheat, and recording children needs consent. So SUNO listens to the teacher instead.
+- **Teacher speech is messy.** Code-mixed Hindi and English, nicknames, two children with the same name, "one child", roll numbers said aloud, opinions ("सोनू तो कमज़ोर है"), and habits rather than today's events.
+- **Speech-to-text can erase the evidence.** "पिंकी ने किताब को कताब पढ़ा" can come back as "किताब को किताब", which turns a mistake into a correct read.
+- **Evidence is sparse.** A teacher mentions about 5 children a day. Levels must be inferred under uncertainty, and the next observation must be chosen to tell us the most.
+- **A wrong label harms a child.** Precision matters more than recall: when unsure, the answer is "not enough evidence yet".
+- **Real conditions:** low connectivity, ₹8–10k Android phones, one minute of teacher time, and about ₹100 per child per year.
 
-**Suggested path, about 5 minutes:**
-1. **आज (Today):** play the brief. It names three children who need support, with what, and today's activity. Below it are the five children to listen to today.
-2. **बोलिए (Note):** record a note, type one, or open *sample notes* and send one as audio (Sarvam-voiced, synthetic). Try **"Hard cases"**: two children named Priya, a label ("कमज़ोर"), a name that isn't on the roster, and an opinion.
-3. Watch what SUNO understood:
-   - green cards are evidence;
-   - amber cards are "listen again tomorrow";
-   - red cards ask "which Priya?" and are settled with one tap.
+## Architecture
 
-   Open **"how SUNO decided"** to see Claude's raw output, every code check, and the confidence arithmetic.
-4. **कक्षा (Class):** the child × skill grid. A cell changes only after 3+ checked observations on 2+ days. Tap a child for their evidence.
-5. **Today → "अगली सुबह / next morning":** moves the demo class one school day forward and builds that morning's brief live, including your note (about 30 s).
-
-**Use it for a real class:** on the login page, choose *create your own class*. Then:
-
-1. **Children:** photograph your attendance register. Claude reads first names only; you check the list, and the photo is not stored.
-2. **This week's words:** photograph this week's textbook page, and Claude proposes the words, sentences and questions by skill. You can also type them.
-3. **Starting levels (optional):** if you have done an ASER-style check, enter each child's level (letter, word, paragraph, story). SUNO starts from there and shows progress week by week.
-4. **Reminder:** set a daily reminder for when the reading period ends. It goes into your phone's own calendar; no new app.
-5. **Every day:** send **one** 60-second note after the reading period. Talk about the whole class ("most children got stuck on vowel signs") and about individual children. After each note, SUNO lists the children from today's list you didn't mention, with a 10-second add-on.
-
-Your class code (like `K7Q2-M9XD`) opens your class on any phone. Data is kept in a free Render Postgres database.
-
-## How it works
-
-```
-Teacher's voice note (phone, offline-capable)
-  → Sarvam saaras:v4 speech-to-text → numbered sentences s1, s2, …
-  → Claude ①  observations: per child, skill, item, outcome, mistake type   [prompts/observations.v3.md, schemas/observations.v2.json]
-  → code checks: cited sentences exist; quote and item really are in her words; the child is resolved
-    from the roster by code (phonetic names, roll numbers) and must agree with Claude; labels masked;
-    "किताब को किताब पढ़ा" (speech-to-text erasing the misreading) can't be "correct"
-  → code confidence (who × how specific × how concrete × how recent); gate 0.75
-       below the gate, and every opinion → "listen again tomorrow", never a label
-  → ladder (code, no AI): for each child, a probability for each level of the Hindi-reading and maths
-    ladders (ASER/TaRL levels), updated by Bayes' rule; one observation informs several skills, and
-    the described mistake counts ("क-म-ल" means the letters are known). A child is named only after
-    ≥3 observations over ≥2 days; "needs support" = the lowest rung not yet reached (TaRL groups)
-  → listening plan (code): the 5 children and items that would tell SUNO the most, confirm-first,
-    quiet children included; two items each (one at the likely level, one a rung away)
-  → Silence Ledger (code)
-  → Claude ②  words the brief from code-decided facts                    [prompts/brief.v4.md, schemas/brief.v3.json]
-  → code checks: no unbacked "needs support", exact listening list and ledger, activity fits the skill, banned words
-       fail twice → the app shows the code facts without prose (fail closed)
-  → Sarvam bulbul:v3 Hindi voice
+```mermaid
+flowchart TB
+  subgraph SETUP["① Once: setup with two photos"]
+    direction LR
+    P1["📷 Register + textbook page<br/>teacher's phone"] --> V["Claude vision<br/>first names · this week's words by skill"]
+    V --> R["Code: first names only<br/>teacher checks · photo never stored"]
+  end
+  subgraph DAY["② Each day: after the reading period"]
+    direction LR
+    N["🎙️ 60-second voice note<br/>her own words · offline queue"] --> STT["Sarvam saaras:v4<br/>speech → numbered sentences<br/>audio deleted"]
+    STT --> C1["Claude ① claude-opus-5-5<br/>per-child observations<br/>JSON schema · cites sentence IDs"]
+    C1 --> G["Code guardrails<br/>grounded in her words · child from roster<br/>labels masked · opinions held · confidence ≥ 0.75"]
+    G --> DB[("Records<br/>Postgres / SQLite")]
+  end
+  subgraph MORNING["③ Next morning: the brief"]
+    direction LR
+    L["Code: ladder + planner<br/>Bayesian ASER/TaRL levels · named after 3 obs on 2 days<br/>5 children to listen to · Silence Ledger"] --> C2["Claude ② claude-opus-5-5<br/>words a warm Hindi brief<br/>from code's decisions only"]
+    C2 --> BC["Code: check the brief<br/>nothing code didn't decide · fails closed"]
+    BC --> TTS["Sarvam bulbul:v3<br/>2-minute Hindi voice"]
+    TTS --> T["📱 Brief + class picture<br/>who needs support · group activity<br/>whom to listen to → tomorrow's note"]
+  end
+  SETUP --> DAY
+  DAY --> MORNING
+  classDef claude fill:#FFF5F0,stroke:#D97757,stroke-width:2px,color:#121833;
+  classDef sarvam fill:#F2F4FF,stroke:#5B6CFF,stroke-width:2px,color:#121833;
+  classDef code fill:#F1FBF5,stroke:#2BB673,stroke-width:2px,color:#121833;
+  classDef phone fill:#121833,stroke:#FFB020,stroke-width:2px,color:#ffffff;
+  class V,C1,C2 claude
+  class STT,TTS sarvam
+  class R,G,L,BC,DB code
+  class P1,N,T phone
+  style SETUP fill:#F1F8F4,stroke:#BFE3CC
+  style DAY fill:#F3F4F9,stroke:#C9CFEE
+  style MORNING fill:#FFF7E6,stroke:#F2D49A
 ```
 
-| Layer | What | Where |
-| --- | --- | --- |
-| Input | Teacher's voice note (or typed note) | `web/app.js` (MediaRecorder, offline queue in IndexedDB) |
-| Processing | Speech-to-text; sentences; Claude ① | `server/pipeline/asr.py`, `claude_observations.py` |
-| Guardrails | Grounding, roster resolution, item check, labels, erased-misreading check, computed confidence | `server/pipeline/guardrails.py`, `names.py`, `confidence.py` |
-| Decisions | Ladder levels, Silence Ledger, listening plan | `server/pipeline/ladder.py`, `planner.py` |
-| Setup | Roster from a photo of the attendance register (Claude ③, vision), checked by code and the teacher | `server/pipeline/roster_photo.py` |
-| Output | Claude ② brief, checked; Hindi voice | `server/pipeline/brief.py`, `tts.py` |
-| Teacher feedback | ✓/✗ on every observation (✗ removes it from the tracker); one-tap name questions | `server/api.py` |
+A more detailed diagram: [docs/img/architecture.png](docs/img/architecture.png).
 
-**Claude** (`claude-opus-5-5`, adaptive thinking, JSON-schema structured outputs, explicit effort, prompt-cached roster and lesson, server-side refusal fallback) makes two calls: reading the note, and wording the brief. **Code computes every confidence, decides every fact, and checks everything Claude returns.**
+| Layer | What happens | Code |
+|---|---|---|
+| Input | Voice note (MediaRecorder; offline queue in IndexedDB) or typed note; register and textbook photos at setup | `web/app.js` |
+| Processing | Speech to text, split at pauses, numbered sentences; Claude ① reads the note | `server/pipeline/asr.py`, `claude_observations.py` |
+| Guardrails | Grounding, roster resolution, item check, label masking, erased-misreading check, computed confidence | `guardrails.py`, `names.py`, `confidence.py` |
+| Decisions | Bayesian ladder levels, listening plan, Silence Ledger, whole-class reteach or move on | `ladder.py`, `planner.py`, `tracker.py` |
+| Output | Claude ② words the brief; code checks it; Sarvam voices it | `brief.py`, `tts.py` |
+| Teacher in the loop | ✓/✗ on every record; one-tap name questions; "How SUNO decided" trace | `server/api.py`, `web/app.js` |
 
-### Tested in simulation, because real classroom evidence wasn't possible in time
+## How we use AI, and where we deliberately don't
 
-**SIMULATED**, not real children or teachers. Every number comes from a script; the assumptions are written in `eval/sim/`.
+| Model | Called | Input → output | Why this model |
+|---|---|---|---|
+| **Claude** `claude-opus-5-5`, call ① | each note | transcript + roster + lesson → JSON observations ([schema](schemas/observations.v2.json), [prompt](prompts/observations.v3.md)): child, skill, item, right/wrong, mistake type, cited sentence IDs, whole-class remarks | Understanding messy, code-mixed Hindi speech, and telling an observation from an opinion, is where an LLM is strong |
+| **Claude** `claude-opus-5-5`, call ② | each morning | code's decisions → a warm 2-minute Hindi script ([schema](schemas/brief.v3.json), [prompt](prompts/brief.v4.md)) | Natural, respectful Hindi a teacher wants to listen to |
+| **Claude** vision | setup only | register photo → first names; textbook page → items by skill ([roster](prompts/roster_photo.v1.md), [lesson](prompts/lesson_photo.v1.md)) | Reads handwriting and printed Hindi from a phone photo |
+| **Sarvam** `saaras:v4` | each note | 60 s of audio → Hindi transcript | Built for Indian languages and code-mixed speech |
+| **Sarvam** `bulbul:v3` | each morning | Hindi script → MP3 voice | Natural Hindi voice, small files |
 
-- **The pipeline on simulated classrooms** (`eval/results/sim_pipeline.md`): 32 voice notes from simulated teachers in 4 styles (precise, brief, impressionistic, Hinglish), including shared names, unknown nicknames, labels and opinions. Each was voiced by Sarvam text-to-speech and transcribed by Sarvam speech-to-text. Results:
-  - **0 of 101** evidence records were about the wrong child;
-  - **101 of 101** had the right right/wrong direction;
-  - **0 of 42** opinions, labels or vague remarks became evidence;
-  - labels were never repeated;
-  - **17 of 19** unclear names were resolved with one tap (none misassigned);
-  - **89%** of clear, specific observations became evidence after speech-to-text (96% on clean text). The rest were held back as "check tomorrow", never wrong: mostly habit remarks and the impressionistic teacher.
-- **A 12-week term, 200 times over** (`eval/results/sim_term.md`), with SUNO's real tracker and planner and the error rates above (floored at 3/n). Compared with a *perfect diary* of what the teacher naturally notices, SUNO's listening list (followed 80% of the time):
-  - hears the quietest third of the class far sooner: **93% vs 41%** by week 2;
-  - finds **50% vs 26%** of the children who need support in Hindi reading by week 8;
-  - finds **36% vs 4%** of the quiet children's gaps;
-  - keeps precision at about 98%.
-- **The same term in classrooms built from published data** (`eval/results/sim_aser.md`, 200 runs per state). Each class's reading levels follow ASER 2024's Std II table for India, Uttar Pradesh, Bihar, Madhya Pradesh or Rajasthan. Absence follows each state's attendance in government primary schools (59–76% present), and some children are absent far more than others. The children are still simulated. Against the same perfect diary, SUNO's list (followed 80%):
-  - hears the quietest third by week 2 in **72–87% vs 39–41%** of cases. It is lowest in Madhya Pradesh and Bihar, where about 40% of children are absent on a given day;
-  - finds **51–59% vs 31–37%** of the children who need support by week 8;
-  - keeps precision of "needs support" at about **99%** in every state.
-  - Two assumptions are stated in `eval/sim/aser2024.json` and `world.py`: ASER's single "word" level is split in two, and the table covers government and private schools together.
-- **The simulation changed the design.** The first planner made detection *worse*: it spread a teacher's few observations too thin. That led to the ladder model and the two-item mini-ladder (`docs/decisions.md`).
-- **Honest limits:**
-  - At about 5 children a day, a struggling child is flagged with confidence after about 6 weeks.
-  - The simulated teacher speaks clean, synthetic Hindi.
-  - Real teachers' speech, habits and judgement are untested until classroom testing in November.
+**Claude API features used:** JSON-schema structured outputs, adaptive thinking with explicit effort (high for reading notes, medium for the brief), prompt caching of the stable roster and lesson prefix (95% of note input served from cache), server-side fallback, and image input. Prompts and schemas are versioned files; one module per pipeline stage.
 
-```bash
-uv run python eval/sim/run_pipeline_sim.py --days 8    # Stage A, about $3 of Claude credit
-uv run python eval/sim/run_term_sim.py --runs 200      # Stage B, no API calls
-uv run python eval/sim/run_aser_sim.py --runs 200      # Stage B in ASER 2024-calibrated classes, no API calls
-```
+**What AI is never allowed to do.** Code, not the model:
+- **sets every confidence score.** It is computed from who, how specific, how concrete and how recent; the gate is 0.75;
+- **decides who a child is**, from the roster: phonetic names across Devanagari and Latin, and roll numbers. When unsure it asks the teacher, never guesses;
+- **decides every level and every "needs support"**, with a Bayesian ladder: named only after 3 observations on 2 days;
+- **picks whom to listen to tomorrow**, by information gain, with quiet children kept in view;
+- **checks the brief:** if Claude says anything code didn't decide, or uses a banned word, it is rejected and code's own text is used (fail closed).
 
-### Running cost
+## What we built
 
-About **₹17.6 per teacher per school day** (Claude and Sarvam), about **₹117 per child per year**, computed by `eval/cost.py` from logged API usage and Sarvam's published prices (`eval/results/cost.md`). A leaner configuration of the same design is estimated at about half that.
+- **Guardrails** ([guardrails.py](server/pipeline/guardrails.py)):
+  - every claim must cite real sentence IDs, and its quote and item must appear in her words;
+  - the child Claude names must match the child code resolves;
+  - labels such as "weak", "slow" or कमज़ोर are masked (English and Hindi list);
+  - opinions and vague remarks become "listen to them tomorrow", never evidence;
+  - "X को X पढ़ा" (speech-to-text erasing a misreading) can't count as correct;
+  - evidence needs a specific word or sum.
+- **Names** ([names.py](server/pipeline/names.py)): a phonetic key across scripts, exact match first, a close match only with the same first sound, nicknames from the roster, roll numbers in digits or Hindi words, and spoken roll forms next to रोल / नंबर.
+- **Learning model** ([ladder.py](server/pipeline/ladder.py)):
+  - the ASER/TaRL reading ladder (beginner → letter → word → sentence → story) and a maths ladder;
+  - likelihood bands and evidence that fades with a 42-day half-life;
+  - the mistake type counts as evidence (क-म-ल means the letters are known);
+  - an optional ASER-style starting level, which fades as notes arrive.
+- **Planner** ([planner.py](server/pipeline/planner.py)):
+  - a 5-child listening list with two items each, one at the likely level and one a rung away;
+  - the Silence Ledger, so no child goes unheard for long;
+  - a whole-class "reteach or move on" decision;
+  - a nudge after each note for listed children she didn't mention.
+- **Teacher app** ([web/](web/)):
+  - an installable PWA, Hindi or English (one at a time), voice first;
+  - an offline note queue and an offline brief;
+  - one-tap name questions, a daily reminder in the phone's own calendar, a class picture with progress, and a CSV export.
+- **Backend** ([server/](server/)): FastAPI; SQLite locally or Postgres hosted; background jobs; per-login demo sandboxes; per-class data isolation; daily usage caps; an aggregate export with no names (`/api/export/summary.json`) for block dashboards.
+- **Tests** ([tests/](tests/)): 86 tests covering guardrails, adversarial cases (shared names, labels, unknown names, opinions, erased misreadings), the planner, brief checks and the API flow. They need no keys.
 
-### Real-speech test
+## Evaluation (every number comes from a script in `eval/`)
 
-One real speaker read 5 scripted notes (a fictional class) into an ordinary phone, each in three settings: a quiet room, a fan on full, and classroom noise playing. That's 15 recordings, run through Sarvam speech-to-text and SUNO's real pipeline (`eval/results/real_notes.md`). At a 15–22% speech-to-text word error rate:
+| Test | Result | Source |
+|---|---|---|
+| **Real speech:** one team member, 15 recordings, quiet room / fan / classroom noise, ordinary phone | 0 of 56 evidence records about the wrong child; 56 of 56 in the right direction; 0 of 21 opinions became evidence; 98% of clear observations captured; 15 of 15 absences; word error rate 15–22% | [real_notes.md](eval/results/real_notes.md) |
+| **Pipeline simulation:** 32 simulated voice notes, 4 teacher styles, real Sarvam speech-to-text | 0 of 101 records about the wrong child; 101 of 101 in the right direction; 0 of 42 opinions became evidence; 17 of 19 unclear names resolved by one tap | [sim_pipeline.md](eval/results/sim_pipeline.md) |
+| **Term simulation:** 200 simulated 12-week terms, listening list (followed 80%) vs a perfect diary of what she notices | Quietest third heard by week 2: 93% vs 41%. Children needing support found by week 8: 50% vs 26%. Quiet children's gaps: 36% vs 4%. Precision about 98% | [sim_term.md](eval/results/sim_term.md) |
+| **ASER-calibrated classrooms:** the same term with ASER 2024's published reading levels and attendance for India, UP, Bihar, MP, Rajasthan | Children needing support found by week 8: 51–59% vs 31–37%; precision about 99% in every state | [sim_aser.md](eval/results/sim_aser.md) |
+| **Feasibility test F1:** voice matching on 200 real children's voices in a simulated classroom | It cannot name the child, so SUNO stopped recording classrooms | [f1_voice_id.md](eval/results/f1_voice_id.md) |
+| **Running cost**, from logged usage | ₹17.6 per teacher per school day, about ₹117 per child per year | [cost.md](eval/results/cost.md) |
 
-- **0 of 56** evidence records were about the wrong child, and **56 of 56** had the right right/wrong direction;
-- **0 of 21** opinions or vague remarks became evidence;
-- **98%** of specific observations were captured;
-- **15 of 15** absences were recorded.
-
-The test changed two things (decisions 32–33):
-- evidence now needs a specific word or sum;
-- roll numbers as people say them ("रोल तेरा" = 13) are understood.
-
-**Limit:** one speaker, a man; most primary teachers are women. The scripts and the scorer are in `docs/real-notes-protocol.md` and `eval/real_notes/`.
-
-### Offline and low network
-
-- **Works offline:** recording (saved on the phone and sent automatically when the network returns), the last brief and its audio, the class grid and child pages as last loaded.
-- **Needs a network:** sending a note (about 100–250 KB a minute) and fetching the next brief (a few KB of text plus the audio).
-
-### Privacy
-
-- No child's voice is ever recorded.
-- The teacher's voice note is transcribed and then dropped; no audio is stored.
-- Children are first names and roll numbers.
-- There is no teacher score or teacher-performance field anywhere.
-- Labels such as "weak" or कमज़ोर are masked and never repeated.
-- Per-class sandboxes: one class cannot read another's data (`tests/test_api_flow.py`).
+**Honest limits.** Simulated results are labelled SIMULATED. The real-speech speaker is one adult man; most primary teachers are women. No real teacher has used SUNO in her class yet: that is the November pilot, with SUNO's levels compared against a blind ASER check ([roadmap](docs/roadmap.md)). Every design change from mentors and tests is logged in [docs/decisions.md](docs/decisions.md).
 
 ## Run locally
 
+You need **Python 3.12** (uv installs it for you), **[uv](https://docs.astral.sh/uv/)** and **ffmpeg**. Keys go in `.env`; copy [`.env.example`](.env.example). The demo class, the tests and the term simulations work **without keys**. Sending a new note or building a brief needs both keys.
+
+| Key | Used for | Where to get it |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Claude: reading notes, the brief, the photos | https://console.anthropic.com |
+| `SARVAM_API_KEY` | Speech-to-text and the Hindi voice | https://dashboard.sarvam.ai |
+
+**macOS**
 ```bash
-brew install uv ffmpeg              # Python 3.12 via uv
-cp .env.example .env                # add ANTHROPIC_API_KEY and SARVAM_API_KEY
+brew install uv ffmpeg
+git clone https://github.com/TusharTechs/suno.git && cd suno
+cp .env.example .env            # then add your two keys
 uv sync
 uv run uvicorn server.api:app --reload --port 8765
 # open http://localhost:8765 and sign in with SUNO-DEMO
-uv run python -m pytest             # guardrail, planner, brief and API tests; no keys needed
 ```
 
-Docker: `docker build -t suno . && docker run -p 8000:8000 --env-file .env suno`.
-
-Deploy: `render.yaml` is a Render Blueprint (free plan, Singapore, Docker); you enter the two API keys in the Render dashboard.
-
-**External AI services.** These are every model the app calls. Keys go in `.env` locally, or in Render's environment settings when hosted; they are never committed.
-
-| Service | Model | What it does | Key |
-|---|---|---|---|
-| Anthropic Claude | `claude-opus-5-5` | ① reads the teacher's note into per-child observations; ② words the morning brief; reads the register photo and the textbook page photo (vision) | `ANTHROPIC_API_KEY` |
-| Sarvam AI | `saaras:v4` | Speech-to-text for the teacher's note (Hindi, code-mixed) | `SARVAM_API_KEY` |
-| Sarvam AI | `bulbul:v3` | Text-to-speech for the Hindi morning brief | `SARVAM_API_KEY` |
-
-The tests and the term simulations need no keys.
-
-**Regenerate the synthetic demo data** (costs about $0.40 of Claude credit):
-
+**Linux** (Debian/Ubuntu; use your package manager elsewhere)
 ```bash
-uv run python eval/seed_demo.py
-uv run python eval/make_samples.py
+sudo apt-get update && sudo apt-get install -y ffmpeg git curl
+curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.local/bin/env
+git clone https://github.com/TusharTechs/suno.git && cd suno
+cp .env.example .env            # then add your two keys
+uv sync
+uv run uvicorn server.api:app --reload --port 8765
 ```
 
-## Repo map
+**Windows** (PowerShell)
+```powershell
+winget install --id=astral-sh.uv -e
+winget install --id=Gyan.FFmpeg -e      # then open a new terminal so ffmpeg is on PATH
+git clone https://github.com/TusharTechs/suno.git; cd suno
+Copy-Item .env.example .env             # then add your two keys
+uv sync
+uv run uvicorn server.api:app --reload --port 8765
+```
 
-| Path | What |
-| --- | --- |
-| `server/api.py`, `jobs.py`, `store.py`, `demo.py` | Web API, background jobs, storage (SQLite locally, Postgres hosted), per-login demo sandboxes |
-| `server/pipeline/` | One module per stage: `asr`, `claude_observations`, `names`, `guardrails`, `confidence`, `ladder`, `planner`, `brief`, `tts`, `roster_photo`, `lesson_photo` |
-| `prompts/`, `schemas/` | Versioned prompts and JSON schemas for every Claude call |
-| `config/` | Skill ladder (Hindi reading, maths, English words) and activity bank (placeholder, not NCERT text) |
-| `web/` | Teacher web app (installable PWA, offline queue; Hindi or English, one language at a time: हिं / EN switch) |
-| `samples/synthetic/` | **Synthetic** demo class, demo history, sample notes and audio, sample register and textbook photos |
-| `tests/` | Guardrail and adversarial tests, planner, brief checks, API flow |
-| `eval/` | Simulations (`eval/sim/`, including ASER 2024-calibrated classes), real-speech scorer (`eval/real_notes/`), cost (`cost.py`), feasibility tests, demo seeding; results in `eval/results/` |
-| `docs/` | Handoff, design-change log, feasibility and strategy notes |
+**Docker** (any system)
+```bash
+docker build -t suno .
+docker run -p 8000:8000 --env-file .env suno     # open http://localhost:8000
+```
 
-**Retired v0 pipeline:** `claude_moments.py`, `claude_evidence.py`, `claude_brief.py` and `prompts/*.v1.md` (moments, evidence, brief) belong to the first design, which recorded the whole lesson. The F1 test (`docs/feasibility.md`) showed that voice matching cannot tell which child answered. Classroom constraints did the rest: distance from the back bench, phone heat, starting and stopping per period, and children's-voice consent. We kept those files as the record of what we tried.
+**Tests and evaluations**
+```bash
+uv run python -m pytest                          # 86 tests, no keys needed
+uv run python eval/sim/run_term_sim.py --runs 200    # term simulation, no API calls
+uv run python eval/sim/run_aser_sim.py --runs 200    # ASER 2024-calibrated classes, no API calls
+uv run python eval/sim/run_pipeline_sim.py --days 8  # pipeline simulation, about $3 of Claude credit
+uv run python eval/cost.py                       # running cost from logged usage
+```
 
-## Never commit
+The microphone works on `localhost` and on HTTPS. Data is kept in `var/` (SQLite), or in Postgres when `SUNO_DATABASE_URL` is set. Deploy: [`render.yaml`](render.yaml) is a Render Blueprint (free web service + free Postgres); enter the two keys in the Render dashboard.
 
-Real audio, children's names, consent forms, team photos, `.env`. See `.gitignore`.
+## Project structure
+
+```
+suno/
+├── server/
+│   ├── api.py              FastAPI: web API + the teacher app, per-class isolation, exports
+│   ├── jobs.py             background jobs: process a note, build the morning brief
+│   ├── store.py            storage: SQLite locally, Postgres when hosted
+│   ├── demo.py             per-login sandboxes of the synthetic demo class
+│   └── pipeline/           one module per stage
+│       ├── asr.py              Sarvam speech-to-text, split at pauses, sentences
+│       ├── claude_observations.py  Claude ①: the teacher's note → observations
+│       ├── guardrails.py       grounding, labels, opinions, erased misreadings
+│       ├── names.py            roster resolution across Devanagari and Latin, roll numbers
+│       ├── confidence.py       confidence computed in code
+│       ├── ladder.py           Bayesian ASER/TaRL levels
+│       ├── tracker.py          Silence Ledger
+│       ├── planner.py          listening list, class view, progress
+│       ├── brief.py            Claude ②: the brief, and its code check (fails closed)
+│       ├── tts.py              Sarvam Hindi voice
+│       ├── roster_photo.py     Claude vision: register → first names
+│       └── lesson_photo.py     Claude vision: textbook page → this week's items
+├── prompts/                versioned prompts for every Claude call
+├── schemas/                versioned JSON schemas for every Claude call
+├── config/                 skill ladder and activity bank
+├── web/                    teacher app (PWA, offline queue, हिं | EN); the deck at /deck
+├── tests/                  guardrail, adversarial, planner, brief and API tests
+├── eval/
+│   ├── sim/                pipeline, term and ASER-calibrated simulations
+│   ├── real_notes/         real-speech test scorer
+│   ├── feasibility/        F1: voice matching on real child voices
+│   ├── results/            every number we report
+│   └── cost.py, seed_demo.py, make_samples.py
+├── samples/synthetic/      demo class, sample notes and audio, sample photos (all synthetic)
+├── docs/                   decisions log, feasibility test, roadmap, real-speech protocol, images
+├── Dockerfile, render.yaml, pyproject.toml, uv.lock, .env.example
+└── LICENSE
+```
+
+## Privacy and safety
+
+- **No child's voice is ever recorded.** Nothing records the classroom.
+- The teacher's voice note is transcribed and then deleted; no audio of hers is stored.
+- **First names and roll numbers only.** Register photos are read and discarded.
+- **No teacher score or teacher-performance field anywhere.** Aggregates go upward only as counts by level, never names.
+- Labels such as "weak" or कमज़ोर are masked and never repeated.
+- One class cannot read another's data. A teacher can delete her class in the app.
+- Every child, name and voice in this repo and the demo is **synthetic**.
+
+## Team and acknowledgements
+
+**Team Sunvai:** Tushar (product and engineering) and Saikiran (architecture and risk).
+
+Thanks to our mentors: the hackathon's technical mentor, and Rebecca Swittens (Madhi Foundation). ASER reading levels and attendance figures are from Pratham / ASER Centre's ASER 2024 reports. The F1 test used Pratham's ASER speech dataset (CC BY-NC-SA 4.0, not redistributed here). Built with [Claude](https://www.anthropic.com/claude) by Anthropic and [Sarvam AI](https://www.sarvam.ai).
+
+## License
+
+[MIT](LICENSE) © 2026 Team Sunvai.
